@@ -1,6 +1,7 @@
 package extractor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ucar.ma2.Array;
@@ -9,6 +10,13 @@ import ucar.nc2.dataset.NetcdfDataset;
 import ucar.nc2.dataset.NetcdfDatasets;
 
 public class ExtractData {
+
+	private static final HashMap<String, String> specSheet = new HashMap<String, String>();
+	static {
+		specSheet.put("Reflectivity", "0:0, :, :");
+		specSheet.put("distanceR", ":");
+		specSheet.put("azimuthR", "0:0,:");
+	}
 
 	private Array getVariableData(NetcdfDataset dataset, String variable, String spec) throws Exception {
 		Variable varData = dataset.findVariable(variable);
@@ -26,18 +34,21 @@ public class ExtractData {
 		return null;
 	}
 
-	private List<String> getAllFileData(String[] input, String variable, String spec) {
-		List<String> result = new ArrayList();
-		for (int i = 0; i < input.length; i++) {
+	public static List<String> extractData(List<String> netCDF_FilesList, String variable) {
+		// TODO: extract dependent variables -> reflextiviy -> distance and azimuth
+		ExtractData ed = new ExtractData();
+		String spec = specSheet.getOrDefault(variable, ":");
+		List<String> extracted_data = new ArrayList<String>();
+		for (String files : netCDF_FilesList) {
 			try {
-				NetcdfDataset ncd = NetcdfDatasets.openDataset(input[i]);
+				NetcdfDataset ncd = NetcdfDatasets.openDataset(files);
 				// if opened get variable data
-				result.add(convertDataToJSON(getVariableData(ncd, variable, spec)));
+				extracted_data.add(ed.convertDataToJSON(ed.getVariableData(ncd, variable, spec)));
 			} catch (Exception err) {
 				// ignore exception for now
 			}
 		}
-		return result;
+		return extracted_data;
 	}
 
 }

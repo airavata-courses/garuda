@@ -47,6 +47,7 @@ public class DataDownloader {
 		Files.createDirectories(Paths.get(tempFolder));
 		String[] fileNameToken = key_name.split("/");
 		String shortName = fileNameToken[fileNameToken.length - 1];
+		// TODO: check if file already present, if present ignore.
 		FileOutputStream fos = new FileOutputStream(new File(tempFolder + "/" + shortName));
 		byte[] read_buf = new byte[1024];
 		int read_len = 0;
@@ -55,7 +56,7 @@ public class DataDownloader {
 		}
 		s3is.close();
 		fos.close();
-		return shortName;
+		return tempFolder + "/" + shortName;
 	}
 
 	private List<String> getFileListFromS3(String stationID, String dd, String mm, String yyyy, String start,
