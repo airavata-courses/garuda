@@ -35,6 +35,7 @@ public class ExtractData {
 				if (variable.equals("Reflectivity")) {
 					extracted_data.add(ed.getReflextivity(ncd));
 				}
+				ncd.close();
 			} catch (Exception err) {
 				// ignore exception for now
 			}
