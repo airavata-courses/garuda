@@ -11,9 +11,19 @@ import ucar.nc2.NetcdfFile;
 @SuppressWarnings("deprecation")
 public class FileTransformer {
 
+	// folder to get downloaded files from
 	private static final String tempFolder = "./temp";
+
+	// folder to store .nc files
 	private static final String filePath = "./netcdfs";
 
+	/**
+	 * Function to convert .gz / octet file to .nc format
+	 * 
+	 * @param inputFile - List path of input files
+	 * @return List of path of output files
+	 * @throws IOException
+	 */
 	public static List<String> convertBinaryToNetCDF(List<String> inputFile) throws IOException {
 		List<String> netCDF_FileList = new ArrayList<String>();
 		Files.createDirectories(Paths.get(filePath));
@@ -27,7 +37,7 @@ public class FileTransformer {
 				ncfileOut.close();
 				netCDF_FileList.add(output);
 			} catch (Exception error) {
-//				error.printStackTrace();
+				System.out.println(error.getMessage());
 			}
 		}
 		return netCDF_FileList;

@@ -18,6 +18,13 @@ public class ExtractData {
 		return json;
 	}
 
+	/**
+	 * Function to Extract data from .nc files
+	 * 
+	 * @param netCDF_FilesList - List of files to fetch data from
+	 * @param variable         - variable to fetch from dataset
+	 * @return List of JSON extracted data from each data set
+	 */
 	public static List<String> extractData(List<String> netCDF_FilesList, String variable) {
 		// TODO: extract dependent variables -> reflextiviy -> distance and azimuth
 		List<String> extracted_data = new ArrayList<String>();

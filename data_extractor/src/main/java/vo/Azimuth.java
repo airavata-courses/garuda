@@ -10,6 +10,11 @@ public class Azimuth {
 	private String spec = "0:0, :";
 	public float[] azimuth;
 
+	/**
+	 * Constructor for setting Azimuth from dataset, uses azimuthR
+	 * 
+	 * @param dataset NetcdfDataset to extract data from
+	 */
 	public Azimuth(NetcdfDataset dataset) {
 		try {
 			Array az = ExtractVariable.getVariableData(dataset, variable, spec);

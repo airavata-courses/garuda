@@ -19,10 +19,24 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 public class DataDownloader {
 
+	// Hard-coded bucket name and region
 	private static final String bucketName = "noaa-nexrad-level2";
 	private static final Regions bucketRegion = Regions.US_EAST_1;
+
+	// folder to store downloaded files
 	private static final String tempFolder = "./temp";
 
+	/**
+	 * Function to download NEXRAD dataset from S3.
+	 * 
+	 * @param stationID - RADAR station short code
+	 * @param year      - YEAR in YYYY
+	 * @param month     - MONTH in MM
+	 * @param date      - DATE in DD
+	 * @param start     - start time window in hhmmss
+	 * @param end       - end time window in hhmmss
+	 * @return List of path of downloaded files
+	 */
 	public static List<String> downloadNexradData(String stationID, String year, String month, String date,
 			String start, String end) {
 		List<String> downloaded_files = new ArrayList<String>();

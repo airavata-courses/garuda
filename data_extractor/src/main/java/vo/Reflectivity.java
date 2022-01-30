@@ -18,6 +18,11 @@ public class Reflectivity {
 	public Azimuth azimuth;
 	public float[][] reflexivity;
 
+	/**
+	 * Constructor for setting Reflextivity properties
+	 * 
+	 * @param dataset NetcdfDataset to extract data from
+	 */
 	public Reflectivity(NetcdfDataset dataset) {
 		try {
 			Array rv = ExtractVariable.getVariableData(dataset, variable, spec);

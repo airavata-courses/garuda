@@ -11,6 +11,11 @@ public class Distance {
 
 	public float[] distance;
 
+	/**
+	 * Constructor for setting distance from dataset, uses distanceR
+	 * 
+	 * @param dataset NetcdfDataset to extract data from
+	 */
 	public Distance(NetcdfDataset dataset) {
 		try {
 			Array dist = ExtractVariable.getVariableData(dataset, variable, spec);
