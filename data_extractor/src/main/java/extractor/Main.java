@@ -21,13 +21,13 @@ public class Main {
 		return result;
 	}
 
-	public static void main(String[] args) {
-		Main test = new Main();
-		try {
-			System.out.println(test.getNexradData("FOP1", "2022", "01", "26", "130000", "140000", "Reflectivity"));
-		} catch (Exception error) {
-			error.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		Main test = new Main();
+//		try {
+//			System.out.println(test.getNexradData("FOP1", "2022", "01", "26", "135000", "140000", "Reflectivity"));
+//		} catch (Exception error) {
+//			error.printStackTrace();
+//		}
+//	}
 
 }
