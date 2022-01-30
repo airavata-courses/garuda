@@ -23,8 +23,8 @@ public class DataDownloader {
 	private static final Regions bucketRegion = Regions.US_EAST_1;
 	private static final String tempFolder = "./temp";
 
-	public static List<String> downloadNexradData(String stationID, String year, String month, String date, String start,
-			String end) {
+	public static List<String> downloadNexradData(String stationID, String year, String month, String date,
+			String start, String end) {
 		List<String> downloaded_files = new ArrayList<String>();
 		DataDownloader dd = new DataDownloader();
 		List<String> fileList = dd.getFileListFromS3(stationID, date, month, year, start, end);
@@ -56,7 +56,7 @@ public class DataDownloader {
 		}
 		s3is.close();
 		fos.close();
-		return tempFolder + "/" + shortName;
+		return shortName;
 	}
 
 	private List<String> getFileListFromS3(String stationID, String dd, String mm, String yyyy, String start,

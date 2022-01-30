@@ -7,7 +7,6 @@ import java.util.List;
 import ucar.ma2.Array;
 import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
-import ucar.nc2.dataset.NetcdfDatasets;
 
 public class ExtractData {
 
@@ -31,7 +30,8 @@ public class ExtractData {
 
 	// TODO: complete this function to convert ma2.Array to JSON
 	private String convertDataToJSON(Array data) {
-		return null;
+		System.out.print(data.toString());
+		return "";
 	}
 
 	public static List<String> extractData(List<String> netCDF_FilesList, String variable) {
@@ -41,7 +41,7 @@ public class ExtractData {
 		List<String> extracted_data = new ArrayList<String>();
 		for (String files : netCDF_FilesList) {
 			try {
-				NetcdfDataset ncd = NetcdfDatasets.openDataset(files);
+				NetcdfDataset ncd = NetcdfDataset.openDataset(files);
 				// if opened get variable data
 				extracted_data.add(ed.convertDataToJSON(ed.getVariableData(ncd, variable, spec)));
 			} catch (Exception err) {
