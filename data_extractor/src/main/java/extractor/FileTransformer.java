@@ -20,13 +20,14 @@ public class FileTransformer {
 		for (String input : inputFile) {
 			try {
 				String output = filePath + "/" + input + ".nc";
+				// TODO: fix error while tranforming FOP120220126_135821_V06_MDM
 				NetcdfFile ncfileIn = ucar.nc2.NetcdfFile.open(tempFolder + "/" + input, null);
 				NetcdfFile ncfileOut = ucar.nc2.FileWriter.writeToFile(ncfileIn, output, false, false, null);
 				ncfileIn.close();
 				ncfileOut.close();
 				netCDF_FileList.add(output);
 			} catch (Exception error) {
-				error.printStackTrace();
+//				error.printStackTrace();
 			}
 		}
 		return netCDF_FileList;
