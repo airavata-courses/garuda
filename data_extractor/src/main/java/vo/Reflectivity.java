@@ -26,6 +26,10 @@ public class Reflectivity {
 	public Reflectivity(NetcdfDataset dataset) {
 		try {
 			Array rv = ExtractVariable.getVariableData(dataset, variable, spec);
+			this.stationLatitute = dataset.findGlobalAttribute("StationLatitude").getValue(0).toString();
+			this.stationLongitude = dataset.findGlobalAttribute("StationLongitude").getValue(0).toString();
+			this.stationName = dataset.findGlobalAttribute("StationName").getValue(0).toString();
+			this.stationID = dataset.findGlobalAttribute("Station").getValue(0).toString();
 			this.reflexivity = ((float[][]) rv.reduce().copyToNDJavaArray());
 			this.distance = new Distance(dataset);
 			this.azimuth = new Azimuth(dataset);
