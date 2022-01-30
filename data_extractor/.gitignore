@@ -165,4 +165,8 @@ $RECYCLE.BIN/
 /temp/*
 /temp
 
+# netCDF files
+/netcdfs/*.nc
+/netcdfs
+
 # End of https://www.gitignore.io/api/git,java,maven,eclipse,windows
