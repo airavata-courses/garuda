@@ -1,7 +1,6 @@
 package extractor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -13,13 +12,13 @@ public class Main {
 		List<String> offline_data = DataDownloader.downloadNexradData(stationID, year, month, date, start, end);
 
 		// transform data
-		List<String> netCDF_FileList = new ArrayList<String>();
+		List<String> netCDF_FileList = FileTransformer.convertBinaryToNetCDF(offline_data);
 
 		// extract data
-		List<String> result = ExtractData.extractData(netCDF_FileList, property);
+//		List<String> result = ExtractData.extractData(netCDF_FileList, property);
 
 		// return extracted data
-		return result;
+		return null;
 	}
 
 	public static void main(String[] args) throws IOException {
