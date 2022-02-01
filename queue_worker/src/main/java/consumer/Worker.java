@@ -24,12 +24,19 @@ public class Worker {
 			channel.basicConsume(queue_name, true, new DeliverCallback() {
 				@Override
 				public void handle(String consumerTag, Delivery message) throws IOException {
-					// TODO Auto-generated method stub
 					System.out.println(new String(message.getBody(), "utf-8"));
+					
 					NexradFetcher nf = new NexradFetcher();
-					List<String> response = nf.getNexradData("KABR", "2007", "01", "01", "000000", "002000", "Reflectivity");
+					List<String> response = nf.getNexradData("KABR", "2007", "01", "01", "000000", "002000",
+							"Reflectivity");
 					System.out.println("fetch data complete...");
-					// TODO: post JSON to db_writer
+
+					// post JSON to db_writer
+					try {
+						PostData.sendPost(response);
+					} catch (Exception error) {
+						System.out.println("error in sending data.. :(");
+					}
 				}
 			}, new CancelCallback() {
 
