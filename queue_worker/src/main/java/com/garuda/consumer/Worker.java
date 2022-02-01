@@ -1,7 +1,9 @@
-package consumer;
+package com.garuda.consumer;
 
 import java.io.IOException;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import com.garuda.dataextractor.extactor.NexradFetcher;
 import com.rabbitmq.client.CancelCallback;
@@ -24,11 +26,25 @@ public class Worker {
 			channel.basicConsume(queue_name, true, new DeliverCallback() {
 				@Override
 				public void handle(String consumerTag, Delivery message) throws IOException {
-					System.out.println(new String(message.getBody(), "utf-8"));
-					
+
+					String request = new String(message.getBody(), "utf-8");
+
+					System.out.println("recieved msg : " + request);
+
+					// extract parameters from request
+					JSONObject request_obj = new JSONObject(request);
+					String stationID = request_obj.getString("stationID");
+					String year = request_obj.getString("year");
+					String month = request_obj.getString("month");
+					String date = request_obj.getString("date");
+					String start_time = request_obj.getString("start_time");
+					String end_time = request_obj.getString("end_time");
+					String property = request_obj.getString("property");
+
+					// fetch data
 					NexradFetcher nf = new NexradFetcher();
-					List<String> response = nf.getNexradData("KABR", "2007", "01", "01", "000000", "002000",
-							"Reflectivity");
+					List<String> response = nf.getNexradData(stationID, year, month, date, start_time, end_time,
+							property);
 					System.out.println("fetch data complete...");
 
 					// post JSON to db_writer

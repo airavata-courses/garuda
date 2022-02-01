@@ -1,4 +1,4 @@
-package consumer;
+package com.garuda.consumer;
 
 import java.net.URI;
 import java.net.http.HttpClient;
