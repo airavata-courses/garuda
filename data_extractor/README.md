@@ -25,10 +25,19 @@ Change directory into garuda/data_extractor
 cd garuda/data_extractor/
 ```
 
-Build package using maven
+Clean build
+```sh
+mvn clean
+```
 
+Compile source code and build package using maven
 ```sh
 mvn assembly:single
+```
+
+Install package
+```sh
+mvn install
 ```
 
 JAR file is generated at folder : /target
