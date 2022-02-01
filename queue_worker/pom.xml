@@ -1,10 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+	<project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.garuda</groupId>
 	<artifactId>queue_worker</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>queue_worker</name>
 	<build>
 		<plugins>
@@ -13,7 +13,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>consumer.Main</mainClass>
+							<mainClass>consumer.Worker</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -28,6 +28,13 @@
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>5.14.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.garuda</groupId>
+			<artifactId>data_extractor</artifactId>
+			<scope>system</scope>
+			<version>0.0.1-SNAPSHOT</version>
+			<systemPath>${basedir}/offline_libs/data_extractor-1.0.0-jar-with-dependencies.jar</systemPath>
 		</dependency>
 	</dependencies>
 </project>
