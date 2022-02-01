@@ -14,7 +14,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>consumer.Worker</mainClass>
+							<mainClass>com.garuda.consumer.Worker</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
