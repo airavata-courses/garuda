@@ -1,4 +1,4 @@
-package extractor;
+package com.garuda.dataextractor.extactor;
 
 import java.io.IOException;
 import java.nio.file.Files;

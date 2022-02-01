@@ -1,13 +1,13 @@
-package extractor;
+package com.garuda.dataextractor.extactor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.garuda.dataextractor.vo.Reflectivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import ucar.nc2.dataset.NetcdfDataset;
-import vo.Reflectivity;
 
 public class ExtractData {
 

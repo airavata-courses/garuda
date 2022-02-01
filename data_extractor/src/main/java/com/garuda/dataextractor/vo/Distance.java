@@ -1,8 +1,9 @@
-package vo;
+package com.garuda.dataextractor.vo;
+
+import com.garuda.dataextractor.utils.ExtractVariable;
 
 import ucar.ma2.Array;
 import ucar.nc2.dataset.NetcdfDataset;
-import utils.ExtractVariable;
 
 public class Distance {
 

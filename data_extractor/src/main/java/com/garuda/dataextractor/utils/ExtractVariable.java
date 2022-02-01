@@ -1,4 +1,4 @@
-package utils;
+package com.garuda.dataextractor.utils;
 
 import ucar.ma2.Array;
 import ucar.nc2.Variable;

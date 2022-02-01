@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.garuda</groupId>
 	<artifactId>data_extractor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>data_extractor</name>
 	<build>
 		<plugins>
@@ -13,7 +13,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>extractor.NexradFetcher</mainClass>
+							<mainClass>com.garuda.dataextractor.extractor.NexradFetcher</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
