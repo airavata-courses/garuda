@@ -3,7 +3,7 @@ package extractor;
 import java.io.IOException;
 import java.util.List;
 
-public class Main {
+public class NexradFetcher {
 
 	/**
 	 * Function to extract NEXRAD data from AWS S3 bucket
@@ -34,13 +34,16 @@ public class Main {
 		return result;
 	}
 
-//	public static void main(String[] args) {
-//		Main test = new Main();
+	public static void main(String[] args) {
+		
+		System.out.println("This is data_extactor package which extracts NEXRAD data from AWS S3...");
+		
+//		NexradFetcher test = new NexradFetcher();
 //		try {
 //			System.out.println(test.getNexradData("FOP1", "2022", "01", "26", "135000", "140000", "Reflectivity"));
 //		} catch (Exception error) {
 //			error.printStackTrace();
 //		}
-//	}
+	}
 
 }

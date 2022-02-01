@@ -13,7 +13,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>extractor.Main</mainClass>
+							<mainClass>extractor.NexradFetcher</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
