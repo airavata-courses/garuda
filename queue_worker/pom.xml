@@ -1,4 +1,3 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -7,10 +6,6 @@
 	<artifactId>queue_worker</artifactId>
 	<version>1.0.0</version>
 	<name>queue_worker</name>
-	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -18,7 +13,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.garuda.consumer.Worker</mainClass>
+							<mainClass>com.garuda.queueworker.consumer.Worker</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -28,6 +23,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.rabbitmq</groupId>

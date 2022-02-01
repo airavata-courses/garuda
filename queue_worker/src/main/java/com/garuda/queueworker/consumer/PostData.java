@@ -1,4 +1,4 @@
-package com.garuda.consumer;
+package com.garuda.queueworker.consumer;
 
 import java.net.URI;
 import java.net.http.HttpClient;

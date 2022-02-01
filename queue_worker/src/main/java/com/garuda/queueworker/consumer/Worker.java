@@ -1,4 +1,4 @@
-package com.garuda.consumer;
+package com.garuda.queueworker.consumer;
 
 import java.io.IOException;
 import java.util.List;
