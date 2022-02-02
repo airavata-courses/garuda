@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 
 // const clientId =
@@ -8,7 +8,7 @@ import { GoogleLogin } from 'react-google-login';
 function Login() {
 
   const onSuccess = (res) => {
-    console.log('Login Success: currentUser:', res.profileObj);
+    console.log('Login Success: currentUser:', res.profileObj.email);
     // alert(
     //   `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
     // );
@@ -16,7 +16,9 @@ function Login() {
     /**
      * Used to redirect user to the dashboard screen
      */
+    window.localStorage.setItem('userEmail', res.profileObj.email);
     window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+
     
   };
 

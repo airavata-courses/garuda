@@ -1,0 +1,10 @@
+.UserRequestForm{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.spanDropdownLocation, .spanDatePicker, .spanDropdownTimeSlots, .spanDropdownMapProperty {
+    flex: 0.15;
+    text-align: center;
+}
