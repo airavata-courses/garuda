@@ -4,7 +4,8 @@ import { GoogleLogout } from 'react-google-login';
 function Logout() {
   const onSuccess = () => {
     console.log('Logout made successfully');
-    alert('Logout made successfully ✌');
+    window.localStorage.removeItem('userEmail');
+    window.location.href = window.location.protocol + "//" + window.location.host + "/"
   };
 
   return (
