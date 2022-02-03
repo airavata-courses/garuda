@@ -31,10 +31,11 @@ app.use(
     //true - it uses qs library to serialize the data (Recommended)
     //false - querystring library to serialize the data
     extended: true,
+    limit: "250mb"
   })
 );
 
-app.use(express.json());
+app.use(express.json({limit: "250mb"}));
 
 /**
  * Method to avoid cors error. Set allow origin for all request

@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const dataSetSchema = new mongoose.Schema({
   request_id: String,
   station_name: String,
-  date: String,
-  start_time: String,
-  end_time: String,
+  station_latitude: String,
+  station_longitude: String,
+  station_id: String,
   property: String,
   lat: [],
   long: [],
@@ -17,26 +17,31 @@ const DatasetModel = mongoose.model("DataSetModel", dataSetSchema);
  * Function inserts data in db
  */
 function insertDataInDataSetCollection(req, res, next) {
-  oDataSetRequest = req.body;
-  var oDataSet = new DatasetModel({
-    request_id: oDataSetRequest.request_id,
-    station_name: oDataSetRequest.station_name,
-    date: oDataSetRequest.date,
-    start_time: oDataSetRequest.start_time,
-    end_time: oDataSetRequest.end_time,
-    property: oDataSetRequest.property,
-    lat: oDataSetRequest.lat,
-    long: oDataSetRequest.long,
+
+  const dataset = [];
+  const raw_data = req.body;
+
+  raw_data.map((raw_string) => {
+    let json = JSON.parse(raw_string.replace(/\bNaN\b/g, "null"));
+    let dataObj = {
+      request_id: "test", // TODO
+      station_name: json.stationName,
+      station_id: json.stationID,
+      station_latitude: json.stationLatitute,
+      station_longitude: json.stationLongitude,
+      property: json.variable,
+      lat: json.latitude,
+      long: json.longitude,
+    }
+    dataset.push(dataObj);
   });
 
-  oDataSet.save((err) => {
-    if (!err) {
-      console.log("Insertion successful in dataset collection");
-      next();
-    } else {
-      console.log("Error during record insertion : " + err);
-      res.send({ status: "error", message: "Insertion failed" });
-    }
+  DatasetModel.insertMany(dataset).then(function () {
+    console.log("Insertion successful in dataset collection");
+    next();
+  }).catch(function (error) {
+    console.log("Error during record insertion : " + err);
+    res.send({ status: "error", message: "Insertion failed" });
   });
 }
 
