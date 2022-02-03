@@ -1,9 +1,12 @@
-import React, {  } from "react";
+import React from "react";
 import UserRequestForm from "./UserRequestForm";
 import Logout from "./Logout";
 import "react-datepicker/dist/react-datepicker.css";
 import Card from "@material-ui/core/Card";
 import "../ui_components/Dashboard.css";
+import MapBox from "./MapBox";
+
+let data = {};
 
 export default function Dashboard() {
   function submitUserRequest(e) {
@@ -15,6 +18,7 @@ export default function Dashboard() {
     var vTimeSlots = document.getElementById("idDropdownTimeSlots").value;
     var vMapProperty = document.getElementById("idDropdownMapProperty").value;
     var userEmail = localStorage.getItem("userEmail");
+
     //TODO: validations
     var requestBody = {
       station_name: vStationLocation,
@@ -48,6 +52,12 @@ export default function Dashboard() {
          }) */
   }
 
+  // TODO: fetch location details
+  // once fetched load data into data variable
+
+  let obj = { latitude: [-68.1193, -47.8825], longitude: [-16.4897, -15.7942] };
+  data = obj;
+
   return (
     <div>
       <Card className="cardUserRequestForm">
@@ -58,6 +68,9 @@ export default function Dashboard() {
       </Card>
       <Card className="logout">
         <Logout />
+      </Card>
+      <Card>
+        <MapBox data={data} />
       </Card>
     </div>
   );
