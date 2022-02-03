@@ -1,4 +1,3 @@
-const mongooseConn = require("../database");
 const mongoose = require('mongoose');
 const userRequestSchema = new mongoose.Schema({
     user_email: String,
@@ -10,4 +9,4 @@ const userRequestSchema = new mongoose.Schema({
 
 
 module.exports = mongoose.model("UsersRequestModel", userRequestSchema);
-//module.exports = { userRequestsModel, mongooseConn }
+//module.exports = { userRequestsModel }

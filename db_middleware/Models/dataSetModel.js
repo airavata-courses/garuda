@@ -1,4 +1,3 @@
-const mongooseConn = require("../database");
 const mongoose = require("mongoose");
 
 const dataSetSchema = new mongoose.Schema({

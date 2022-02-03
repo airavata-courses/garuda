@@ -19,6 +19,7 @@ const {
   getDataOfRequestId,
 } = require("./Models/dataSetModel");
 const mongoose = require("mongoose");
+const connectDB = require("./database");
 
 const app = express();
 const hostname = CONSTANTS.CONST_NODE_JS_HOSTNAME;
@@ -417,4 +418,5 @@ app.get("/ping", (req, res) => {
 //Method to listen all incoming request
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
+  connectDB();
 });
