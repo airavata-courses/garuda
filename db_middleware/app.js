@@ -15,7 +15,7 @@ const CONSTANTS = require("./constants");
 const http = require("http");
 const express = require("express");
 const userRequestsModel = require("./Models/userRequestModel");
-const dataSetModel = require("./Models/dataSetModel");
+const { insertDataInDataSetCollection } = require("./Models/dataSetModel");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -122,13 +122,11 @@ app.post("/getDataOfRequestID", (req, res) => {
             long: []
           }
  */
-app.post("/data_writer", (req, res) => {
-  processRequestBody(req).then((data) => {
-    data = JSON.parse(data);
-    console.log("data inside data_writer " + data);
-    setAccessHeaderForRequest(res);
-    insertDataInDataSetCollection(data, res);
-  });
+
+app.post("/data_writer", (req, res, next) => {
+  insertDataInDataSetCollection(req, res, next);
+  // TODO : Update status in userrequest collection
+  updateStatusOfRequestInDB(req, res);
 });
 
 //Test endpoint
@@ -323,25 +321,6 @@ function getAllUserRequests(receivedData, res) {
   );
 }
 
-function getDataOfRequestId(receivedData, res) {
-  dataSetModel.find(
-    { request_id: receivedData.request_id, property: receivedData.property },
-    (err, data) => {
-      if (!err) {
-        //data: array of objects
-        console.log(data);
-        res.send({
-          status: "success",
-          message: "Information retrieved",
-          data: data,
-        });
-      } else {
-        res.send({ status: "error", message: "Retrieval failed" });
-      }
-    }
-  );
-}
-
 /**
  * Methods to communicate with the mongodb for BACKEND
  */
@@ -367,63 +346,42 @@ const dummy_json ={
       "11187678618"
   ]
 }*/
-function insertDataInDataSetCollection(oDataSetRequest, response) {
-  var oDataSet = new dataSetModel({
-    request_id: oDataSetRequest.request_id,
-    station_name: oDataSetRequest.station_name,
-    date: oDataSetRequest.date,
-    start_time: oDataSetRequest.start_time,
-    end_time: oDataSetRequest.end_time,
-    property: oDataSetRequest.property,
-    lat: oDataSetRequest.lat,
-    long: oDataSetRequest.long,
-  });
 
-  oDataSet.save((err) => {
-    if (!err) {
-      console.log("Insertion successful in dataset collection");
-      //Update status in userrequest collection
-      updateStatusOfRequestInDB(oDataSetRequest, response);
-    } else {
-      response.send({ status: "error", message: "Insertion failed" });
-      console.log("Error during record insertion : " + err);
-    }
-  });
-}
-
-function updateStatusOfRequestInDB(oDataSetRequest, response) {
-  userRequestsModel.updateOne(
-    { request_id: oDataSetRequest.request_id },
-    { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
-    function (err, docs) {
-      if (!err) {
-        // docs response
-        // {
-        //   acknowledged: true,
-        //   modifiedCount: 1,
-        //   upsertedId: null,
-        //   upsertedCount: 0,
-        //   matchedCount: 1
-        // }
-        if (docs.modifiedCount && docs.matchedCount) {
-          response.send({
-            status: "success",
-            message: "Insert and Update successful",
-          });
-        } else {
-          response.send({
-            status: "error",
-            message: "Something went wrong during the update operation",
-          });
-        }
-      } else {
-        response.send({
-          status: "error",
-          message: "Update failed in user request collection",
-        });
-      }
-    }
-  );
+// TODO: complete while integrating API gateway
+function updateStatusOfRequestInDB(req, res) {
+  res.json({ status: 200 });
+  // userRequestsModel.updateOne(
+  //   { request_id: oDataSetRequest.request_id },
+  //   { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
+  //   function (err, docs) {
+  //     if (!err) {
+  //       // docs response
+  //       // {
+  //       //   acknowledged: true,
+  //       //   modifiedCount: 1,
+  //       //   upsertedId: null,
+  //       //   upsertedCount: 0,
+  //       //   matchedCount: 1
+  //       // }
+  //       if (docs.modifiedCount && docs.matchedCount) {
+  //         response.send({
+  //           status: "success",
+  //           message: "Insert and Update successful",
+  //         });
+  //       } else {
+  //         response.send({
+  //           status: "error",
+  //           message: "Something went wrong during the update operation",
+  //         });
+  //       }
+  //     } else {
+  //       response.send({
+  //         status: "error",
+  //         message: "Update failed in user request collection",
+  //       });
+  //     }
+  //   }
+  // );
 }
 
 /**
@@ -458,7 +416,7 @@ function setAccessHeaderForRequest(res) {
  */
 app.get("/ping", (req, res) => {
   res.json({
-    ping: "pokemon"
+    ping: "pokemon",
   });
 });
 
