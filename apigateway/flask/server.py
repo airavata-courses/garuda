@@ -8,6 +8,10 @@ import pymongo
 app = Flask(__name__)
 
 def log_error(err_code):
+    '''
+    Log error codes:
+    -1 = Email id not provided in GET request for /getAllStatus
+    '''
     if err_code == -1:
         print("Config file not found")
     elif err_code == -2:
@@ -65,13 +69,6 @@ def get_data_db(conf, key):
     result = collection.find_one()
     return result
 
-@app.route("/fetch-data", methods = ['POST'])
-def serve_request():
-    error_code, config = read_config(1)
-    if error_code != 0:
-        log_error(error_code)
-    
-    return "It works!!!"
 
 @app.route('/getAllInfo', methods = ['GET'])
 def get_info_to_display():
@@ -80,17 +77,24 @@ def get_info_to_display():
         "time" : ['00:00:00 - 00:29:59', '00:30:00 - 00:59:59', '01:00:00 - 01:29:59', '01:30:00 - 01:59:59', '02:00:00 - 02:29:59', '02:30:00 - 02:59:59', '03:00:00 - 03:29:59', '03:30:00 - 03:59:59', '04:00:00 - 04:29:59', '04:30:00 - 04:59:59', '05:00:00 - 05:29:59', '05:30:00 - 05:59:59', '06:00:00 - 06:29:59', '06:30:00 - 06:59:59', '07:00:00 - 07:29:59', '07:30:00 - 07:59:59', '08:00:00 - 08:29:59', '08:30:00 - 08:59:59', '09:00:00 - 09:29:59', '09:30:00 - 09:59:59', '10:00:00 - 10:29:59', '10:30:00 - 10:59:59', '11:00:00 - 11:29:59', '11:30:00 - 11:59:59', '12:00:00 - 12:29:59', '12:30:00 - 12:59:59', '13:00:00 - 13:29:59', '13:30:00 - 13:59:59', '14:00:00 - 14:29:59', '14:30:00 - 14:59:59', '15:00:00 - 15:29:59', '15:30:00 - 15:59:59', '16:00:00 - 16:29:59', '16:30:00 - 16:59:59', '17:00:00 - 17:29:59', '17:30:00 - 17:59:59', '18:00:00 - 18:29:59', '18:30:00 - 18:59:59', '19:00:00 - 19:29:59', '19:30:00 - 19:59:59', '20:00:00 - 20:29:59', '20:30:00 - 20:59:59', '21:00:00 - 21:29:59', '21:30:00 - 21:59:59', '22:00:00 - 22:29:59', '22:30:00 - 22:59:59', '23:00:00 - 23:29:59', '23:30:00 - 23:59:59'],
         "property_type" : ["reflectivity"]
     }
-    # json_response = json.dumps(response)
     return jsonify(response)
 
 @app.route('/getAllStatus', methods = ['GET'])
 def get_user_job_status():
-    userid = request.args.get('email_id')
+    try:
+        userid = request.args.get('email_id')
+    except:
+        response = {
+            "error_code" : -1,
+            "error_message" : "email_id not provided"
+        }
+        return jsonify(response)
 
     # Call db helper to fetch data for email_id
     # Get reponse from db helper
 
     response = {
+        "error_code" : 0,
         "request_details" : []
     }
     return response
@@ -105,6 +109,8 @@ def generate_new_request():
 
     # Make call to check db for this key
     # Take response
+
+    # Make decision on response code and message
     response_code = 0
     if response_code == 0:
         response_message = "Found"
@@ -120,11 +126,14 @@ def generate_new_request():
 @app.route('/getDataOfRequestID', methods = ['GET'])
 def get_data_of_stations():
     # Get parameters
+    user_email = request.args.get('user_email')
+    request_id = request.args.get('request_id')
 
-    # Make db helper call
+    # Make db helper call with request_id
     # Receive data
 
-    # Return data as json
+    # Return entire row as json
+
     return 
 
 def main():
