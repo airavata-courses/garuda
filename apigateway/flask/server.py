@@ -1,11 +1,14 @@
 import time, random
 from urllib import response
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
+# import flask_cors
 import configparser
 import os, json
 import pika, requests
 
 app = Flask(__name__)
+cors = CORS(app)
 
 def log_error(err_code):
     '''
@@ -50,6 +53,7 @@ def api_request(method, url, header = None, data = None, response_type = 'json')
         return response_message
 
 @app.route('/getAllInfo', methods = ['GET'])
+@cross_origin()
 def get_info_to_display():
     response = {
         "station_name" : ['DAN1', 'KABR', 'KABX', 'KAKQ', 'KAMA', 'KAMX', 'KAPX', 'KARX', 'KATX', 'KBBX', 'KBGM', 'KBHX', 'KBIS', 'KBLX', 'KBMX', 'KBOX', 'KBRO', 'KBUF', 'KBYX', 'KCAE', 'KCBW', 'KCBX', 'KCCX', 'KCLE', 'KCLX', 'KCRP', 'KCXX', 'KCYS', 'KDAX', 'KDDC', 'KDFX', 'KDGX', 'KDLH', 'KDMX', 'KDOX', 'KDTX', 'KDVN', 'KEAX', 'KEMX', 'KENX', 'KEOX', 'KEPZ', 'KESX', 'KEVX', 'KEWX', 'KEYX', 'KFCX', 'KFDR', 'KFFC', 'KFSD', 'KFSX', 'KFTG', 'KFWS', 'KGGW', 'KGJX', 'KGLD', 'KGRB', 'KGRK', 'KGRR', 'KGSP', 'KGWX', 'KGYX', 'KHDX', 'KHGX', 'KHNX', 'KHPX', 'KHTX', 'KICT', 'KICX', 'KILN', 'KILX', 'KIND', 'KINX', 'KIWA', 'KIWX', 'KJAX', 'KJGX', 'KJKL', 'KLBB', 'KLCH', 'KLGX', 'KLIX', 'KLNX', 'KLOT', 'KLRX', 'KLSX', 'KLTX', 'KLVX', 'KLWX', 'KLZK', 'KMAF', 'KMAX', 'KMBX', 'KMHX', 'KMKX', 'KMLB', 'KMOB', 'KMPX', 'KMQT', 'KMRX', 'KMSX', 'KMTX', 'KMUX', 'KMVX', 'KMXX', 'KNKX', 'KNQA', 'KOAX', 'KOHX', 'KOKX', 'KOTX', 'KPAH', 'KPBZ', 'KPDT', 'KPOE', 'KPUX', 'KRAX', 'KRGX', 'KRIW', 'KRLX', 'KRTX', 'KSFX', 'KSGF', 'KSHV', 'KSJT', 'KSOX', 'KSRX', 'KTBW', 'KTFX', 'KTLH', 'KTLX', 'KTWX', 'KTYX', 'KUDX', 'KUEX', 'KVNX', 'KVTX', 'KVWX', 'KYUX', 'PHKI', 'PHKM', 'PHMO', 'PHWA', 'TJUA'],
@@ -59,6 +63,7 @@ def get_info_to_display():
     return jsonify(response)
 
 @app.route('/getAllStatus', methods = ['GET'])
+@cross_origin()
 def get_user_job_status():
     try:
         userid = request.args.get('user_email')
@@ -99,6 +104,7 @@ def get_user_job_status():
     return jsonify(response)
 
 @app.route('/postNewRequest', methods = ['POST'])
+@cross_origin()
 def generate_new_request():
     try:
         request_data = request.get_json()
@@ -197,6 +203,7 @@ def generate_new_request():
     return jsonify(response)
 
 @app.route('/getDataOfRequestID', methods = ['GET'])
+@cross_origin()
 def get_data_of_stations():
     # Get parameters
     try:
