@@ -15,7 +15,10 @@ const CONSTANTS = require("./constants");
 const http = require("http");
 const express = require("express");
 const userRequestsModel = require("./Models/userRequestModel");
-const { insertDataInDataSetCollection } = require("./Models/dataSetModel");
+const {
+  insertDataInDataSetCollection,
+  getDataOfRequestId,
+} = require("./Models/dataSetModel");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -34,6 +37,15 @@ app.use(
 app.use(express.json());
 
 /**
+ * Method to avoid cors error. Set allow origin for all request
+ */
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
+
+/**
  * Section - Api calls from the frontend
  */
 /**
@@ -46,7 +58,6 @@ app.use(express.json());
 app.post("/postCheckRequest", (req, res) => {
   processRequestBody(req).then((data) => {
     receivedData = JSON.parse(data);
-    setAccessHeaderForRequest(res);
     checkIfRequestIdExists(receivedData, res);
   });
 });
@@ -64,7 +75,6 @@ app.post("/postCheckRequest", (req, res) => {
 app.post("/postNewRequest", (req, res) => {
   processRequestBody(req).then((data) => {
     receivedData = JSON.parse(data);
-    setAccessHeaderForRequest(res);
     insertUserRequest(receivedData, res, true);
   });
 });
@@ -79,7 +89,6 @@ app.post("/postNewRequest", (req, res) => {
 app.post("/getAllStatus", (req, res) => {
   processRequestBody(req).then((data) => {
     receivedData = JSON.parse(data);
-    setAccessHeaderForRequest(res);
     getAllUserRequests(receivedData, res);
   });
 });
@@ -95,13 +104,8 @@ app.post("/getAllStatus", (req, res) => {
           }
  */
 
-app.post("/getDataOfRequestID", (req, res) => {
-  processRequestBody(req).then((data) => {
-    receivedData = JSON.parse(data);
-    setAccessHeaderForRequest(res);
-    getDataOfRequestId(receivedData, res);
-  });
-});
+// TODO: make this API HTTP GET
+app.post("/getDataOfRequestID", getDataOfRequestId);
 
 /**
  * Section - Api calls from the backend
@@ -122,7 +126,6 @@ app.post("/getDataOfRequestID", (req, res) => {
             long: []
           }
  */
-
 app.post("/data_writer", (req, res, next) => {
   insertDataInDataSetCollection(req, res, next);
   // TODO : Update status in userrequest collection
@@ -401,14 +404,6 @@ function processRequestBody(requestObject) {
       resolve(data);
     });
   });
-}
-
-/**
- * Method to avoid cors error. Set allow origin for all request
- */
-function setAccessHeaderForRequest(res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "*");
 }
 
 /**

@@ -41,14 +41,14 @@ function insertDataInDataSetCollection(req, res, next) {
   });
 }
 
-// TODO: test this
-function getDataOfRequestId(receivedData, res) {
-  dataSetModel.find(
-    { request_id: receivedData.request_id, property: receivedData.property },
+/**
+ * Function to check status of request
+ */
+function getDataOfRequestId(req, res, next) {
+  DatasetModel.find(
+    { request_id: req.body.request_id, property: req.body.property },
     (err, data) => {
       if (!err) {
-        //data: array of objects
-        console.log(data);
         res.send({
           status: "success",
           message: "Information retrieved",
