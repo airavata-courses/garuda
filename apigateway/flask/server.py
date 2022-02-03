@@ -3,7 +3,7 @@ from urllib import response
 from flask import Flask, jsonify, request
 import configparser
 import os, json
-import pymongo
+import pymongo, pika
 
 app = Flask(__name__)
 
@@ -19,6 +19,21 @@ def log_error(err_code):
     elif err_code == -3:
         print("Status value not valid")
     
+def push_to_rabbitmq(data):
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='localhost')
+    )
+    channel = connection.channel()
+    channel.queue_declare(queue='offload_request')
+    message = json.dumps(data)
+
+    channel.basic_publish(exchange='', routing_key='offload_request', body=message)
+    connection.close()
+    '''
+    Queue Request example: 
+    {"requestID":"1234","stationID":"KABR","year":"2007","month":"01","date":"01","start_time":"000000","end_time":"003000","property":"Reflectivity"}
+    '''
+
 
 def read_config(status = 1):
     '''
