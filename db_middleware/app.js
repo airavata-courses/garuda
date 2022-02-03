@@ -12,7 +12,6 @@
   run 'mongo' command
 */
 const CONSTANTS = require("./constants");
-const http = require("http");
 const express = require("express");
 const userRequestsModel = require("./Models/userRequestModel");
 const {
