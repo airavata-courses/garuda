@@ -25,6 +25,11 @@ Change directory into garuda/data_extractor
 cd garuda/data_extractor/
 ```
 
+Testing source code
+```sh
+mvn test
+```
+
 Clean build
 ```sh
 mvn clean
