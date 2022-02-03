@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-app.use(express.json({limit: "250mb"}));
+app.use(express.json({ limit: "250mb" }));
 
 /**
  * Method to avoid cors error. Set allow origin for all request
@@ -127,11 +127,7 @@ app.post("/getDataOfRequestID", getDataOfRequestId);
             long: []
           }
  */
-app.post("/data_writer", (req, res, next) => {
-  insertDataInDataSetCollection(req, res, next);
-  // TODO : Update status in userrequest collection
-  updateStatusOfRequestInDB(req, res);
-});
+app.post("/data_writer", insertDataInDataSetCollection, updateStatusOfRequestInDB);
 
 //Test endpoint
 // app.get('/', function (req, res) {
