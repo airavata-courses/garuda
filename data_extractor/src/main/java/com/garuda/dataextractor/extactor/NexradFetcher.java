@@ -37,13 +37,7 @@ public class NexradFetcher {
 	public static void main(String[] args) {
 		
 		System.out.println("This is data_extactor package which extracts NEXRAD data from AWS S3...");
-		
-//		NexradFetcher test = new NexradFetcher();
-//		try {
-//			System.out.println(test.getNexradData("FOP1", "2022", "01", "26", "135000", "140000", "Reflectivity"));
-//		} catch (Exception error) {
-//			error.printStackTrace();
-//		}
+
 	}
 
 }
