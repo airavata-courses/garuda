@@ -43,11 +43,13 @@ jobs:
           mvn clean
           mvn compile assembly:single
 
-    steps:
       - uses: actions/checkout@v2
       - name: Use Node.js LTS Gallium
         uses: actions/setup-node@v2
         with:
-          node-version: 'lts/gallium'
-          cache: 'npm'
-      - run: npm install
+          node-version: "lts/gallium"
+          cache: "npm"
+      - name: Build db_middleware with npm
+        working-directory: ./db_middleware
+        run: |
+          npm install
