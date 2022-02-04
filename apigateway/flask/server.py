@@ -117,8 +117,8 @@ def generate_new_request():
     try:
         station_key = request_data['station_name']
         db_date_absolute = str(request_data['date'])     
-        db_date = db_date_absolute.strip().strip('-')
-        time_start, time_end = str(request_data['time']).strip().strip(':').split('-')
+        db_date = db_date_absolute.replace(" ", "").replace("-", "")
+        time_start, time_end = str(request_data['time']).replace(" ","").replace(":", "").split('-')
         property = request_data['property']
         user_email = request_data['user_email']
     except:
