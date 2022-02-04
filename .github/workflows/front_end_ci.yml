@@ -6,9 +6,9 @@ name: Front End CI (React)
 
 on:
   push:
-    branches: [ development_rishabh, main ] 
+    branches: [ development_rishabh ] 
   pull_request:
-    branches: [ development_rishabh, main ]
+    branches: [ development_rishabh ]
 
 jobs:
   build:
@@ -29,6 +29,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: login/package-lock.json
     - run: | 
         npm ci
         npm run build --if-present
