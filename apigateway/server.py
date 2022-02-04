@@ -179,7 +179,7 @@ def generate_new_request():
             '''
             rmq_month, rmq_date, rmq_year = db_date_absolute.split('-')
             rabbitmq_data = {
-                "requestID" : str(random.randint(1, 100000)),
+                "requestID" : str(db_key),
                 "stationID" : str(station_key),
                 "year" : rmq_year,
                 "month" : rmq_month,
