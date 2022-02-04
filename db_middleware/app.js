@@ -86,8 +86,8 @@ app.post("/postNewRequest", (req, res) => {
                     user_email: “STRING”
                   }
  */
-app.get("/getAllStatus", (req, res) => {
-  getAllUserRequests(req.body,res)
+app.post("/getAllStatus", (req, res) => {
+  getAllUserRequests(req.body, res)
 });
 
 /**
@@ -101,7 +101,7 @@ app.get("/getAllStatus", (req, res) => {
           }
  */
 
-app.get("/getDataOfRequestID", getDataOfRequestId);
+app.post("/getDataOfRequestID", getDataOfRequestId);
 
 /**
  * Section - Api calls from the backend
@@ -189,7 +189,7 @@ function insertUserRequest(objUserRequest, response) {
           var oUserReq = new userRequestsModel({
             user_email: paramUserEmail,
             request_id: paramRequestId,
-            status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE, //by default the status is 0 - inprocess but in this case data set exists already so it will directly go to complete state
+            status: CONSTANTS.CONST_REQUEST_STATUS_IN_PROCESS, //by default the status is 0 - inprocess but in this case data set exists already so it will directly go to complete state
             time_stamp: objUserRequest.time_stamp,
             property: paramPropertyType,
           });
@@ -274,7 +274,7 @@ const dummy_json ={
 function updateStatusOfRequestInDB(req, res) {
   //res.json({ status: 200 });
   userRequestsModel.updateOne(
-    { request_id: oDataSetRequest.request_id, property: oDataSetRequest.property },
+    { request_id: req.body.requestID },
     { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
     function (err, docs) {
       if (!err) {
@@ -287,18 +287,18 @@ function updateStatusOfRequestInDB(req, res) {
         //   matchedCount: 1
         // }
         if (docs.modifiedCount && docs.matchedCount) {
-          response.send({
+          res.send({
             status: "success",
             message: "Insert and Update successful",
           });
         } else {
-          response.send({
+          res.send({
             status: "error",
             message: "Something went wrong during the update operation",
           });
         }
       } else {
-        response.send({
+        res.send({
           status: "error",
           message: "Update failed in user request collection",
         });

@@ -127,7 +127,7 @@ def generate_new_request():
             "response_message" : "Incorrect keys passed in the json request"
         }
         return jsonify(response)
-    db_key = f"{station_key}_{db_date}_{time_start}_{time_end}"
+    db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}"
 
     # Make call to check db for this key
     URL = "http://localhost:3001/postCheckRequest"
@@ -179,7 +179,7 @@ def generate_new_request():
             '''
             rmq_month, rmq_date, rmq_year = db_date_absolute.split('-')
             rabbitmq_data = {
-                "requestID" : str(random.randint(1, 100000)),
+                "requestID" : str(db_key),
                 "stationID" : str(station_key),
                 "year" : rmq_year,
                 "month" : rmq_month,
@@ -219,7 +219,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "http://localhost:3001/postCheckRequest"
+    URL = "http://localhost:3001/getDataOfRequestID"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
