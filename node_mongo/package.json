@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "express": "^4.17.2",
-    "mongoose": "^6.1.10",
-    "nodemon": "^2.0.15"
-  }
-}
