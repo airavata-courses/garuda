@@ -20,6 +20,7 @@ const {
 } = require("./Models/dataSetModel");
 const mongoose = require("mongoose");
 const connectDB = require("./database");
+const morgan = require('morgan')
 
 const app = express();
 const hostname = CONSTANTS.CONST_NODE_JS_HOSTNAME;
@@ -34,8 +35,8 @@ app.use(
     limit: "250mb"
   })
 );
-
 app.use(express.json({ limit: "250mb" }));
+app.use(morgan('combined'))
 
 /**
  * Method to avoid cors error. Set allow origin for all request
