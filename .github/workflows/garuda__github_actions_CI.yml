@@ -6,9 +6,9 @@ name: Garuda_CI
 # events but only for the development branch and master branch
 on:
   push:
-    branches: [ data_extractor, queue_worker, main ]
+    branches: [data_extractor, queue_worker, main]
   pull_request:
-    branches: [ data_extractor, queue_worker, main ]
+    branches: [data_extractor, queue_worker, main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,10 +24,10 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: "11"
+          distribution: "adopt"
 
-    # Install, lint, test and build
+      # Test, Clean, Build and Install Data Extractor Module
       - name: Build and Install data_extractor with Maven
         working-directory: ./data_extractor
         run: |
@@ -35,7 +35,8 @@ jobs:
           mvn clean
           mvn assembly:single
           mvn install
-      
+
+      # Clean and Build Queue Worker Module
       - name: Build queue_worker with Maven
         working-directory: ./queue_worker
         run: |
