@@ -76,7 +76,7 @@ def get_user_job_status():
         return jsonify(response)
 
     # Call db helper to fetch data for email_id
-    URL = "localhost:3001/getAllStatus"
+    URL = "http://localhost:3001/getAllStatus"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email": str(userid)
@@ -130,7 +130,7 @@ def generate_new_request():
     db_key = f"{station_key}_{db_date}_{time_start}_{time_end}"
 
     # Make call to check db for this key
-    URL = "localhost:3001/postCheckRequest"
+    URL = "http://localhost:3001/postCheckRequest"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "request_id" : db_key,
@@ -155,7 +155,7 @@ def generate_new_request():
         response['response_message'] = "Success"
         response['data_dump'] = ""
         # Make call to postNewRequest
-        URL = "localhost:3001/postNewRequest"
+        URL = "http://localhost:3001/postNewRequest"
         METHOD = 'POST'
         PAYLOAD = json.dumps({
             "user_email" : str(user_email),
@@ -219,7 +219,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "localhost:3001/postCheckRequest"
+    URL = "http://localhost:3001/postCheckRequest"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
