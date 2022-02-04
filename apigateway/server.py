@@ -219,7 +219,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "http://localhost:3001/postCheckRequest"
+    URL = "http://localhost:3001/getDataOfRequestID"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
