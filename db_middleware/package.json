@@ -1,0 +1,28 @@
+{
+  "name": "db_middleware",
+  "version": "1.0.0",
+  "description": "middleware API for interacting with database",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/airavata-courses/garuda.git"
+  },
+  "author": "garuda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/airavata-courses/garuda/issues"
+  },
+  "homepage": "https://github.com/airavata-courses/garuda#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.2.0"
+  }
+}
