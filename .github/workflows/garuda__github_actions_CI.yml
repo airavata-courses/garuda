@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Data_Extractor_CI
+name: Garuda_CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the development branch and master branch
 on:
   push:
-    branches: [ data_extractor, main ]
+    branches: [ data_extractor, queue_worker, main ]
   pull_request:
-    branches: [ data_extractor, main ]
+    branches: [ data_extractor, queue_worker, main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,10 +28,16 @@ jobs:
           distribution: 'adopt'
 
     # Install, lint, test and build
-      - name: Build with Maven
+      - name: Build and Install data_extractor with Maven
         working-directory: ./data_extractor
         run: |
           mvn test
           mvn clean
           mvn assembly:single
           mvn install
+      
+      - name: Build queue_worker with Maven
+        working-directory: ./queue_worker
+        run: |
+          mvn clean
+          mvn compile assembly:single
