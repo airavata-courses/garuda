@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -10,9 +10,6 @@ import {
 // world map
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json";
-
-let colorFill = "#F00"
-let coordinates = [];
 
 function checkRange(reflectivityRange){
   if(reflectivityRange < 30){
@@ -35,8 +32,10 @@ function checkRange(reflectivityRange){
 }
 
 const MapBox = (props) => {
-  for (let i = 0; i < props.data.latitude.length; i++) {
-    coordinates.push([props.data.longitude[i], props.data.latitude[i],props.data.reflectivity[i]]);
+  const [coordinates] = useState([]);
+
+  for (let i = 0; i < props.data.obj.latitude.length; i++) {
+    coordinates.push([props.data.obj.longitude[i], props.data.obj.latitude[i], props.data.obj.reflectivity[i]]);
   }
   // TODO: set height width
   return (
@@ -44,7 +43,7 @@ const MapBox = (props) => {
       <ComposableMap
 
         // play with these params 
-        
+
         // projection="geoAzimuthalEqualArea"
         //   projectionConfig={{
         //     rotate: [-190, 100, 0],
@@ -56,9 +55,8 @@ const MapBox = (props) => {
         //   style={{
         //     border: "1px solid #DDD",
         //   }}
-        center={[40.2672, 86.1349]}
       >
-        <ZoomableGroup zoom={2} disablePanning>
+        <ZoomableGroup zoom={2} center={props.data.station} disablePanning>
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies
@@ -74,9 +72,8 @@ const MapBox = (props) => {
             }
           </Geographies>
           {coordinates.map((coordinates, index) => (
-             colorFill = checkRange(coordinates[2]),
             <Marker key={index} coordinates={coordinates}>
-              <circle key = {index} r="1" fill= {colorFill} />
+              <circle key={index} r="0.1" fill={checkRange(coordinates[2])} />
             </Marker>
           ))}
         </ZoomableGroup>

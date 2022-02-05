@@ -287,17 +287,10 @@ function updateStatusOfRequestInDB(req, res) {
         //   upsertedCount: 0,
         //   matchedCount: 1
         // }
-        if (docs.modifiedCount && docs.matchedCount) {
-          res.send({
-            status: "success",
-            message: "Insert and Update successful",
-          });
-        } else {
-          res.send({
-            status: "error",
-            message: "Something went wrong during the update operation",
-          });
-        }
+        res.send({
+          status: "success",
+          message: "Insert and Update successful",
+        });
       } else {
         res.send({
           status: "error",
@@ -329,4 +322,4 @@ const server = app.listen(port, hostname, () => {
   }
 });
 
-module.exports = {app, server};
+module.exports = { app, server };
