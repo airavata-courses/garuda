@@ -49,6 +49,7 @@ jobs:
         with:
           node-version: "lts/gallium"
           cache: "npm"
+          cache-dependency-path: '**/package-lock.json'
       - name: Build db_middleware with npm
         working-directory: ./db_middleware
         run: |
