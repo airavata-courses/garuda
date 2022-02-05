@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -11,12 +11,11 @@ import {
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json";
 
-let colorFill = "#F00"
-let coordinates = [];
-
 const MapBox = (props) => {
+  const [coordinates] = useState([]);
+
   for (let i = 0; i < props.data.latitude.length; i++) {
-    coordinates.push([props.data.longitude[i], props.data.latitude[i],props.data.reflectivity[i]]);
+    coordinates.push([props.data.longitude[i], props.data.latitude[i], props.data.reflectivity[i]]);
   }
   // TODO: set height width
   return (
@@ -24,7 +23,7 @@ const MapBox = (props) => {
       <ComposableMap
 
         // play with these params 
-        
+
         // projection="geoAzimuthalEqualArea"
         //   projectionConfig={{
         //     rotate: [-190, 100, 0],
@@ -54,9 +53,8 @@ const MapBox = (props) => {
             }
           </Geographies>
           {coordinates.map((coordinates, index) => (
-             colorFill = coordinates[2] > 100 ? "#fff" : "#000",
             <Marker key={index} coordinates={coordinates}>
-              <circle key = {index} r="1" fill= {colorFill} />
+              <circle key={index} r="0.1" fill={coordinates[2] > 100 ? "#fff" : "#000"} />
             </Marker>
           ))}
         </ZoomableGroup>
