@@ -54,3 +54,4 @@ jobs:
         working-directory: ./db_middleware
         run: |
           npm install
+          npm test
