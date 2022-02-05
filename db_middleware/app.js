@@ -141,9 +141,9 @@ app.post("/data_writer", insertDataInDataSetCollection, updateStatusOfRequestInD
 
 function checkIfRequestIdExists(receivedData, res) {
   const paramRequestId = receivedData.request_id;
-  const paramPropertyType = receivedData.property;
+  //const paramPropertyType = receivedData.property;
   userRequestsModel.find(
-    { request_id: paramRequestId, property: paramPropertyType },
+    { request_id: paramRequestId },
     (err, data) => {
       if (!err) {
         //data: array of objects
@@ -214,9 +214,10 @@ function insertUserRequest(objUserRequest, response) {
             }
           });
         } else {
-          //Do nothing same request already associated with user_email in DB
-          //Shouldn't reach here ever
-          console.log("Shouldn't reach here in any scenario");
+          response.send({
+            status: "success",
+            message: "Request already exists"
+          });
         }
       } else {
         response.send({ status: "error", message: "Insertion failed" });
@@ -286,17 +287,10 @@ function updateStatusOfRequestInDB(req, res) {
         //   upsertedCount: 0,
         //   matchedCount: 1
         // }
-        if (docs.modifiedCount && docs.matchedCount) {
-          res.send({
-            status: "success",
-            message: "Insert and Update successful",
-          });
-        } else {
-          res.send({
-            status: "error",
-            message: "Something went wrong during the update operation",
-          });
-        }
+        res.send({
+          status: "success",
+          message: "Insert and Update successful",
+        });
       } else {
         res.send({
           status: "error",
@@ -321,7 +315,11 @@ app.get("/ping", (req, res) => {
 });
 
 //Method to listen all incoming request
-app.listen(port, hostname, () => {
+const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  connectDB();
+  if (process.env.NODE_ENV != 'test') {
+    connectDB();
+  }
 });
+
+module.exports = { app, server };

@@ -4,7 +4,7 @@
   "description": "middleware API for interacting with database",
   "main": "app.js",
   "scripts": {
-    "test": "npm test",
+    "test": "jest",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/airavata-courses/garuda#readme",
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   },
   "dependencies": {
     "express": "^4.17.2",
