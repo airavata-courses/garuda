@@ -18,8 +18,17 @@ COPY setup /main/setup/
 WORKDIR /main
 
 RUN apt-get update && \
-      apt-get -y install sudo
+      apt-get -y install sudo apt-utils debconf wget supervisor
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y keyboard-configuration
 
 RUN sh /main/setup/apigateway.sh
 RUN sh /main/setup/data-extractor.sh
 RUN sh /main/setup/db-middleware.sh
+RUN sh /main/setup/build.sh
+
+WORKDIR /main
+
+EXPOSE 80 5000 3001 27017 5672
+
+# default command
+CMD ["supervisord", "-c", "/main/setup/service_script.conf"]

@@ -15,4 +15,11 @@ cd ..
 cd queue_worker
 mvn clean
 mvn compile assembly:single
+cd ..
+
+# Npm start
+cd db_middleware
+npm install
+cd ..
+
 
