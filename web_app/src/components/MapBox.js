@@ -12,10 +12,16 @@ const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json";
 
 function checkRange(reflectivityRange){
-  if(reflectivityRange < 30){
-    return "#2CF3E0" //light blue
-  } else if(reflectivityRange >= 30 && reflectivityRange < 60 ) {
+  if(reflectivityRange > -20){
+    return "#FFA500" //orange
+  } else if(reflectivityRange >-22 && reflectivityRange <=-20) {
     return "#F51620" //red
+  } else if(reflectivityRange >-24 && reflectivityRange <=-22 ) {
+    return "#80B622" //green
+  } else if(reflectivityRange >-26 && reflectivityRange <=-24 ) {
+    return "#2CF3E0" //light blue
+  } else if(reflectivityRange >-28 && reflectivityRange <=-26) {
+    return "#EF7C8E" // pink
   } else if(reflectivityRange >= 60 && reflectivityRange < 90){
     return "#0000FF" //blue
   }else if(reflectivityRange >= 90 && reflectivityRange < 120){

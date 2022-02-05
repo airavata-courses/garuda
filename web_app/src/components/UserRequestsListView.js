@@ -42,7 +42,7 @@ export default function UserRequestsListView({ sendDataToParent, setLoadMapFalse
     if (!isLoaded) {
         return <div>Loading...</div>;
     } else if (arrUserRequestHistory == 0) {
-        return <div>no request found ...</div>;
+        return <div className='divNoRequest'>No requests found. Please submit a new request using above form.</div>;
     } else {
         return (
             <div className='divUserRequests'>

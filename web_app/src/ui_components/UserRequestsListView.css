@@ -41,3 +41,9 @@
     justify-content: center;
     text-align: center;
 }
+
+.divNoRequest{
+    text-align: center;
+    margin: 10px;
+    font-size: 18px;
+}

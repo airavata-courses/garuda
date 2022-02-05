@@ -19,7 +19,10 @@
     overflow:auto;
 }
 .divMainDashboardMap{
-    flex:0.50
+    flex:0.50;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
 }
 .cardUserRequestForm
 {
