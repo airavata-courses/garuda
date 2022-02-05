@@ -16,7 +16,7 @@ export default function Dashboard() {
   const sendDataToParent = (arrOfRequests) => { // the callback. Use a better name
     for(let i =0; i<arrOfRequests[0].lat.length; i++){
       let reflectivity = i
-      for(let j =0; j<arrOfRequests[0].lat[i].length; j+=1000){
+      for(let j =0; j<arrOfRequests[0].lat[i].length; j+=200){
         obj.latitude.push(arrOfRequests[0].lat[i][j]);
         obj.longitude.push(arrOfRequests[0].long[i][j]);
         obj.reflectivity.push(reflectivity)
@@ -106,6 +106,9 @@ export default function Dashboard() {
 
   return (
     <div className="divMainDashboard">
+      <div className="divLogout">
+        <Logout />
+      </div>
       <div className='divMainDashboardUserForm'>
         <Card className="cardUserRequestForm">
           <UserRequestForm />
@@ -121,11 +124,7 @@ export default function Dashboard() {
       <div className='divMainDashboardUserRequests'>
         <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
       </div>
-      <div>
-        <Card className="logout">
-          <Logout />
-        </Card>
-      </div>
+      
       <div className='divMainDashboardMap'>
         <Card>
           {isLoadMap && data && <MapBox data={data} />}
