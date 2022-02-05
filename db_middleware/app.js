@@ -321,7 +321,11 @@ app.get("/ping", (req, res) => {
 });
 
 //Method to listen all incoming request
-app.listen(port, hostname, () => {
+const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  connectDB();
+  if (process.env.NODE_ENV != 'test') {
+    connectDB();
+  }
 });
+
+module.exports = {app, server};
