@@ -291,9 +291,10 @@ function insertUserRequest(objUserRequest, response) {
             }
           });
         } else {
-          //Do nothing same request already associated with user_email in DB
-          //Shouldn't reach here ever
-          console.log("Shouldn't reach here in any scenario");
+          response.send({
+            status: "success",
+            message: "Request already exists"
+          });
         }
       } else {
         response.send({ status: "error", message: "Insertion failed" });
