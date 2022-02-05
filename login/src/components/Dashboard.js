@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Card from "@material-ui/core/Card";
 import "../ui_components/Dashboard.css";
 import UtilsApiCalls from '../api/UtilsApiCalls';
+import UserRequestsListView from './UserRequestsListView';
 
 export default function Dashboard() {
     
@@ -14,29 +15,61 @@ export default function Dashboard() {
         var vTimeSlots = document.getElementById('idDropdownTimeSlots').value
         var vMapProperty = document.getElementById('idDropdownMapProperty').value
         var userEmail = localStorage.getItem('userEmail');
-        //TODO: validations
-        var requestBody = {
-            "station_name":vStationLocation,
-            "date":vDate,
-            "time":vTimeSlots,
-            "property_type":vMapProperty,
-            "user_email":userEmail,
+        
+        if(vStationLocation === "default"){
+            //alert("Please select station location")
+            document.getElementById('apiResponseMsg').innerHTML = "Please select station location"
+        } else if(vTimeSlots === "default") {
+            //alert("Please select the time slot")
+            document.getElementById('apiResponseMsg').innerHTML = "Please select the time slot"
+        } else if(vMapProperty === "default") {
+            //alert("Please select the property")
+            document.getElementById('apiResponseMsg').innerHTML = "Please select the property"
+        } else {
+
+            var requestBody = {
+                "station_name":vStationLocation,
+                "date":vDate,
+                "time":vTimeSlots,
+                "user_email":userEmail,
+                "property":vMapProperty
             }
 
-
-            //TODO: display response on ui
-            fetch("http://127.0.0.1:3001/postNewRequest", {
+            console.log("request body " + JSON.stringify(requestBody) )
+            var apiEndpoint = process.env.REACT_APP_API_GATEWAY_ENDPOINT + '/' + process.env.REACT_APP_POST_NEW_REQUEST
+            console.group(apiEndpoint)
+                // { 
+                // “response_code” : “0” / ”1”,
+                // “response_message” : “Success/Fail”, “data_dump” :””    }
+              
+            document.getElementById('apiResponseMsg').innerHTML = "Loading Please Wait! Submitting your request."
+            fetch(apiEndpoint, {
                 method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
                 body: JSON.stringify(requestBody)
             }).then(res => res.json())
             .then(
                 (result) => {
                     console.log(result)
+                    //TODO: Parse the response and change the UI message accordingly
+                    if(result.response_code.localeCompare("0") == 0){
+                        // Success
+                        document.getElementById('apiResponseMsg').innerHTML = result.response_message
+                    } else {
+                        // Error
+                        document.getElementById('apiResponseMsg').innerHTML = result.response_message
+                    } 
+                    
                 },
                 (error) => {
                     console.log(error)
+                    document.getElementById('apiResponseMsg').innerHTML = "Something went wrong! Please try again later."
                 }
             )
+        }
 
         //TODO: using 
         //https://stackoverflow.com/questions/39260595/event-handlers-in-react-stateless-components
@@ -49,15 +82,25 @@ export default function Dashboard() {
       }
 
     return (
-        <div>
-            <Card className = "cardUserRequestForm">
-            <UserRequestForm/>
-            <div className = "divSubmitButton">
-                <button  onClick ={submitUserRequest} >
-                    Submit Request
-                </button>
+        <div className = "divMainDashboard">
+            <div className='divMainDashboardUserForm'>
+                <Card className = "cardUserRequestForm">
+                <UserRequestForm/>
+                <div className = "divSubmitButton">
+                    <button  className = "button" onClick ={submitUserRequest} >
+                        Submit Request
+                    </button>
+                </div>
+                <div className = "apiResponseMsg" id = "apiResponseMsg" style={{marginBottom:"20px"}}></div>
+                </Card>
             </div>
-            </Card>
+            
+            <div className='divMainDashboardUserRequests'>
+                <UserRequestsListView />
+            </div>
+            <div className='divMainDashboardMap'>
+                {/* TODO: ADD MAP COMPONENT HERE */}
+            </div>
         </div>
     );
 }

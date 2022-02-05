@@ -16,17 +16,17 @@ function Login() {
     /**
      * Used to redirect user to the dashboard screen
      */
-    window.localStorage.setItem('userEmail', res.profileObj.email);
-    window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
-
     
+    document.getElementById('divApiResponse').innerHTML = "Login Successful! Redirecting..."
+    window.localStorage.setItem('userEmail', res.profileObj.email);
+    setTimeout(() => {
+      window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+    }, 200);
   };
 
   const onFailure = (res) => {
+    document.getElementById('divApiResponse').innerHTML = "Login Failed! Please try again!"
     console.log('Login failed: res:', res);
-    alert(
-      `Failed to login. 😢 Please ping this to repo owner twitter.com/sivanesh_fiz`
-    );
   };
 
   return (
@@ -40,6 +40,7 @@ function Login() {
         style={{ marginTop: '100px' }}
         isSignedIn={true}
       />
+      <div id="divApiResponse" style={{marginTop:"20px"}}></div>
     </div>
   );
 }

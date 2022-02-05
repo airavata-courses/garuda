@@ -1,3 +1,25 @@
+.divMainDashboard{
+    margin:"20px";
+    display:"flex";
+    flex-direction: column;
+    
+    
+}
+.divMainDashboardUserForm{
+    flex:1;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 1%;
+
+}
+.divMainDashboardUserRequests{
+    flex:1;
+    height:200px;
+    overflow:auto;
+}
+.divMainDashboardMap{
+    flex:0.50
+}
 .cardUserRequestForm
 {
     margin:"20px"
@@ -7,3 +29,18 @@
 text-align: center;
 margin-bottom: 20px;
 }
+
+.button {
+    background: #009879; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  .apiResponseMsg{
+    text-align: center;
+  }
