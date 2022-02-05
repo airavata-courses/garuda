@@ -14,17 +14,22 @@ export default function Dashboard() {
   const [isLoadMap, setLoadMap] = useState(false);
 
   let obj = { latitude: [], longitude: [], reflectivity: [] };
+  let station = [];
 
-  const sendDataToParent = (arrOfRequests) => { // the callback. Use a better name
-    for (let i = 0; i < arrOfRequests[0].lat.length; i++) {
+  const sendDataToParent = (response) => { // the callback
+
+    station.push(response[0].station_longitude);
+    station.push(response[0].station_latitude);
+
+    for (let i = 0; i < response[0].lat.length; i++) {
       let reflectivity = i
-      for (let j = 0; j < arrOfRequests[0].lat[i].length; j += 200) {
-        obj.latitude.push(arrOfRequests[0].lat[i][j]);
-        obj.longitude.push(arrOfRequests[0].long[i][j]);
-        obj.reflectivity.push(reflectivity)
+      for (let j = 0; j < response[0].lat[i].length; j += 200) {
+        obj.latitude.push(response[0].lat[i][j]);
+        obj.longitude.push(response[0].long[i][j]);
+        obj.reflectivity.push(reflectivity);
       }
     }
-    data = obj
+    data = {obj, station}
     setLoadMap(true)
   };
 

@@ -34,8 +34,8 @@ function checkRange(reflectivityRange){
 const MapBox = (props) => {
   const [coordinates] = useState([]);
 
-  for (let i = 0; i < props.data.latitude.length; i++) {
-    coordinates.push([props.data.longitude[i], props.data.latitude[i], props.data.reflectivity[i]]);
+  for (let i = 0; i < props.data.obj.latitude.length; i++) {
+    coordinates.push([props.data.obj.longitude[i], props.data.obj.latitude[i], props.data.obj.reflectivity[i]]);
   }
   // TODO: set height width
   return (
@@ -55,9 +55,8 @@ const MapBox = (props) => {
         //   style={{
         //     border: "1px solid #DDD",
         //   }}
-        center={[40.2672, 86.1349]}
       >
-        <ZoomableGroup zoom={2} disablePanning>
+        <ZoomableGroup zoom={2} center={props.data.station} disablePanning>
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies
