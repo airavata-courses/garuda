@@ -20,6 +20,7 @@ const {
 } = require("./Models/dataSetModel");
 const mongoose = require("mongoose");
 const connectDB = require("./database");
+const morgan = require('morgan')
 
 const app = express();
 const hostname = CONSTANTS.CONST_NODE_JS_HOSTNAME;
@@ -34,8 +35,8 @@ app.use(
     limit: "250mb"
   })
 );
-
 app.use(express.json({ limit: "250mb" }));
+app.use(morgan('combined'))
 
 /**
  * Method to avoid cors error. Set allow origin for all request
@@ -57,10 +58,7 @@ app.use(function (req, res, next) {
                 }
  */
 app.post("/postCheckRequest", (req, res) => {
-  processRequestBody(req).then((data) => {
-    receivedData = JSON.parse(data);
-    checkIfRequestIdExists(receivedData, res);
-  });
+  checkIfRequestIdExists(req.body, res)
 });
 
 /**
@@ -74,10 +72,11 @@ app.post("/postCheckRequest", (req, res) => {
               }
  */
 app.post("/postNewRequest", (req, res) => {
-  processRequestBody(req).then((data) => {
-    receivedData = JSON.parse(data);
-    insertUserRequest(receivedData, res, true);
-  });
+  insertUserRequest(req.body, res)
+  // processRequestBody(req).then((data) => {
+  //   receivedData = JSON.parse(data);
+  //   insertUserRequest(receivedData, res, true);
+  // });
 });
 
 /**
@@ -88,10 +87,7 @@ app.post("/postNewRequest", (req, res) => {
                   }
  */
 app.post("/getAllStatus", (req, res) => {
-  processRequestBody(req).then((data) => {
-    receivedData = JSON.parse(data);
-    getAllUserRequests(receivedData, res);
-  });
+  getAllUserRequests(req.body, res)
 });
 
 /**
@@ -105,7 +101,6 @@ app.post("/getAllStatus", (req, res) => {
           }
  */
 
-// TODO: make this API HTTP GET
 app.post("/getDataOfRequestID", getDataOfRequestId);
 
 /**
@@ -143,62 +138,6 @@ app.post("/data_writer", insertDataInDataSetCollection, updateStatusOfRequestInD
 /**
  * Below code is used to leverage node.js on the client side when not using express
  */
-// http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'text/plain');
-//   res.end(JSON.stringify({"a":"asd"}));
-// });
-
-/**
- * Methods to communicate with the mongodb for FRONTEND
- */
-//Rishabh - Another approach to write the below function
-// async function checkRequestIdInsertOrReturn() {
-//   const ad = 'dummy_request_id'
-//   const findResults = await userRequestsModel.find({ request_id: ad });
-//   console.log({findResults})
-// }
-/**
- *
- * @param {*} receivedData
- * @param {*} res
- * @deprecated
- */
-function checkRequestIdInsertOrReturn(receivedData, res) {
-  const paramRequestId = receivedData.request_id;
-  userRequestsModel.find({ request_id: paramRequestId }, (err, data) => {
-    if (!err) {
-      //data: array of objects
-      if (data.length != 0) {
-        res.send({
-          status: "success",
-          message: "Information retrieved",
-          requests: data,
-          is_new_request: "false",
-        });
-        //Below code acts as a caching mechanism if the request made by the user already exists in DB but the initial request was made by some other user then insert the same entry with new user's user email
-        //TODO: The above fix causes a bug i.e the 'data' variable which is returned has multiple entries of same request and email id of other user is getting exposed
-        //solution for it before returning the data add a filter to return only current users request.
-        var tempData = data;
-        tempData.forEach((jsonDocument) => {
-          if (jsonDocument.user_email != receivedData.user_email) {
-            jsonDocument.user_email = receivedData.user_email;
-            id = mongoose.Types.ObjectId();
-            jsonDocument._id = id;
-            insertUserRequest(jsonDocument, res, false);
-            return;
-          } else {
-            console.log("nothing");
-          }
-        });
-      } else {
-        insertUserRequest(receivedData, res, true);
-      }
-    } else {
-      res.send({ status: "error", message: "Retrieval failed" });
-    }
-  });
-}
 
 function checkIfRequestIdExists(receivedData, res) {
   const paramRequestId = receivedData.request_id;
@@ -215,22 +154,6 @@ function checkIfRequestIdExists(receivedData, res) {
             requests: data,
             data_status: "true",
           });
-          //Below code acts as a caching mechanism if the request made by the user already exists in DB but the initial request was made by some other user then insert the same entry with new user's user email
-          //TODO: The above fix causes a bug i.e the 'data' variable which is returned has multiple entries of same request and email id of other user is getting exposed
-          //Update: no need to do it moved that functionality on api gateway
-          //solution for it before returning the data add a filter to return only current users request.
-          // var tempData = data
-          // tempData.forEach(jsonDocument => {
-          //   if(jsonDocument.user_email != receivedData.user_email){
-          //     jsonDocument.user_email = receivedData.user_email
-          //     id = mongoose.Types.ObjectId();
-          //     jsonDocument._id = id
-          //     insertUserRequest(jsonDocument, res, false)
-          //     return;
-          //   } else {
-          //     console.log("nothing")
-          //   }
-          // })
         } else {
           res.send({
             status: "success",
@@ -250,9 +173,9 @@ function checkIfRequestIdExists(receivedData, res) {
 }
 
 function insertUserRequest(objUserRequest, response) {
-  const paramRequestId = receivedData.request_id;
-  const paramPropertyType = receivedData.property;
-  const paramUserEmail = receivedData.user_email;
+  const paramRequestId = objUserRequest.request_id;
+  const paramPropertyType = objUserRequest.property;
+  const paramUserEmail = objUserRequest.user_email;
   userRequestsModel.find(
     {
       request_id: paramRequestId,
@@ -266,7 +189,7 @@ function insertUserRequest(objUserRequest, response) {
           var oUserReq = new userRequestsModel({
             user_email: paramUserEmail,
             request_id: paramRequestId,
-            status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE, //by default the status is 0 - inprocess but in this case data set exists already so it will directly go to complete state
+            status: CONSTANTS.CONST_REQUEST_STATUS_IN_PROCESS, //by default the status is 0 - inprocess but in this case data set exists already so it will directly go to complete state
             time_stamp: objUserRequest.time_stamp,
             property: paramPropertyType,
           });
@@ -350,59 +273,44 @@ const dummy_json ={
 
 // TODO: complete while integrating API gateway
 function updateStatusOfRequestInDB(req, res) {
-  res.json({ status: 200 });
-  // userRequestsModel.updateOne(
-  //   { request_id: oDataSetRequest.request_id },
-  //   { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
-  //   function (err, docs) {
-  //     if (!err) {
-  //       // docs response
-  //       // {
-  //       //   acknowledged: true,
-  //       //   modifiedCount: 1,
-  //       //   upsertedId: null,
-  //       //   upsertedCount: 0,
-  //       //   matchedCount: 1
-  //       // }
-  //       if (docs.modifiedCount && docs.matchedCount) {
-  //         response.send({
-  //           status: "success",
-  //           message: "Insert and Update successful",
-  //         });
-  //       } else {
-  //         response.send({
-  //           status: "error",
-  //           message: "Something went wrong during the update operation",
-  //         });
-  //       }
-  //     } else {
-  //       response.send({
-  //         status: "error",
-  //         message: "Update failed in user request collection",
-  //       });
-  //     }
-  //   }
-  // );
+  //res.json({ status: 200 });
+  userRequestsModel.updateOne(
+    { request_id: req.body.requestID },
+    { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
+    function (err, docs) {
+      if (!err) {
+        // docs response
+        // {
+        //   acknowledged: true,
+        //   modifiedCount: 1,
+        //   upsertedId: null,
+        //   upsertedCount: 0,
+        //   matchedCount: 1
+        // }
+        if (docs.modifiedCount && docs.matchedCount) {
+          res.send({
+            status: "success",
+            message: "Insert and Update successful",
+          });
+        } else {
+          res.send({
+            status: "error",
+            message: "Something went wrong during the update operation",
+          });
+        }
+      } else {
+        res.send({
+          status: "error",
+          message: "Update failed in user request collection",
+        });
+      }
+    }
+  );
 }
 
 /**
  * Utils Method
  */
-/**
- * Get request body of the request and return a string
- */
-function processRequestBody(requestObject) {
-  return new Promise((resolve, reject) => {
-    let data = "";
-    requestObject.on("data", (chunk) => {
-      data += chunk;
-    });
-    requestObject.on("end", () => {
-      console.log("Received data " + JSON.parse(JSON.stringify(data)));
-      resolve(data);
-    });
-  });
-}
 
 /**
  * API for ping check
@@ -414,7 +322,11 @@ app.get("/ping", (req, res) => {
 });
 
 //Method to listen all incoming request
-app.listen(port, hostname, () => {
+const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  connectDB();
+  if (process.env.NODE_ENV != 'test') {
+    connectDB();
+  }
 });
+
+module.exports = {app, server};
