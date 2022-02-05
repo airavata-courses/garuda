@@ -2,6 +2,7 @@
     margin:"20px";
     display:"flex";
     flex-direction: column;
+    background: aliceblue;
     
     
 }
@@ -43,4 +44,9 @@ margin-bottom: 20px;
 
   .apiResponseMsg{
     text-align: center;
+  }
+
+  .divLogout{
+    text-align: end;
+    margin-right: 30px;
   }
