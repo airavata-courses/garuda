@@ -141,9 +141,9 @@ app.post("/data_writer", insertDataInDataSetCollection, updateStatusOfRequestInD
 
 function checkIfRequestIdExists(receivedData, res) {
   const paramRequestId = receivedData.request_id;
-  const paramPropertyType = receivedData.property;
+  //const paramPropertyType = receivedData.property;
   userRequestsModel.find(
-    { request_id: paramRequestId, property: paramPropertyType },
+    { request_id: paramRequestId },
     (err, data) => {
       if (!err) {
         //data: array of objects
