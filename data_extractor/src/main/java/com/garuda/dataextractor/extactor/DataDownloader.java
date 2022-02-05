@@ -1,30 +1,23 @@
 package com.garuda.dataextractor.extactor;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.garuda.dataextractor.utils.DownloadFromS3;
 
 public class DataDownloader {
 
 	// Hard-coded bucket name and region
 	private static final String bucketName = "noaa-nexrad-level2";
-	private static final Regions bucketRegion = Regions.US_EAST_1;
-
-	// folder to store downloaded files
-	private static final String tempFolder = "./temp";
 
 	/**
 	 * Function to download NEXRAD dataset from S3.
@@ -42,35 +35,29 @@ public class DataDownloader {
 		List<String> downloaded_files = new ArrayList<String>();
 		DataDownloader dd = new DataDownloader();
 		List<String> fileList = dd.getFileListFromS3(stationID, date, month, year, start, end);
+
+		ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
+
+		List<Future<String>> resultList = new ArrayList<>();
+
 		for (String file : fileList) {
+			DownloadFromS3 dfs = new DownloadFromS3(file);
+			Future<String> result = executor.submit(dfs);
+			resultList.add(result);
+		}
+
+		for (Future<String> future : resultList) {
 			try {
-				downloaded_files.add(dd.downloadFromS3(file));
-			} catch (Exception error) {
-				error.printStackTrace();
-				// ignore exception
+				downloaded_files.add(future.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
 			}
 		}
-		return downloaded_files;
-	}
 
-	private String downloadFromS3(String key_name) throws Exception {
-		System.out.format("Downloading %s from S3 bucket %s...\n", key_name, bucketName);
-		final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(bucketRegion).build();
-		S3Object o = s3.getObject(bucketName, key_name);
-		S3ObjectInputStream s3is = o.getObjectContent();
-		Files.createDirectories(Paths.get(tempFolder));
-		String[] fileNameToken = key_name.split("/");
-		String shortName = fileNameToken[fileNameToken.length - 1];
-		// TODO: check if file already present, if present ignore.
-		FileOutputStream fos = new FileOutputStream(new File(tempFolder + "/" + shortName));
-		byte[] read_buf = new byte[1024];
-		int read_len = 0;
-		while ((read_len = s3is.read(read_buf)) > 0) {
-			fos.write(read_buf, 0, read_len);
-		}
-		s3is.close();
-		fos.close();
-		return shortName;
+		// shut down the executor service now
+		executor.shutdown();
+
+		return downloaded_files;
 	}
 
 	private List<String> getFileListFromS3(String stationID, String dd, String mm, String yyyy, String start,
