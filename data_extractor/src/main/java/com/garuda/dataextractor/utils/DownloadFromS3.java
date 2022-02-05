@@ -35,14 +35,24 @@ public class DownloadFromS3 implements Callable<String> {
 
 	private static String downloadFromS3(String key_name) throws Exception {
 		System.out.format("Downloading %s from S3 bucket %s...\n", key_name, bucketName);
+
+		// generate file name
+		String[] fileNameToken = key_name.split("/");
+		String shortName = fileNameToken[fileNameToken.length - 1];
+
+		Files.createDirectories(Paths.get(tempFolder));
+
+		// output file
+		File op = new File(tempFolder + "/" + shortName);
+		if (op.exists()) {
+			return shortName;
+		}
+
 		final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(bucketRegion).build();
 		S3Object o = s3.getObject(bucketName, key_name);
 		S3ObjectInputStream s3is = o.getObjectContent();
-		Files.createDirectories(Paths.get(tempFolder));
-		String[] fileNameToken = key_name.split("/");
-		String shortName = fileNameToken[fileNameToken.length - 1];
-		// TODO: check if file already present, if present ignore.
-		FileOutputStream fos = new FileOutputStream(new File(tempFolder + "/" + shortName));
+
+		FileOutputStream fos = new FileOutputStream(op);
 		byte[] read_buf = new byte[1024];
 		int read_len = 0;
 		while ((read_len = s3is.read(read_buf)) > 0) {
