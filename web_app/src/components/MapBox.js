@@ -11,11 +11,12 @@ import {
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json";
 
+let colorFill = "#F00"
 let coordinates = [];
 
 const MapBox = (props) => {
   for (let i = 0; i < props.data.latitude.length; i++) {
-    coordinates.push([props.data.longitude[i], props.data.latitude[i]]);
+    coordinates.push([props.data.longitude[i], props.data.latitude[i],props.data.reflectivity[i]]);
   }
   // TODO: set height width
   return (
@@ -53,8 +54,9 @@ const MapBox = (props) => {
             }
           </Geographies>
           {coordinates.map((coordinates, index) => (
+             colorFill = coordinates[2] > 100 ? "#fff" : "#000",
             <Marker key={index} coordinates={coordinates}>
-              <circle r={2} fill="#F00" stroke="#fff" />
+              <circle key = {index} r="1" fill= {colorFill} />
             </Marker>
           ))}
         </ZoomableGroup>

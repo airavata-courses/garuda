@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserRequestForm from "./UserRequestForm";
 import Logout from "./Logout";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,6 +10,26 @@ import UserRequestsListView from './UserRequestsListView'
 let data = {};
 
 export default function Dashboard() {
+
+  const [isLoadMap, setLoadMap] = useState(false);
+  let obj = { latitude: [], longitude: [], reflectivity: [] };
+  const sendDataToParent = (arrOfRequests) => { // the callback. Use a better name
+    for(let i =0; i<arrOfRequests[0].lat.length; i++){
+      let reflectivity = i
+      for(let j =0; j<arrOfRequests[0].lat[i].length; j+=1000){
+        obj.latitude.push(arrOfRequests[0].lat[i][j]);
+        obj.longitude.push(arrOfRequests[0].long[i][j]);
+        obj.reflectivity.push(reflectivity)
+      }
+    }
+    data = obj
+    setLoadMap(true)
+  };
+
+  const setLoadMapFalse = () => { // the callback. Use a better name
+    setLoadMap(false)
+  };
+
   function submitUserRequest(e) {
     e.preventDefault();
     var vStationLocation = document.getElementById(
@@ -84,12 +104,6 @@ export default function Dashboard() {
          }) */
   }
 
-  // TODO: fetch location details
-  // once fetched load data into data variable
-
-  let obj = { latitude: [-68.1193, -47.8825], longitude: [-16.4897, -15.7942] };
-  data = obj;
-
   return (
     <div className="divMainDashboard">
       <div className='divMainDashboardUserForm'>
@@ -105,7 +119,7 @@ export default function Dashboard() {
       </div>
 
       <div className='divMainDashboardUserRequests'>
-        <UserRequestsListView />
+        <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
       </div>
       <div>
         <Card className="logout">
@@ -114,7 +128,7 @@ export default function Dashboard() {
       </div>
       <div className='divMainDashboardMap'>
         <Card>
-          <MapBox data={data} />
+          {isLoadMap && data && <MapBox data={data} />}
         </Card>
       </div>
     </div>
