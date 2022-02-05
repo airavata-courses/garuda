@@ -33,6 +33,7 @@ public class Worker {
 
 					// extract parameters from request
 					JSONObject request_obj = new JSONObject(request);
+					String requestID = request_obj.getString("requestID");
 					String stationID = request_obj.getString("stationID");
 					String year = request_obj.getString("year");
 					String month = request_obj.getString("month");
@@ -47,9 +48,16 @@ public class Worker {
 							property);
 					System.out.println("fetch data complete...");
 
+					// create response
+					JSONObject final_response = new JSONObject();
+					final_response.put("requestID", requestID);
+					final_response.put("start_time", start_time);
+					final_response.put("end_time", end_time);
+					final_response.put("data", response);
+
 					// post JSON to db_writer
 					try {
-						PostData.sendPost(response);
+						PostData.sendPost(final_response.toString());
 					} catch (Exception error) {
 						System.out.println("error in sending data.. :(");
 					}
