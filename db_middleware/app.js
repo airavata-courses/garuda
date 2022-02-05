@@ -214,9 +214,10 @@ function insertUserRequest(objUserRequest, response) {
             }
           });
         } else {
-          //Do nothing same request already associated with user_email in DB
-          //Shouldn't reach here ever
-          console.log("Shouldn't reach here in any scenario");
+          response.send({
+            status: "success",
+            message: "Request already exists"
+          });
         }
       } else {
         response.send({ status: "error", message: "Insertion failed" });
@@ -321,7 +322,11 @@ app.get("/ping", (req, res) => {
 });
 
 //Method to listen all incoming request
-app.listen(port, hostname, () => {
+const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  connectDB();
+  if (process.env.NODE_ENV != 'test') {
+    connectDB();
+  }
 });
+
+module.exports = {app, server};
