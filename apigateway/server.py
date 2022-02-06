@@ -23,8 +23,9 @@ def log_error(err_code):
         print("Status value not valid")
     
 def push_to_rabbitmq(data):
+    creds = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost')
+        pika.ConnectionParameters(host = 'garuda_rabbitmq', port = 5672, virtual_host = "/", credentials = creds)
     )
     channel = connection.channel()
     channel.queue_declare(queue='offload_request')
@@ -76,7 +77,7 @@ def get_user_job_status():
         return jsonify(response)
 
     # Call db helper to fetch data for email_id
-    URL = "http://localhost:3001/getAllStatus"
+    URL = "http://garudadbmiddleware:3001/getAllStatus"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email": str(userid)
@@ -130,7 +131,7 @@ def generate_new_request():
     db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}"
 
     # Make call to check db for this key
-    URL = "http://localhost:3001/postCheckRequest"
+    URL = "http://garudadbmiddleware:3001/postCheckRequest"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "request_id" : db_key,
@@ -158,7 +159,7 @@ def generate_new_request():
         except:
             response['data_dump'] = ""
         # Make call to postNewRequest
-        URL = "http://localhost:3001/postNewRequest"
+        URL = "http://garudadbmiddleware:3001/postNewRequest"
         METHOD = 'POST'
         PAYLOAD = json.dumps({
             "user_email" : str(user_email),
@@ -222,7 +223,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "http://localhost:3001/getDataOfRequestID"
+    URL = "http://garudadbmiddleware:3001/getDataOfRequestID"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
