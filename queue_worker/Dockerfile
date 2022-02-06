@@ -4,7 +4,7 @@ FROM maven:3.6.3-jdk-11
 # LABEL about the custom image
 LABEL maintainer="garuda"
 LABEL version="1.0"
-LABEL description="This is a docker image for the service data_extractor in the garuda project assignment 1"
+LABEL description="This is a docker image for the service queue_worker in the garuda project assignment 1"
 
 WORKDIR /main
 
