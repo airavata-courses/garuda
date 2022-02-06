@@ -49,6 +49,6 @@ JAR file is generated at folder : /target
 ```sh
 cd target/
 ```
-> Note: JAR file built : data_extractor-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+> Note: JAR file built : data_extractor-1.1.1-jar-with-dependencies
 
 
