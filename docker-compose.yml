@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
   mongodb:
@@ -23,7 +23,7 @@ services:
       - rabbitmq
     build:
       dockerfile: apigateway/Dockerfile
-      context: /apigateway/
+      context: .
     restart: unless-stopped
     ports:
       - 5000:5000
@@ -38,7 +38,7 @@ services:
       - rabbitmq
     build:
       dockerfile: db_middleware/Dockerfile
-      context: /db_middleware
+      context: .
     restart: unless-stopped
     ports:
       - 3001:3001
