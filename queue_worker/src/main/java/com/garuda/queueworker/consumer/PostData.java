@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 public class PostData {
 	private final static HttpClient httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
-	private final static String data_writer_url = "http://localhost:3001/data_writer";
+	private final static String data_writer_url = "http://garudadbmiddleware:3001/data_writer";
 
 	public static void sendPost(String data) throws Exception {
 
