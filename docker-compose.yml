@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:5.0
+    restart: always
+    ports:
+      - 27012:27012
+    volumes:
+      - /db/:/db/
+  
+  rabbitmq:
+    image: rabbitmq:3.9
+    restart: always
+    ports:
+      - 5672:5672
+    volumes:
+      - /rabbitmq/:/rabbitmq/
+
+  apigateway:
+    depends_on:
+      - mongodb
+      - rabbitmq
+    build:
+      dockerfile: apigateway/Dockerfile
+      context: /apigateway/
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    stdin_open: true
+    tty: true
+    volumes: 
+      - /apigateway/:/apigateway/
+  
+  db_middleware:
+    depends_on:
+      - mongodb
+      - rabbitmq
+    build:
+      dockerfile: db_middleware/Dockerfile
+      context: /db_middleware
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    stdin_open: true
+    tty: true
+    volumes: 
+      - /db_middleware/:/db_middleware/
+
+  data_extractor_queue_worker:
+    depends_on:
+      - mongodb
+      - rabbitmq
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes: 
+      - /main/:/main/
