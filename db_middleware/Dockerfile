@@ -12,4 +12,6 @@ COPY . /main/
 
 RUN npm install
 
+EXPOSE 80 5000 3001 27017 5672 4369 15672
+
 CMD [ "npm" , "start"]

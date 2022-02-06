@@ -12,4 +12,6 @@ COPY . /main/
 RUN mvn clean
 RUN mvn compile assembly:single
 
+EXPOSE 80 5000 3001 27017 5672 4369 15672
+
 CMD [ "java", "-jar", "target/queue_worker-1.0.0-jar-with-dependencies.jar"]

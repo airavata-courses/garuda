@@ -11,4 +11,6 @@ WORKDIR /main
 COPY . /main/
 RUN pip install -r /main/requirements.txt
 
+EXPOSE 80 5000 3001 27017 5672 4369 15672
+
 CMD [ "python" , "/main/server.py"]

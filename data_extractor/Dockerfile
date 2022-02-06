@@ -14,4 +14,6 @@ RUN mvn clean
 RUN mvn assembly:single
 RUN mvn install
 
+EXPOSE 80 5000 3001 27017 5672 4369 15672
+
 # CMD [ "python" , "/main/apigateway/server.py"]
