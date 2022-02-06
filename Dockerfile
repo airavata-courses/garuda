@@ -28,7 +28,8 @@ RUN sh /main/setup/build.sh
 
 WORKDIR /main
 
-EXPOSE 80 5000 3001 27017 5672
+EXPOSE 80 5000 3001 27017 5672 4369 15672
 
 # default command
-CMD ["supervisord", "-c", "/main/setup/service_script.conf"]
+# CMD ["supervisord", "-c", "/main/setup/service_script.conf"]
+CMD ["/bin/bash"]

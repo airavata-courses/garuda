@@ -153,7 +153,10 @@ def generate_new_request():
     if db_response['status'] == "success":
         response['response_code'] = "0"
         response['response_message'] = "Success"
-        response['data_dump'] = ""
+        try:
+            response['data_dump'] = db_response['requests']
+        except:
+            response['data_dump'] = ""
         # Make call to postNewRequest
         URL = "http://localhost:3001/postNewRequest"
         METHOD = 'POST'
