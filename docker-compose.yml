@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  mongodb:
+    container_name: garuda_mongo
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  db_middleware:
+    container_name: garudadbmiddleware
+    image: garuda_db_middleware
+    depends_on:
+      - mongodb
+    build: ./db_middleware
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    stdin_open: true
+    tty: true
+  api_gateway:
+    container_name: garuda_api_gateway
+    image: garuda_api_gateway
+    depends_on:
+      - mongodb
+      - db_middleware
+      - rabbitmq
+    build: ./apigateway
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    stdin_open: true
+    tty: true
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'garuda_rabbitmq'
+    hostname: "garuda_rabbitmq"
+    restart: unless-stopped
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - queue:/var/lib/rabbitmq/
+        - queue:/var/log/rabbitmq
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+  queue_worker:
+    container_name: garuda_queue_worker
+    image: garuda_queue_worker
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    build: .
+    stdin_open: true
+    tty: true
+  web_app:
+    container_name: garuda_web_app
+    restart: unless-stopped
+    build: ./web_app
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+
+volumes:
+  db:
+  queue:

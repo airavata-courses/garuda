@@ -18,6 +18,7 @@ const dataSetSchema = new mongoose.Schema({
   property: String,
   // lat: [],
   // long: [],
+  //data: [],
 });
 
 const DatasetModel = mongoose.model("DataSetModel", dataSetSchema);
@@ -29,7 +30,7 @@ function insertDataInDataSetCollection(req, res, next) {
 
   const raw_data = req.body.data;
 
-  let json = JSON.parse(JSON.stringify(raw_data).replace(/\bNaN\b/g, "null"))
+  let json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"))
   var objectId = new mongoose.Types.ObjectId();
 
   let dataSetModelObj = new DatasetModel({
@@ -46,7 +47,7 @@ function insertDataInDataSetCollection(req, res, next) {
     //long: json.longitude,
   })
 
-  
+
 
   const latRefModelObj = new LatRefModel({
     parent_doc_ref: objectId,
@@ -63,7 +64,6 @@ function insertDataInDataSetCollection(req, res, next) {
     //data: json[json.variable]
     data: json.Reflectivity
   })
-
   latRefModelObj.save((err) => {
     if (!err) {
       console.log("Insertion successful in lat model");
@@ -131,12 +131,17 @@ function getDataOfRequestId(req, res, next) {
       }
     }]
   ).then((result) => {
-    console.log(result);
     res.send({
+      status: "success",
+      message: "Information retrieved",
       "data": result
     })
   })
     .catch((error) => {
+      res.send({
+        status: "error",
+        message: "Information retrieval failed"
+      })
       console.log(error);
     });
 
