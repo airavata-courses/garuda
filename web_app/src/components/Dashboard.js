@@ -92,6 +92,9 @@ export default function Dashboard() {
             if (result.response_code.localeCompare("0") == 0) {
               // Success
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
+              setTimeout(() => {
+                window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+                }, 2000) 
             } else {
               // Error
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
