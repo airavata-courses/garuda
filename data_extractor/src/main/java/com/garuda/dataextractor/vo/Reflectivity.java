@@ -17,7 +17,7 @@ public class Reflectivity {
 
 	public Distance distance;
 	public Azimuth azimuth;
-	public float[][] reflexivity;
+	public float[][] Reflectivity;
 
 	public double[][] latitude;
 	public double[][] longitude;
@@ -34,7 +34,7 @@ public class Reflectivity {
 			this.stationLongitude = dataset.findGlobalAttribute("StationLongitude").getValue(0).toString();
 			this.stationName = dataset.findGlobalAttribute("StationName").getValue(0).toString();
 			this.stationID = dataset.findGlobalAttribute("Station").getValue(0).toString();
-			this.reflexivity = ((float[][]) rv.reduce().copyToNDJavaArray());
+			this.Reflectivity = ((float[][]) rv.reduce().copyToNDJavaArray());
 			this.distance = new Distance(dataset);
 			this.azimuth = new Azimuth(dataset);
 

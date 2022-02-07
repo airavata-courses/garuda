@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"extractor"},{"l":"utils"},{"l":"vo"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.garuda.dataextractor.extactor"},{"l":"com.garuda.dataextractor.utils"},{"l":"com.garuda.dataextractor.vo"},{"l":"data_extractor"}]

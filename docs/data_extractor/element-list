@@ -1,3 +1,4 @@
-extractor
-utils
-vo
+com.garuda.dataextractor.extactor
+com.garuda.dataextractor.utils
+com.garuda.dataextractor.vo
+data_extractor

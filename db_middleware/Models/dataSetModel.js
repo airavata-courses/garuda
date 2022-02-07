@@ -18,6 +18,7 @@ const dataSetSchema = new mongoose.Schema({
   property: String,
   // lat: [],
   // long: [],
+  //data: [],
 });
 
 const DatasetModel = mongoose.model("DataSetModel", dataSetSchema);
