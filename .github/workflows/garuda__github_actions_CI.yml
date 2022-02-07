@@ -64,7 +64,9 @@ jobs:
         with:
           node-version: "lts/gallium"
           cache: 'npm'
-          cache-dependency-path: web_app/package-lock.json
-      - run: npm install
-      - run: npm ci
-      - run: CI="" npm run build --if-present
+          cache-dependency-path: **/package-lock.json
+      - name: Build Web-App module
+        working-directory: ./web_app
+        run: |
+          npm ci
+          CI="" npm run build --if-present
