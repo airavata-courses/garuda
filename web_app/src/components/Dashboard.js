@@ -16,6 +16,10 @@ export default function Dashboard() {
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
 
+  function refreshDashboard() {
+    window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+  }
+
   const sendDataToParent = (response) => { // the callback
 
     station.push(response[0].station_longitude);
@@ -88,6 +92,9 @@ export default function Dashboard() {
             if (result.response_code.localeCompare("0") == 0) {
               // Success
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
+              setTimeout(() => {
+                window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+                }, 2000) 
             } else {
               // Error
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
@@ -129,6 +136,9 @@ export default function Dashboard() {
 
       <div className='divMainDashboardUserRequests'>
         <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
+        <button className="button" onClick={refreshDashboard} >
+              Refresh List
+            </button>
       </div>
       
       <div className='divMainDashboardMap'>
