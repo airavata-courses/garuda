@@ -43,6 +43,7 @@ jobs:
           mvn clean
           mvn compile assembly:single
 
+      # Install and Test db_middleware module
       - uses: actions/checkout@v2
       - name: Use Node.js LTS Gallium
         uses: actions/setup-node@v2
@@ -55,3 +56,15 @@ jobs:
         run: |
           npm install
           npm test
+      
+      # Build Web-App module
+      - uses: actions/checkout@v2
+      - name: Use Node.js LTS Gallium
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/gallium"
+          cache: 'npm'
+          cache-dependency-path: web_app/package-lock.json
+      - run: npm install
+      - run: npm ci
+      - run: CI="" npm run build --if-present
