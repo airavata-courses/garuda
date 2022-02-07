@@ -9,7 +9,7 @@ export default function UserRequestForm() {
     const KEY_TIME_SLOTS = 'time'
     const KEY_PROPERTY_TYPE = 'property'
 
-    const [startDate] = useState(new Date());
+    const [startDate, setDate] = useState(new Date());
 
     //const apiURL = "https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation";
     //const apiURL = "http://127.0.0.1:5001/getAllInfo";
@@ -41,6 +41,7 @@ export default function UserRequestForm() {
                         <DatePicker
                             id="idDatePickerComponent"
                             selected={startDate}
+                            onChange={(startDate) => setDate(startDate)}
                             dateFormat="MM-dd-yyyy" />
                     </span>
 
