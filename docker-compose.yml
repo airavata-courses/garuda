@@ -28,7 +28,7 @@ services:
       - db_middleware
       - rabbitmq
     build: ./apigateway
-    restart: always
+    restart: unless-stopped
     ports:
       - 5000:5000
     stdin_open: true
@@ -52,7 +52,7 @@ services:
   queue_worker:
     container_name: garuda_queue_worker
     image: garuda_queue_worker
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - rabbitmq
     build: .
@@ -60,6 +60,7 @@ services:
     tty: true
   web_app:
     container_name: garuda_web_app
+    restart: unless-stopped
     build: ./web_app
     ports:
       - 3000:3000
