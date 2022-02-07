@@ -16,6 +16,10 @@ export default function Dashboard() {
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
 
+  function refreshDashboard() {
+    window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+  }
+
   const sendDataToParent = (response) => { // the callback
 
     station.push(response[0].station_longitude);
@@ -129,6 +133,9 @@ export default function Dashboard() {
 
       <div className='divMainDashboardUserRequests'>
         <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
+        <button className="button" onClick={refreshDashboard} >
+              Refresh List
+            </button>
       </div>
       
       <div className='divMainDashboardMap'>
