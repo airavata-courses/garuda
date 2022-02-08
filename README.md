@@ -9,13 +9,7 @@ Application to visualises use requested [NEXRAD](https://www.ncei.noaa.gov/produ
 #### Start Application
 
 ```sh
-
-
-
 docker-compose up
-
-
-
 ```
 
 Run the above command on your terminal from root of project folder to create all the resources to run the project.
@@ -37,13 +31,7 @@ URL for the web-application: http://localhost:3000
 #### Clean Created Resources
 
 ```sh
-
-
-
 docker-compose down
-
-
-
 ```
 
 ## Modules

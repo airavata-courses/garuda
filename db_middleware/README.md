@@ -1,13 +1,18 @@
 # DB Middleware
 
+> Note: Change Directory
+```sh
+cd db_middleware
+```
+
 ## Install Dependencies 
 ```sh
 npm install
-````
+```
 
 ## Test Module
 
-Prerequisite : 
+Prerequisite :
 ```sh
 npm install
 ```
@@ -18,7 +23,6 @@ npm test
 ```
 
 ## RUN Module
-
 ```sh
 npm run
 ```

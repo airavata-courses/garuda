@@ -2,6 +2,11 @@
 
 ## Run Module
 
+> Note: Change Directory
+```sh
+cd apigateway
+```
+
 1. Install Dependencies 
 ```sh
 pip install -r requirements.txt
