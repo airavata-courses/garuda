@@ -50,6 +50,10 @@ docker-compose down
 
 5. [Web_App](./web_app/README.md): Web Application module is the application with which the end users interacts. It communicates with API_Gateway module to maintain user data and fetch NEXRAD data.
 
+## Architecture
+
+![Garuda Architecture Diagram](./docs/diagram/Architecture_diagram.jpg)
+
 ## Developers
 
 - Pranav Palani Acharya
