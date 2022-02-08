@@ -16,19 +16,24 @@ export default function Dashboard() {
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
 
+  function refreshDashboard() {
+    window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+  }
+
   const sendDataToParent = (response) => { // the callback
 
     station.push(response[0].station_longitude);
     station.push(response[0].station_latitude);
 
-    for (let i = 0; i < response[0].lat.length; i++) {
-      for (let j = 0; j < response[0].lat[i].length; j += 200) {
-        obj.latitude.push(response[0].lat[i][j]);
-        obj.longitude.push(response[0].long[i][j]);
-        obj.reflectivity.push(response[0].data[i][j]);
+    for (let i = 0; i < response[0].lat.lat.length; i++) {
+      for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
+        obj.latitude.push(response[0].lat.lat[i][j]);
+        obj.longitude.push(response[0].long.long[i][j]);
+        obj.reflectivity.push(response[0].reflectivity.data[i][j]);
       }
     }
-    data = {obj, station}
+
+    data = { obj, station }
     setLoadMap(true)
   };
 
@@ -88,6 +93,9 @@ export default function Dashboard() {
             if (result.response_code.localeCompare("0") == 0) {
               // Success
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
+              setTimeout(() => {
+                window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+              }, 2000)
             } else {
               // Error
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
@@ -128,9 +136,12 @@ export default function Dashboard() {
       </div>
 
       <div className='divMainDashboardUserRequests'>
+        <button className="button" onClick={refreshDashboard} >
+          Refresh List
+        </button>
         <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
       </div>
-      
+
       <div className='divMainDashboardMap'>
         <Card>
           {isLoadMap && data && <MapBox data={data} />}

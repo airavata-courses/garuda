@@ -20,6 +20,11 @@ public class Worker {
 		System.out.println("Stating a consumer of queue_worker....");
 		try {
 			ConnectionFactory factory = new ConnectionFactory();
+			factory.setUsername("guest");
+			factory.setPassword("guest");
+			factory.setHost("garuda_rabbitmq");
+			factory.setVirtualHost("/");
+			factory.setPort(5672);
 			com.rabbitmq.client.Connection conn = factory.newConnection();
 			Channel channel = conn.createChannel();
 			channel.queueDeclare(queue_name, false, false, false, null);
@@ -61,6 +66,7 @@ public class Worker {
 							PostData.sendPost(final_response.toString());
 						} catch (Exception error) {
 							System.out.println("error in sending data.. :(");
+							System.out.println(error.getMessage());
 						}	
 					}
 
@@ -76,6 +82,7 @@ public class Worker {
 		} catch (Exception error) {
 			System.out.println("error in stating a consumer of service worker :(");
 			System.out.println(error.getMessage());
+			System.exit(1);
 		}
 
 	}

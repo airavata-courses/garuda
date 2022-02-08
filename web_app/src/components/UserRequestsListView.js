@@ -31,7 +31,7 @@ export default function UserRequestsListView({ sendDataToParent, setLoadMapFalse
                     document.getElementById('apiResponseMsg').innerHTML = "Map will be rendered soon"
                 },
                 (error) => {
-                    document.getElementById('apiResponseMsg').innerHTML = "Something went wrong! Please try again later!"
+                    document.getElementById('apiResponseMsg').innerHTML = "Apologies! No data available on Nexrad!"
                     console.log(error)
                 }
             )
