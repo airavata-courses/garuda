@@ -141,9 +141,9 @@ app.post("/data_writer", insertDataInDataSetCollection, updateStatusOfRequestInD
 
 function checkIfRequestIdExists(receivedData, res) {
   const paramRequestId = receivedData.request_id;
-  const paramPropertyType = receivedData.property;
-  userRequestsModel.find(
-    { request_id: paramRequestId, property: paramPropertyType },
+  //const paramPropertyType = receivedData.property;
+  userRequestsModel.userRequestsModel.find(
+    { request_id: paramRequestId },
     (err, data) => {
       if (!err) {
         //data: array of objects
@@ -176,7 +176,7 @@ function insertUserRequest(objUserRequest, response) {
   const paramRequestId = objUserRequest.request_id;
   const paramPropertyType = objUserRequest.property;
   const paramUserEmail = objUserRequest.user_email;
-  userRequestsModel.find(
+  userRequestsModel.userRequestsModel.find(
     {
       request_id: paramRequestId,
       property: paramPropertyType,
@@ -186,7 +186,7 @@ function insertUserRequest(objUserRequest, response) {
       if (!err) {
         if (data.length == 0) {
           //New Request from different USER but data already exists
-          var oUserReq = new userRequestsModel({
+          var oUserReq = new userRequestsModel.userRequestsModel({
             user_email: paramUserEmail,
             request_id: paramRequestId,
             status: CONSTANTS.CONST_REQUEST_STATUS_IN_PROCESS, //by default the status is 0 - inprocess but in this case data set exists already so it will directly go to complete state
@@ -228,7 +228,7 @@ function insertUserRequest(objUserRequest, response) {
 }
 
 function getAllUserRequests(receivedData, res) {
-  userRequestsModel.find(
+  userRequestsModel.userRequestsModel.find(
     { user_email: receivedData.user_email },
     (err, data) => {
       if (!err) {
@@ -274,7 +274,7 @@ const dummy_json ={
 // TODO: complete while integrating API gateway
 function updateStatusOfRequestInDB(req, res) {
   //res.json({ status: 200 });
-  userRequestsModel.updateOne(
+  userRequestsModel.userRequestsModel.updateOne(
     { request_id: req.body.requestID },
     { status: CONSTANTS.CONST_REQUEST_STATUS_COMPLETE },
     function (err, docs) {

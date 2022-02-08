@@ -1,0 +1,55 @@
+.divMainDashboard{
+    margin:"20px";
+    display:"flex";
+    flex-direction: column;
+    background: aliceblue;
+    
+    
+}
+.divMainDashboardUserForm{
+    flex:1;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 1%;
+
+}
+.divMainDashboardUserRequests{
+    flex:1;
+    height:200px;
+    overflow:auto;
+}
+.divMainDashboardMap{
+    flex:0.50;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+.cardUserRequestForm
+{
+    margin:"20px"
+}
+
+.divSubmitButton {
+text-align: center;
+margin-bottom: 20px;
+}
+
+.button {
+    background: #009879; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  .apiResponseMsg{
+    text-align: center;
+  }
+
+  .divLogout{
+    text-align: end;
+    margin-right: 30px;
+  }
