@@ -59,6 +59,18 @@ docker-compose build
 
 ![Garuda Architecture Diagram](./docs/diagram/Architecture_diagram.jpg)
 
+## CI/CD
+
+1. CI : Github Action workflow is used as CI. Any pull request/ commit to main branch triggers CI workflow. [Garuda_CI](./.github/workflows/garuda__github_actions_CI.yml)
+
+2. CD: 
+    1. Github Pages is used to deploy [data_extractor](./data_extractor/README.md)'s [javadocs](https://courses.airavata.org/garuda/data_extractor/index.html). 
+    2. Github Pages also host static assets. docs/ folder is hosted via GitHub Pages.
+
+## Packages / Distribution builds
+
+[Garuda's Data Extractor Maven Package](https://github.com/airavata-courses/garuda/packages/1236747)
+
 ## Developers
 
 - Pranav Palani Acharya
