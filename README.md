@@ -6,6 +6,12 @@ Application to visualises user requested [NEXRAD](https://www.ncei.noaa.gov/prod
 
 ## Run
 
+#### Dependency/Prerequisite
+
+Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/engine/install/)
+
+> Note: You'll need latest version of docker engine
+
 #### Start Application
 
 ```sh
@@ -13,8 +19,6 @@ docker-compose up
 ```
 
 Run the above command on your terminal from root of project folder to create all the resources to run the project.
-
-> Note: You'll need latest version of docker engine
 
 > Note: The above command creates 6 containers for the running the application.
 
@@ -29,6 +33,8 @@ URL for the web-application: http://localhost:3000
 > Type : CTLR + C to exit
 
 #### Clean Created Resources
+
+Done playing around ? Run this command to removed all the resources created.
 
 ```sh
 
