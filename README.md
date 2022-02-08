@@ -1,4 +1,4 @@
-# Team Garuda
+# Garuda
 
 Spring 2022 Project
 
