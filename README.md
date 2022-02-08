@@ -24,6 +24,8 @@ Run the above command on your terminal from the root of project folder to create
 
 > Note: The services run in non-detached mode. On exiting the process from terminal all the containers stop.
 
+> Note: This command might take some time to run. It's spinning up all the containers required to run the project. After all the resources are done loading, logs won't be printing on the terminal. You can use the application now !
+
 #### Access Web-Application
 
 URL for the web-application: http://localhost:3000
@@ -69,6 +71,8 @@ Run the above command on your cmd from the root of project folder to create all 
 > Note: The above command creates 6 containers for the running the application.
 
 > Note: The services run in non-detached mode. On exiting the process from terminal all the containers stop.
+
+> Note: This command might take some time to run. It's spinning up all the containers required to run the project. After all the resources are done loading, logs won't be printing on the terminal. You can use the application now !
 
 #### Access Web-Application
 
