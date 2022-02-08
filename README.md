@@ -4,7 +4,7 @@ Spring 2022 Project
 
 Application to visualises user requested [NEXRAD](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) data.
 
-## Run
+## Run on UNIX based systems
 
 #### Dependency/Prerequisite
 
@@ -18,7 +18,7 @@ Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/e
 docker-compose up
 ```
 
-Run the above command on your terminal from root of project folder to create all the resources to run the project.
+Run the above command on your terminal from the root of project folder to create all the resources to run the project.
 
 > Note: The above command creates 6 containers for the running the application.
 
@@ -40,6 +40,60 @@ Done playing around ? Run this command to remove all the created resources.
 
 docker-compose down
 
+```
+
+#### Build
+
+Build resource again if needed
+
+```sh
+docker-compose build
+```
+
+## Run on Windows based systems
+
+#### Dependency/Prerequisite
+
+Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/desktop/windows/install/)
+
+> Note: You'll need latest version of docker for windows
+
+#### Start Application
+
+```sh
+docker compose up
+```
+
+Run the above command on your cmd from the root of project folder to create all the resources to run the project.
+
+> Note: The above command creates 6 containers for the running the application.
+
+> Note: The services run in non-detached mode. On exiting the process from terminal all the containers stop.
+
+#### Access Web-Application
+
+URL for the web-application: http://localhost:3000
+
+#### Stop Application
+
+> Type : CTLR + C to exit
+
+#### Clean Created Resources
+
+Done playing around ? Run this command to remove all the created resources.
+
+```sh
+
+docker compose down
+
+```
+
+#### Build
+
+Build resource again if needed
+
+```sh
+docker compose build
 ```
 
 ## Modules
