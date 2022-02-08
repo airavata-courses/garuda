@@ -9,7 +9,9 @@ Application to visualises user requested [NEXRAD](https://www.ncei.noaa.gov/prod
 #### Start Application
 
 ```sh
+
 docker-compose up
+
 ```
 
 Run the above command on your terminal from root of project folder to create all the resources to run the project.
@@ -31,7 +33,9 @@ URL for the web-application: http://localhost:3000
 #### Clean Created Resources
 
 ```sh
+
 docker-compose down
+
 ```
 
 ## Modules
@@ -45,3 +49,9 @@ docker-compose down
 4. [API_Gateway](./apigateway/README.md): API_Gateway module provides a middle-ware layer for all the back-end services. Front-end application communicate with API_Gateway module to interact with all other micro-services.
 
 5. [Web_App](./web_app/README.md): Web Application module is the application with which the end users interacts. It communicates with API_Gateway module to maintain user data and fetch NEXRAD data.
+
+## Developers
+
+- Pranav Palani Acharya
+- Rishabh Deepak Jain
+- Tanmay Dilipkumar Sawaji
