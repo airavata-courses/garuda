@@ -2,7 +2,7 @@
 
 Spring 2022 Project
 
-Application to visualises use requested [NEXRAD](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) data.
+Application to visualises user requested [NEXRAD](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) data.
 
 ## Run
 
