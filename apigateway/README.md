@@ -1,9 +1,13 @@
-# garuda
-Spring 2022 Project
+# API GATEWAY
 
-Prerequisites:
-Python version 3.8.10
+## Run Module
 
-Steps to follow:
-1. pip install -r apigateway/requirements.txt
-2. python apigateway/server.py
+1. Install Dependencies 
+```sh
+pip install -r requirements.txt
+```
+
+2. Run Server
+```sh
+python server.py
+```

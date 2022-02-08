@@ -10,7 +10,11 @@ Application to visualises use requested [NEXRAD](https://www.ncei.noaa.gov/produ
 
 ```sh
 
+
+
 docker-compose up
+
+
 
 ```
 
@@ -34,7 +38,11 @@ URL for the web-application: http://localhost:3000
 
 ```sh
 
+
+
 docker-compose down
+
+
 
 ```
 
@@ -45,3 +53,7 @@ docker-compose down
 2. [Queue Worker](./queue_worker/README.md) : Apache Maven project to build a JAR file which runs a consumer on a rabbitmq queue. It processes the request using data_extractor utitlity JAR and published the data to a API endpoint.
 
 3. [DB_Middleware](./db_middleware/README.md): Microservice to interact with database. This microservices provides APIs to perform read and writes to database. Reads are performed by API_Gateway module and Writes are performed by Queue_Worker module and API_Gateway module.
+
+4. [API_Gateway](./apigateway/README.md): API_Gateway module provides a middle-ware layer for all the back-end services. Front-end application communicate with API_Gateway module to interact with all other micro-services.
+
+5. [Web_App](./web_app/README.md): Web Application module is the application with which the end users interacts. It communicates with API_Gateway module to maintain user data and fetch NEXRAD data.
