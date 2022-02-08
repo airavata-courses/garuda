@@ -1,8 +1,6 @@
-# Getting Started with Create React App
+# Garuda Web Aplication
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+## Scripts
 
 In the project directory, you can run:
 
