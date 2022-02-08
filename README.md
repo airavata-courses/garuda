@@ -116,6 +116,10 @@ docker compose build
 
 ![Garuda Architecture Diagram](./docs/diagram/Architecture_diagram.jpg)
 
+## Napkin Diagram
+
+![Garuda Napkin Diagram](./docs/diagram/napkin_diagram.jpeg)
+
 ## CI/CD
 
 - **CI** : Github Action workflow is used as CI. Any pull request/ commit to main branch triggers CI workflow. [Garuda_CI](./.github/workflows/garuda__github_actions_CI.yml)
