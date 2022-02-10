@@ -51,18 +51,18 @@ function insertDataInDataSetCollection(req, res, next) {
 
   const latRefModelObj = new LatRefModel({
     parent_doc_ref: objectId,
-    lat: json.latitude
+    lat: json.latitude.filter((number, index)=> index % 4 == 0)
   })
   const longRefModelObj = new LongRefModel({
     parent_doc_ref: objectId,
-    long: json.longitude
+    long: json.longitude.filter((number, index)=> index % 4 == 0)
   })
 
   const reflectivityRefModelObj = new ReflectivityRefModel({
     parent_doc_ref: objectId,
     //TODO check this in container
     //data: json[json.variable]
-    data: json.Reflectivity
+    data: json.Reflectivity.filter((number, index)=> index % 4 == 0)
   })
   latRefModelObj.save((err) => {
     if (!err) {
