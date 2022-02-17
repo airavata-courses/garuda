@@ -1,10 +1,11 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const { exists } = require("./latSetModel");
 const LatRefModel = require("./latSetModel")
 const LongRefModel = require("./longSetModel")
 const ReflectivityRefModel = require("./reflectivitySetModel")
 const UserReqModelClass = require("./userRequestModel")
+const CONSTANTS = require("../constants");
+
 
 const dataSetSchema = new mongoose.Schema({
   _id: ObjectId,
@@ -26,6 +27,28 @@ const DatasetModel = mongoose.model("DataSetModel", dataSetSchema);
 /**
  * Function inserts data in db
  */
+/*  For testing
+const dummy_json ={
+  "request_id": "rishabh_request_id",
+  "station_name": "station_name",
+  "date": "02/02/2022",
+  "start_time": "12:00AM",
+  "end_time": "12:30AM",
+  "property": "reflectivity",
+  "lat": [
+      "123123.123",
+      "1231234",
+      "5675",
+      "8767868"
+  ],
+  "long": [
+      "111123123.123",
+      "1111231234",
+      "115675",
+      "11187678618"
+  ]
+}*/
+
 function insertDataInDataSetCollection(req, res, next) {
 
   const raw_data = req.body.data;
@@ -72,12 +95,14 @@ function insertDataInDataSetCollection(req, res, next) {
       dataSetModelObj.save((err) => {
         if (!err) {
           console.log("Insertion successful in dataset model");
-          next()
+          res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true
         } else {
           console.log("Error during record insertion in dataset model: " + err);
-          res.send({ status: "error", message: "Insertion failed" });
-          UserReqModelClass.setErrorStatusToUserRequest(req, res)
+          // res.send({ status: "error", message: "Insertion failed" });
+          res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false
+          res.locals.CONSTANTS.IS_ERROR_API_CALLED = false
         }
+        next()
       })
     } else {
       console.log("Error during record insertion in lat model: " + err);
