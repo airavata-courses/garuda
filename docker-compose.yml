@@ -67,6 +67,11 @@ services:
     depends_on:
       - rabbitmq
     build: .
+    environment:
+      - DB_MIDDLEWARE_HOST=garudadbmiddleware
+      - DB_MIDDLEWARE_PORT=3001
+      - RABBITMQ_HOST=garuda_rabbitmq
+      - RABBITMQ_PORT=5672
     stdin_open: true
     tty: true
   web_app:
