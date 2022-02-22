@@ -1,5 +1,12 @@
 package com.garuda.queueworker.consumer;
 
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_HOST;
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_PASSWORD;
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_PORT;
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_QUEUE_NAME;
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_USERNAME;
+import static com.garuda.queueworker.consumer.Constants.RABBITMQ_VIRTUAL_HOST;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -14,21 +21,19 @@ import com.rabbitmq.client.Delivery;
 
 public class Worker {
 
-	private final static String queue_name = "offload_request";
-
 	public static void main(String args[]) {
 		System.out.println("Stating a consumer of queue_worker....");
 		try {
 			ConnectionFactory factory = new ConnectionFactory();
-			factory.setUsername("guest");
-			factory.setPassword("guest");
-			factory.setHost("garuda_rabbitmq");
-			factory.setVirtualHost("/");
-			factory.setPort(5672);
+			factory.setUsername(RABBITMQ_USERNAME);
+			factory.setPassword(RABBITMQ_PASSWORD);
+			factory.setHost(RABBITMQ_HOST);
+			factory.setVirtualHost(RABBITMQ_VIRTUAL_HOST);
+			factory.setPort(RABBITMQ_PORT);
 			com.rabbitmq.client.Connection conn = factory.newConnection();
 			Channel channel = conn.createChannel();
-			channel.queueDeclare(queue_name, false, false, false, null);
-			channel.basicConsume(queue_name, true, new DeliverCallback() {
+			channel.queueDeclare(RABBITMQ_QUEUE_NAME, false, false, false, null);
+			channel.basicConsume(RABBITMQ_QUEUE_NAME, true, new DeliverCallback() {
 				@Override
 				public void handle(String consumerTag, Delivery message) throws IOException {
 
