@@ -33,6 +33,12 @@ services:
       - db_middleware
       - rabbitmq
     build: ./apigateway
+    environment:
+      - DB_MIDDLEWARE_HOST=garudadbmiddleware
+      - DB_MIDDLEWARE_PORT=3001
+      - RABBITMQ_HOST=garuda_rabbitmq
+      - RABBITMQ_PORT=5672
+      - APP_PORT=5000
     restart: unless-stopped
     ports:
       - 5000:5000
