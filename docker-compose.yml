@@ -15,6 +15,11 @@ services:
     depends_on:
       - mongodb
     build: ./db_middleware
+    environment:
+      - DB_HOSTNAME=mongodb
+      - DB_PORT=27017
+      - DB_DATABASE=garuda
+      - APP_PORT=3001
     restart: unless-stopped
     ports:
       - 3001:3001
