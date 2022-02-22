@@ -1,4 +1,3 @@
-from asyncio import constants
 import time, random
 from urllib import response
 from flask import Flask, jsonify, request
@@ -7,7 +6,7 @@ from flask_cors import CORS, cross_origin
 import configparser
 import os, json
 import pika, requests
-from constanst import getConstants 
+from constants import getConstants 
 
 app = Flask(__name__)
 cors = CORS(app)
