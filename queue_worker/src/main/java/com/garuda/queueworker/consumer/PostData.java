@@ -10,7 +10,8 @@ import static com.garuda.queueworker.consumer.Constants.DB_MIDDLEWARE_PORT;
 public class PostData {
 	private final static HttpClient httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
-	private final static String data_writer_url = "http://"+ DB_MIDDLEWARE_HOST	 +":"+ 	DB_MIDDLEWARE_PORT	 +	"/data_writer";
+	private final static String data_writer_url = "http://" + DB_MIDDLEWARE_HOST + ":" + DB_MIDDLEWARE_PORT
+			+ "/data_writer";
 
 	public static void sendPost(String data) throws Exception {
 
