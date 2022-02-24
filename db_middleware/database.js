@@ -16,6 +16,7 @@ function connectDB() {
     console.log("database is disconnected successfully");
   });
   conn.on("error", console.error.bind(console, "connection error:"));
+  return conn
 }
 
 module.exports = connectDB;

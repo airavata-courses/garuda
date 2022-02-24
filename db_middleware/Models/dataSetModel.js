@@ -4,8 +4,6 @@ const LatRefModel = require("./latSetModel")
 const LongRefModel = require("./longSetModel")
 const ReflectivityRefModel = require("./reflectivitySetModel")
 const UserReqModelClass = require("./userRequestModel")
-const CONSTANTS = require("../constants");
-
 
 const dataSetSchema = new mongoose.Schema({
   _id: ObjectId,
@@ -49,11 +47,14 @@ const dummy_json ={
   ]
 }*/
 
-function insertDataInDataSetCollection(req, res, next) {
+async function insertDataInDataSetCollection(req, res, next) {
 
   const raw_data = req.body.data;
-
-  let json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"))
+  //Rishabh: When calling this API from postman comment the 1st line and uncomment the 2nd line
+  //1st line
+  //let json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"))
+  //2nd line
+  let json = raw_data
   var objectId = new mongoose.Types.ObjectId();
 
   let dataSetModelObj = new DatasetModel({
@@ -87,7 +88,28 @@ function insertDataInDataSetCollection(req, res, next) {
     //data: json[json.variable]
     data: json.Reflectivity
   })
-  latRefModelObj.save((err) => {
+  //Rishabh: transaction method won't work if replica of mongodb is not running
+  //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware folder
+  //We can also do this with custom connection in order to run write operation on another connection object
+  //Ref - https://mongoosejs.com/docs/transactions.html
+  const session = await mongoose.startSession()
+  await session.withTransaction(async(session)=>{
+    await latRefModelObj.save({ session })
+    await longRefModelObj.save({ session })
+    await reflectivityRefModelObj.save({ session })
+    await dataSetModelObj.save({ session })
+    res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true
+  }).
+  catch(err => {
+    console.log("Error during record insertion data_writer_api: " + err);
+    res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false
+    res.locals.IS_ERROR_API_CALLED = false
+    res.send({ status: "error", message: "Insertion failed in lat model" });
+  });
+  
+ next()
+
+  /* latRefModelObj.save((err) => {
     if (!err) {
       console.log("Insertion successful in lat model");
       longRefModelObj.save() //Insertion in long model TODO: ask if can add then() here
@@ -108,7 +130,7 @@ function insertDataInDataSetCollection(req, res, next) {
       console.log("Error during record insertion in lat model: " + err);
       res.send({ status: "error", message: "Insertion failed in lat model" });
     }
-  })
+  }) */
 }
 
 /**
