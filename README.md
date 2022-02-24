@@ -14,6 +14,14 @@ Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/e
 
 #### Start Application
 
+Pull the latest images from DockerHub
+
+```sh
+docker-compose pull
+```
+
+Start application services
+
 ```sh
 docker-compose up
 ```
@@ -62,8 +70,16 @@ Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/d
 
 #### Start Application
 
+Pull the latest images from DockerHub
+
 ```sh
-docker compose up
+docker-compose pull
+```
+
+Start application services
+
+```sh
+docker-compose up
 ```
 
 Run the above command on your cmd from the root of project folder to create all the resources to run the project.
