@@ -6,9 +6,12 @@ from flask_cors import CORS, cross_origin
 import configparser
 import os, json
 import pika, requests
+from constants import getConstants 
 
 app = Flask(__name__)
 cors = CORS(app)
+
+constants = getConstants()
 
 def log_error(err_code):
     '''
@@ -25,7 +28,7 @@ def log_error(err_code):
 def push_to_rabbitmq(data):
     creds = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host = 'garuda_rabbitmq', port = 5672, virtual_host = "/", credentials = creds)
+        pika.ConnectionParameters(host = constants['RABBITMQ_HOST'], port = constants['RABBITMQ_PORT'], virtual_host = "/", credentials = creds)
     )
     channel = connection.channel()
     channel.queue_declare(queue='offload_request')
@@ -79,7 +82,7 @@ def get_user_job_status():
         return jsonify(response)
 
     # Call db helper to fetch data for email_id
-    URL = "http://garudadbmiddleware:3001/getAllStatus"
+    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "getAllStatus"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email": str(userid)
@@ -133,7 +136,7 @@ def generate_new_request():
     db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}"
 
     # Make call to check db for this key
-    URL = "http://garudadbmiddleware:3001/postCheckRequest"
+    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "postCheckRequest"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "request_id" : db_key,
@@ -161,7 +164,7 @@ def generate_new_request():
         except:
             response['data_dump'] = ""
         # Make call to postNewRequest
-        URL = "http://garudadbmiddleware:3001/postNewRequest"
+        URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "postNewRequest"
         METHOD = 'POST'
         PAYLOAD = json.dumps({
             "user_email" : str(user_email),
@@ -225,7 +228,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "http://garudadbmiddleware:3001/getDataOfRequestID"
+    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "getDataOfRequestID"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
@@ -257,7 +260,7 @@ def get_data_of_stations():
     return jsonify(response)
 
 def main():
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=constants["APP_PORT"])
 
 if __name__ == "__main__":
     main()

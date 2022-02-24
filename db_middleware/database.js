@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 function connectDB() {
   mongoose
-    .connect(CONSTANTS.CONST_MONGO_DB_SERVER_URL, { useNewUrlParser: true })
+    .connect('mongodb://' + CONSTANTS.DB_HOSTNAME + ':' + CONSTANTS.DB_PORT + '/' + CONSTANTS.DB_DATABASE, { useNewUrlParser: true })
     .catch((err) => {
       console.log("error in connecting to database");
     });

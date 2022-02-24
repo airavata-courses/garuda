@@ -23,8 +23,6 @@ const connectDB = require("./database");
 const morgan = require('morgan')
 
 const app = express();
-const hostname = CONSTANTS.CONST_NODE_JS_HOSTNAME;
-const port = CONSTANTS.CONST_NODE_JS_PORT;
 
 app.use(
   express.urlencoded({
@@ -315,8 +313,8 @@ app.get("/ping", (req, res) => {
 });
 
 //Method to listen all incoming request
-const server = app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+const server = app.listen(CONSTANTS.APP_PORT, () => {
+  console.log(`Server running at port ${CONSTANTS.APP_PORT}`);
   if (process.env.NODE_ENV != 'test') {
     connectDB();
   }
