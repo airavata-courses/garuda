@@ -1,12 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
-
+import { useNavigate } from "react-router-dom";
+import AppContext from './AppContext';
 // const clientId =
 //   '766338807168-qt90s6t8o21mh03c328t9nbb35s4hgl0.apps.googleusercontent.com';
 
 function Login() {
-
+  const globalMyContext = useContext(AppContext)
+  let navigateObj = useNavigate();
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj.email);
     // alert(
@@ -18,9 +20,11 @@ function Login() {
      */
     
     document.getElementById('divApiResponse').innerHTML = "Login Successful! Redirecting..."
-    window.localStorage.setItem('userEmail', res.profileObj.email);
+    {globalMyContext.fnSetGlobalUserName(res.profileObj.email)}
+    //window.localStorage.setItem('userEmail', res.profileObj.email);
     setTimeout(() => {
-      window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+      navigateObj('/Dashboard',{ replace: true, state:{ userEmail: res.profileObj.email} })
+      //window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
     }, 200);
   };
 

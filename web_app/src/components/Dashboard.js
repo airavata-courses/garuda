@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import UserRequestForm from "./UserRequestForm";
 import Logout from "./Logout";
 import "react-datepicker/dist/react-datepicker.css";
@@ -6,11 +6,16 @@ import Card from "@material-ui/core/Card";
 import "../ui_components/Dashboard.css";
 import MapBox from "./MapBox";
 import UserRequestsListView from './UserRequestsListView'
+import { useNavigate, useLocation } from "react-router-dom";
+import AppContext from './AppContext';
 
 let data = {};
 
 export default function Dashboard() {
-
+  const globalMyContext = useContext(AppContext)
+  const {state} = useLocation();
+  const {userEmail} = state
+  
   const [isLoadMap, setLoadMap] = useState(false);
 
   let obj = { latitude: [], longitude: [], reflectivity: [] };
@@ -18,6 +23,7 @@ export default function Dashboard() {
 
   function refreshDashboard() {
     window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+    
   }
 
   const sendDataToParent = (response) => { // the callback
@@ -42,6 +48,8 @@ export default function Dashboard() {
   };
 
   function submitUserRequest(e) {
+    var userEmail = globalMyContext.fnSetGlobalUserName("asd")
+    console.log("yeysysys " , userEmail)
     e.preventDefault();
     var vStationLocation = document.getElementById(
       "idDropdownStationLocation"
@@ -49,8 +57,10 @@ export default function Dashboard() {
     var vDate = document.getElementById("idDatePickerComponent").value;
     var vTimeSlots = document.getElementById("idDropdownTimeSlots").value;
     var vMapProperty = document.getElementById("idDropdownMapProperty").value;
-    var userEmail = localStorage.getItem("userEmail");
-
+    //var userEmail = localStorage.getItem("userEmail");
+    //var userEmail = {userEmail}
+    var userEmail = globalMyContext.fnSetGlobalUserName("asd")
+    console.log("yeysysys " , userEmail)
     if (vStationLocation === "default") {
       //alert("Please select station location")
       document.getElementById('apiResponseMsg').innerHTML = "Please select station location"
