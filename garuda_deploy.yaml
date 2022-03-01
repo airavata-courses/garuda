@@ -95,7 +95,7 @@ spec:
         - name: DB_MIDDLEWARE_PORT
           value: "8080"
         - name: RABBITMQ_HOST
-          value: "garuda_rabbitmq"
+          value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
         - name: RABBITMQ_PORT
           value: "5672"
         - name: APP_PORT
@@ -149,10 +149,10 @@ spec:
         image: acharyapranav/garuda:queue_worker
         resources:
           requests:
-            memory: "64Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
         env:
         - name: DB_MIDDLEWARE_HOST
@@ -160,7 +160,7 @@ spec:
         - name: DB_MIDDLEWARE_PORT
           value: "8080"
         - name: RABBITMQ_HOST
-          value: "garuda_rabbitmq"
+          value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
         - name: RABBITMQ_PORT
           value: "5672"
 ---
