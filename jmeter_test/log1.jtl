@@ -1,0 +1,11 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1646005406643,186,Home,200,OK,Thread Group 1-1,text,true,,563,143,3,3,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,184,0,128
+1646005406730,132,Home,200,OK,Thread Group 1-2,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,132,0,79
+1646005406830,130,Home,200,OK,Thread Group 1-3,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,130,0,76
+1646005406929,144,Home,200,OK,Thread Group 1-4,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,144,0,81
+1646005407029,138,Home,200,OK,Thread Group 1-5,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,138,0,80
+1646005407129,140,Home,200,OK,Thread Group 1-6,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,140,0,81
+1646005407229,132,Home,200,OK,Thread Group 1-7,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,131,0,79
+1646005407330,143,Home,200,OK,Thread Group 1-8,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,142,0,82
+1646005407430,154,Home,200,OK,Thread Group 1-9,text,true,,563,143,2,2,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,154,0,96
+1646005407529,134,Home,200,OK,Thread Group 1-10,text,true,,563,143,1,1,https://61f4496d10f0f7001768c8d1.mockapi.io/getLocation,134,0,76
