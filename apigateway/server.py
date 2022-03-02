@@ -82,7 +82,7 @@ def get_user_job_status():
         return jsonify(response)
 
     # Call db helper to fetch data for email_id
-    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "getAllStatus"
+    URL = "http://" + constants["DB_MIDDLEWARE_READER_HOST"] + ":" + constants["DB_MIDDLEWARE_READER_PORT"] + "/" + "getAllStatus"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email": str(userid)
@@ -136,7 +136,7 @@ def generate_new_request():
     db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}"
 
     # Make call to check db for this key
-    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "postCheckRequest"
+    URL = "http://" + constants["DB_MIDDLEWARE_READER_HOST"] + ":" + constants["DB_MIDDLEWARE_READER_PORT"] + "/" + "postCheckRequest"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "request_id" : db_key,
@@ -164,7 +164,7 @@ def generate_new_request():
         except:
             response['data_dump'] = ""
         # Make call to postNewRequest
-        URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "postNewRequest"
+        URL = "http://" + constants["DB_MIDDLEWARE_WRITER_HOST"] + ":" + constants["DB_MIDDLEWARE_WRITER_PORT"] + "/" + "postNewRequest"
         METHOD = 'POST'
         PAYLOAD = json.dumps({
             "user_email" : str(user_email),
@@ -228,7 +228,7 @@ def get_data_of_stations():
         return jsonify(response)
 
     # Make db helper call with request_id
-    URL = "http://" + constants["DB_MIDDLEWARE_HOST"] + ":" + constants["DB_MIDDLEWARE_PORT"] + "/" + "getDataOfRequestID"
+    URL = "http://" + constants["DB_MIDDLEWARE_READER_HOST"] + ":" + constants["DB_MIDDLEWARE_READER_PORT"] + "/" + "getDataOfRequestID"
     METHOD = 'POST'
     PAYLOAD = json.dumps({
         "user_email" : str(user_email),
