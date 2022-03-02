@@ -309,12 +309,13 @@ function updateStatusOfRequestInDB(req, res) {
 app.get("/ping", (req, res) => {
   res.json({
     ping: "pokemon",
+    type: CONSTANTS.APP_TYPE
   });
 });
 
 //Method to listen all incoming request
 const server = app.listen(CONSTANTS.APP_PORT, () => {
-  console.log(`Server running at port ${CONSTANTS.APP_PORT}`);
+  console.log(`Server of type: ${CONSTANTS.APP_TYPE} running at port ${CONSTANTS.APP_PORT}`);
   if (process.env.NODE_ENV != 'test') {
     connectDB();
   }
