@@ -24,6 +24,7 @@ services:
       - DB_HOSTS=garuda_mongo:27017
       - DB_DATABASE=garuda
       - APP_PORT=3001
+      - APP_TYPE=writer
       - DB_REPLICA_SET=MainRepSet
       - DB_REPLICA_SET_PREFERENCE=secondaryPreferred
     restart: unless-stopped
@@ -41,6 +42,7 @@ services:
       - DB_HOSTS=garuda_mongo:27017
       - DB_DATABASE=garuda
       - APP_PORT=3002
+      - APP_TYPE=reader
       - DB_REPLICA_SET=MainRepSet
       - DB_REPLICA_SET_PREFERENCE=secondaryPreferred
     restart: unless-stopped
