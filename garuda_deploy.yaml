@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-middleware-deployment
+  name: db-middleware-writer-deployment
   labels:
-    app: db-middleware
+    app: db-middleware-writer
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: db-middleware
+      app: db-middleware-writer
   template:
     metadata:
       labels:
-        app: db-middleware
+        app: db-middleware-writer
     spec:
       containers:
-      - name: db-middleware
-        image: acharyapranav/garuda:db_middleware
+      - name: db-middleware-writer
+        image: acharyapranav/garuda:db_middleware-PROJECT2
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
         resources:
           requests:
             memory: "64Mi"
@@ -27,38 +27,109 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         env:
-        - name: DB_HOSTNAME
-          value: "mongod-0.mongodb-service"
-        - name: DB_PORT
-          value: "27017"
+        - name: DB_HOSTS
+          value: "mongod-0.mongodb-service,mongod-1.mongodb-service,mongod-2.mongodb-service:27017"
         - name: DB_DATABASE
           value: "garuda"
         - name: APP_PORT
-          value: "3001"
+          value: "3000"
+        - name: APP_TYPE
+          value: "writer"
+        - name: DB_REPLICA_SET
+          value: "MainRepSet"
+        - name: DB_REPLICA_SET_PREFERENCE
+          value: "secondaryPreferred"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-middleware-service
+  name: db-middleware-writer-service
 spec:
   selector:
-    app: db-middleware
+    app: db-middleware-writer
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 3001
+      targetPort: 3000
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: db-middleware-hpa
+  name: db-middleware-writer-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: db-middleware-deployment
+    name: db-middleware-writer-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-middleware-reader-deployment
+  labels:
+    app: db-middleware-reader
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: db-middleware-reader
+  template:
+    metadata:
+      labels:
+        app: db-middleware-reader
+    spec:
+      containers:
+      - name: db-middleware-reader
+        image: acharyapranav/garuda:db_middleware-PROJECT2
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: DB_HOSTS
+          value: "mongod-0.mongodb-service,mongod-1.mongodb-service,mongod-2.mongodb-service:27017"
+        - name: DB_DATABASE
+          value: "garuda"
+        - name: APP_PORT
+          value: "3000"
+        - name: APP_TYPE
+          value: "reader"
+        - name: DB_REPLICA_SET
+          value: "MainRepSet"
+        - name: DB_REPLICA_SET_PREFERENCE
+          value: "secondaryPreferred"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-middleware-reader-service
+spec:
+  selector:
+    app: db-middleware-reader
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 3000
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: db-middleware-reader-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: db-middleware-reader-deployment
   minReplicas: 2
-  maxReplicas: 10
+  maxReplicas: 7
   targetCPUUtilizationPercentage: 75
 ---
 apiVersion: apps/v1
@@ -79,7 +150,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: acharyapranav/garuda:api_gateway
+        image: acharyapranav/garuda:api_gateway-PROJECT2
         ports:
         - containerPort: 5000
         resources:
@@ -90,9 +161,13 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         env:
-        - name: DB_MIDDLEWARE_HOST
-          value: "db-middleware-service"
-        - name: DB_MIDDLEWARE_PORT
+        - name: DB_MIDDLEWARE_WRITER_HOST
+          value: "db-middleware-writer-service"
+        - name: DB_MIDDLEWARE_WRITER_PORT
+          value: "8080"
+        - name: DB_MIDDLEWARE_READER_HOST
+          value: "db-middleware-reader-service"
+        - name: DB_MIDDLEWARE_READER_PORT
           value: "8080"
         - name: RABBITMQ_HOST
           value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
@@ -125,7 +200,7 @@ spec:
     kind: Deployment
     name: api-gateway-deployment
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 7
   targetCPUUtilizationPercentage: 75
 ---
 apiVersion: apps/v1
@@ -146,7 +221,7 @@ spec:
     spec:
       containers:
       - name: queue-worker
-        image: acharyapranav/garuda:queue_worker
+        image: acharyapranav/garuda:queue_worker-PROJECT2
         resources:
           requests:
             memory: "256Mi"
@@ -155,9 +230,9 @@ spec:
             memory: "512Mi"
             cpu: "500m"
         env:
-        - name: DB_MIDDLEWARE_HOST
-          value: "db-middleware-service"
-        - name: DB_MIDDLEWARE_PORT
+        - name: DB_MIDDLEWARE_WRITER_HOST
+          value: "db-middleware-writer-service"
+        - name: DB_MIDDLEWARE_WRITER_PORT
           value: "8080"
         - name: RABBITMQ_HOST
           value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
@@ -174,7 +249,7 @@ spec:
     kind: Deployment
     name: queue-worker-deployment
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 75
 ---
 apiVersion: v1
