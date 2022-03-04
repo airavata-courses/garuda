@@ -185,11 +185,11 @@ function setErrorStatusToUserRequest(req, res, next) {
 function updateUserRequestStatusInDb(req, res, next) {
   if(res.locals.IS_INSERT_OPERATION_SUCCESSFUL) {
     //success - executed when insertion to dataSet model is successful and need to update requestID status to complete in userDetailsModel
-    console.log("INSIDE IF " + res.locals.IS_INSERT_OPERATION_SUCCESSFUL + " asdasdasd")
+    //console.log("INSIDE IF " + res.locals.IS_INSERT_OPERATION_SUCCESSFUL + " asdasdasd")
     setCompleteStatusToUserRequest(req, res, next)
   } else {
     //error - executed in 2 cases - 1. error during insertion to dataSetModel 2. When the api is called specially by queue_worker to indicate that the data for a specific request id doesn't exists on nexard database
-    console.log("INSIDE ELSE" + res.locals.IS_ERROR_API_CALLED + " asdasdasd")
+    //console.log("INSIDE ELSE" + res.locals.IS_ERROR_API_CALLED + " asdasdasd")
     setErrorStatusToUserRequest(req, res, next)
   }
 
