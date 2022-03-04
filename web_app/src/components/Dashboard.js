@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import "../ui_components/Dashboard.css";
 import MapBox from "./MapBox";
 import UserRequestsListView from './UserRequestsListView'
+import { Grid } from "@material-ui/core";
 
 let data = {};
 
@@ -136,9 +137,12 @@ export default function Dashboard() {
       </div>
 
       <div className='divMainDashboardUserRequests'>
-        <button className="button" onClick={refreshDashboard} >
-          Refresh List
-        </button>
+        <div className="divRefreshButton">
+          <button className="button" onClick={refreshDashboard} >
+            Refresh List
+          </button>
+        </div>
+        
         <UserRequestsListView sendDataToParent={sendDataToParent} setLoadMapFalse={setLoadMapFalse} />
       </div>
 
