@@ -1,6 +1,0 @@
-run command
-jmeter -n -t '/Users/rishi/Documents/Spring_22/ADS/jmeter_test/sample.jmx' -l '/Users/rishi/Documents/Spring_22/ADS/jmeter_test/log.jtl'
-
-plot command
-jmeter -g '/Users/rishi/Documents/Spring_22/ADS/jmeter_test/log1.jtl' -o '/Users/rishi/Documents/Spring_22/ADS/jmeter_test/loqweqweg.jtl'
-
