@@ -21,10 +21,10 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            memory: "64Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
         env:
         - name: DB_HOSTS
@@ -63,7 +63,7 @@ spec:
     name: db-middleware-writer-deployment
   minReplicas: 1
   maxReplicas: 5
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 50
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,10 +88,10 @@ spec:
         - containerPort: 3000
         resources:
           requests:
-            memory: "64Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
         env:
         - name: DB_HOSTS
@@ -130,7 +130,7 @@ spec:
     name: db-middleware-reader-deployment
   minReplicas: 2
   maxReplicas: 7
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 50
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -201,7 +201,7 @@ spec:
     name: api-gateway-deployment
   minReplicas: 1
   maxReplicas: 7
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 50
 ---
 apiVersion: apps/v1
 kind: Deployment
