@@ -1,6 +1,5 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const { exists } = require("./latSetModel");
 const LatRefModel = require("./latSetModel")
 const LongRefModel = require("./longSetModel")
 const ReflectivityRefModel = require("./reflectivitySetModel")
@@ -26,11 +25,36 @@ const DatasetModel = mongoose.model("DataSetModel", dataSetSchema);
 /**
  * Function inserts data in db
  */
-function insertDataInDataSetCollection(req, res, next) {
+/*  For testing
+const dummy_json ={
+  "request_id": "rishabh_request_id",
+  "station_name": "station_name",
+  "date": "02/02/2022",
+  "start_time": "12:00AM",
+  "end_time": "12:30AM",
+  "property": "reflectivity",
+  "lat": [
+      "123123.123",
+      "1231234",
+      "5675",
+      "8767868"
+  ],
+  "long": [
+      "111123123.123",
+      "1111231234",
+      "115675",
+      "11187678618"
+  ]
+}*/
+
+async function insertDataInDataSetCollection(req, res, next) {
 
   const raw_data = req.body.data;
-
+  //Rishabh: When calling this API from postman comment the 1st line and uncomment the 2nd line
+  //1st line
   let json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"))
+  //2nd line
+  //let json = raw_data
   var objectId = new mongoose.Types.ObjectId();
 
   let dataSetModelObj = new DatasetModel({
@@ -64,7 +88,28 @@ function insertDataInDataSetCollection(req, res, next) {
     //data: json[json.variable]
     data: json.Reflectivity.filter((number, index)=> index % 4 == 0)
   })
-  latRefModelObj.save((err) => {
+  //Rishabh: transaction method won't work if replica of mongodb is not running
+  //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware folder
+  //We can also do this with custom connection in order to run write operation on another connection object
+  //Ref - https://mongoosejs.com/docs/transactions.html
+  const session = await mongoose.startSession()
+  await session.withTransaction(async(session)=>{
+    await latRefModelObj.save({ session })
+    await longRefModelObj.save({ session })
+    await reflectivityRefModelObj.save({ session })
+    await dataSetModelObj.save({ session })
+    res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true
+  }).
+  catch(err => {
+    console.log("Error during record insertion data_writer_api: " + err);
+    res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false
+    res.locals.IS_ERROR_API_CALLED = false
+    res.send({ status: "error", message: "Insertion failed in lat model" });
+  });
+  
+ next()
+
+  /* latRefModelObj.save((err) => {
     if (!err) {
       console.log("Insertion successful in lat model");
       longRefModelObj.save() //Insertion in long model TODO: ask if can add then() here
@@ -72,18 +117,20 @@ function insertDataInDataSetCollection(req, res, next) {
       dataSetModelObj.save((err) => {
         if (!err) {
           console.log("Insertion successful in dataset model");
-          next()
+          res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true
         } else {
           console.log("Error during record insertion in dataset model: " + err);
-          res.send({ status: "error", message: "Insertion failed" });
-          UserReqModelClass.setErrorStatusToUserRequest(req, res)
+          // res.send({ status: "error", message: "Insertion failed" });
+          res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false
+          res.locals.CONSTANTS.IS_ERROR_API_CALLED = false
         }
+        next()
       })
     } else {
       console.log("Error during record insertion in lat model: " + err);
       res.send({ status: "error", message: "Insertion failed in lat model" });
     }
-  })
+  }) */
 }
 
 /**
