@@ -3,9 +3,12 @@ const mongoose = require("mongoose");
 
 function connectDB() {
   mongoose
-    .connect(CONSTANTS.CONST_MONGO_DB_SERVER_URL, { useNewUrlParser: true })
+    .connect('mongodb://' + CONSTANTS.DB_HOSTS + '/' + CONSTANTS.DB_DATABASE +
+      '?replicaSet=' + CONSTANTS.DB_REPLICA_SET + '&readPreference=' + CONSTANTS.DB_REPLICA_SET_PREFERENCE, { useNewUrlParser: true })
     .catch((err) => {
-      console.log("error in connecting to database");
+      console.log("error in connecting to database : ", err);
+      // exit process to retry
+      process.exit(1);
     });
 
   const conn = mongoose.connection;
@@ -16,6 +19,7 @@ function connectDB() {
     console.log("database is disconnected successfully");
   });
   conn.on("error", console.error.bind(console, "connection error:"));
+  return conn
 }
 
 module.exports = connectDB;

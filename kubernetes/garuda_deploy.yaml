@@ -1,0 +1,314 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-middleware-writer-deployment
+  labels:
+    app: db-middleware-writer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-middleware-writer
+  template:
+    metadata:
+      labels:
+        app: db-middleware-writer
+    spec:
+      containers:
+      - name: db-middleware-writer
+        image: acharyapranav/garuda:db_middleware-PROJECT2
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: DB_HOSTS
+          value: "mongod-0.mongodb-service,mongod-1.mongodb-service,mongod-2.mongodb-service:27017"
+        - name: DB_DATABASE
+          value: "garuda"
+        - name: APP_PORT
+          value: "3000"
+        - name: APP_TYPE
+          value: "writer"
+        - name: DB_REPLICA_SET
+          value: "MainRepSet"
+        - name: DB_REPLICA_SET_PREFERENCE
+          value: "secondaryPreferred"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-middleware-writer-service
+spec:
+  selector:
+    app: db-middleware-writer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 3000
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: db-middleware-writer-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: db-middleware-writer-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-middleware-reader-deployment
+  labels:
+    app: db-middleware-reader
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: db-middleware-reader
+  template:
+    metadata:
+      labels:
+        app: db-middleware-reader
+    spec:
+      containers:
+      - name: db-middleware-reader
+        image: acharyapranav/garuda:db_middleware-PROJECT2
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: DB_HOSTS
+          value: "mongod-0.mongodb-service,mongod-1.mongodb-service,mongod-2.mongodb-service:27017"
+        - name: DB_DATABASE
+          value: "garuda"
+        - name: APP_PORT
+          value: "3000"
+        - name: APP_TYPE
+          value: "reader"
+        - name: DB_REPLICA_SET
+          value: "MainRepSet"
+        - name: DB_REPLICA_SET_PREFERENCE
+          value: "secondaryPreferred"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-middleware-reader-service
+spec:
+  selector:
+    app: db-middleware-reader
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 3000
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: db-middleware-reader-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: db-middleware-reader-deployment
+  minReplicas: 2
+  maxReplicas: 7
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: acharyapranav/garuda:api_gateway-PROJECT2
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: DB_MIDDLEWARE_WRITER_HOST
+          value: "db-middleware-writer-service"
+        - name: DB_MIDDLEWARE_WRITER_PORT
+          value: "8080"
+        - name: DB_MIDDLEWARE_READER_HOST
+          value: "db-middleware-reader-service"
+        - name: DB_MIDDLEWARE_READER_PORT
+          value: "8080"
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
+        - name: RABBITMQ_PORT
+          value: "5672"
+        - name: APP_PORT
+          value: "5000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-service
+spec:
+  selector:
+    app: api-gateway
+  type: NodePort  
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000
+      nodePort: 30000
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-gateway-deployment
+  minReplicas: 1
+  maxReplicas: 7
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-worker-deployment
+  labels:
+    app: queue-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-worker
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+    spec:
+      containers:
+      - name: queue-worker
+        image: acharyapranav/garuda:queue_worker-PROJECT2
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        env:
+        - name: DB_MIDDLEWARE_WRITER_HOST
+          value: "db-middleware-writer-service"
+        - name: DB_MIDDLEWARE_WRITER_PORT
+          value: "8080"
+        - name: RABBITMQ_HOST
+          value: "rabbitmq-0.rabbitmq.rabbits.svc.cluster.local"
+        - name: RABBITMQ_PORT
+          value: "5672"
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: queue-worker-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: queue-worker-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    name: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongod
+spec:
+  serviceName: mongodb-service
+  replicas: 3
+  selector:
+    matchLabels:
+      role: mongo
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+        replicaset: MainRepSet
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongod-container
+          image: mongo
+          command:
+            - "mongod"
+            - "--bind_ip"
+            - "0.0.0.0"
+            - "--replSet"
+            - "MainRepSet"
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 200Mi
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongodb-persistent-storage-claim
+              mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-persistent-storage-claim
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "standard"
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
