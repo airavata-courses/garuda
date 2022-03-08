@@ -24,6 +24,6 @@ npm test
 
 ## RUN Module
 ```sh
-npm run
+npm start
 ```
 

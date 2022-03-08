@@ -8,13 +8,21 @@ def getConstants():
     if os.environ.get('APP_PORT') is not None:
         constants["APP_PORT"] = os.environ.get('APP_PORT')
 
-    constants["DB_MIDDLEWARE_HOST"] = 'localhost'
-    if os.environ.get('DB_MIDDLEWARE_HOST') is not None:
-        constants["DB_MIDDLEWARE_HOST"] = os.environ.get('DB_MIDDLEWARE_HOST')
+    constants["DB_MIDDLEWARE_WRITER_HOST"] = 'localhost'
+    if os.environ.get('DB_MIDDLEWARE_WRITER_HOST') is not None:
+        constants["DB_MIDDLEWARE_WRITER_HOST"] = os.environ.get('DB_MIDDLEWARE_WRITER_HOST')
     
-    constants["DB_MIDDLEWARE_PORT"] = '3001'
-    if os.environ.get('DB_MIDDLEWARE_PORT') is not None:
-        constants["DB_MIDDLEWARE_PORT"] = os.environ.get('DB_MIDDLEWARE_PORT')
+    constants["DB_MIDDLEWARE_WRITER_PORT"] = '3001'
+    if os.environ.get('DB_MIDDLEWARE_WRITER_PORT') is not None:
+        constants["DB_MIDDLEWARE_WRITER_PORT"] = os.environ.get('DB_MIDDLEWARE_WRITER_PORT')
+
+    constants["DB_MIDDLEWARE_READER_HOST"] = 'localhost'
+    if os.environ.get('DB_MIDDLEWARE_READER_HOST') is not None:
+        constants["DB_MIDDLEWARE_READER_HOST"] = os.environ.get('DB_MIDDLEWARE_READER_HOST')
+    
+    constants["DB_MIDDLEWARE_READER_PORT"] = '3002'
+    if os.environ.get('DB_MIDDLEWARE_READER_PORT') is not None:
+        constants["DB_MIDDLEWARE_READER_PORT"] = os.environ.get('DB_MIDDLEWARE_READER_PORT')
 
     constants["RABBITMQ_HOST"] = 'localhost'
     if os.environ.get('RABBITMQ_HOST') is not None:

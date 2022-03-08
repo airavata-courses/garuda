@@ -1,10 +1,14 @@
 
 module.exports = {
     // add dev, prod and test env
-    DB_HOSTNAME: process.env.DB_HOSTNAME || 'localhost',
-    DB_PORT: process.env.DB_PORT || 27017,
+    // user:pw@host1.com:27017,host2.com:27017,host3.com:27017
+    DB_HOSTS: process.env.DB_HOSTS || 'localhost:27017',
     DB_DATABASE: process.env.DB_DATABASE || 'garuda_mongodb',
+    DB_REPLICA_SET: process.env.DB_REPLICA_SET || 'MainRepSet',
+    DB_REPLICA_SET_PREFERENCE: process.env.DB_REPLICA_SET_PREFERENCE || 'secondaryPreferred',
 
+    // writer - 3001, reader - 3002
+    APP_TYPE: process.env.APP_TYPE || 'writer',
     APP_PORT: process.env.APP_PORT || 3001,
 
     CONST_REQUEST_STATUS_IN_PROCESS: '0',
