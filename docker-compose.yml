@@ -16,7 +16,7 @@ services:
       - db:/data/db
   db_middleware_writer:
     container_name: garudadbmiddlewarewriter
-    image: acharyapranav/garuda:db_middleware
+    image: acharyapranav/garuda:db_middleware-$PROJECT
     depends_on:
       - mongodb
     build: ./db_middleware
@@ -24,6 +24,7 @@ services:
       - DB_HOSTS=garuda_mongo:27017
       - DB_DATABASE=garuda
       - APP_PORT=3001
+      - APP_TYPE=writer
       - DB_REPLICA_SET=MainRepSet
       - DB_REPLICA_SET_PREFERENCE=secondaryPreferred
     restart: unless-stopped
@@ -33,7 +34,7 @@ services:
     tty: true
   db_middleware_reader:
     container_name: garudadbmiddlewarereader
-    image: acharyapranav/garuda:db_middleware
+    image: acharyapranav/garuda:db_middleware-$PROJECT
     depends_on:
       - mongodb
     build: ./db_middleware
@@ -41,6 +42,7 @@ services:
       - DB_HOSTS=garuda_mongo:27017
       - DB_DATABASE=garuda
       - APP_PORT=3002
+      - APP_TYPE=reader
       - DB_REPLICA_SET=MainRepSet
       - DB_REPLICA_SET_PREFERENCE=secondaryPreferred
     restart: unless-stopped
@@ -50,7 +52,7 @@ services:
     tty: true
   api_gateway:
     container_name: garuda_api_gateway
-    image: acharyapranav/garuda:api_gateway
+    image: acharyapranav/garuda:api_gateway-$PROJECT
     depends_on:
       - mongodb
       - db_middleware_writer
@@ -88,7 +90,7 @@ services:
         retries: 5
   queue_worker:
     container_name: garuda_queue_worker
-    image: acharyapranav/garuda:queue_worker
+    image: acharyapranav/garuda:queue_worker-$PROJECT
     restart: unless-stopped
     depends_on:
       - rabbitmq
@@ -104,7 +106,7 @@ services:
     tty: true
   web_app:
     container_name: garuda_web_app
-    image: acharyapranav/garuda:web_app
+    image: acharyapranav/garuda:web_app-$PROJECT
     restart: unless-stopped
     build: ./web_app
     ports:
