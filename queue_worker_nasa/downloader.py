@@ -159,7 +159,7 @@ def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45,
         try:
             result.raise_for_status()
             outfn = item['label']
-            f = open(outfn,'wb')
+            f = open('./files/' + outfn,'wb')
             f.write(result.content)
             f.close()
             print(outfn, " is downloaded ")
