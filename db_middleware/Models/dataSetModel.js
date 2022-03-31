@@ -49,6 +49,9 @@ const dummy_json ={
 
 async function insertDataInDataSetCollection(req, res, next) {
 
+  // TODO: NASA data handling
+  // can check if nasa data nasa data via req.body.type = nasa
+
   const raw_data = req.body.data;
   //Rishabh: When calling this API from postman comment the 1st line and uncomment the 2nd line
   //1st line
