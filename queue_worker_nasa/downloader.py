@@ -10,7 +10,7 @@ from urllib.parse import urlencode
 
 
 # Create a urllib PoolManager instance to make requests.
-http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED',ca_certs=certifi.where())
+http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 # Set the URL for the GES DISC subset service endpoint
 url = 'https://disc.gsfc.nasa.gov/service/subset/jsonwsp'
 
@@ -19,34 +19,26 @@ url = 'https://disc.gsfc.nasa.gov/service/subset/jsonwsp'
 # It is created for convenience since this task will be repeated more than once
 def get_http_data(request):
     hdrs = {'Content-Type': 'application/json',
-            'Accept'      : 'application/json'}
-    data = json.dumps(request)       
+            'Accept': 'application/json'}
+    data = json.dumps(request)
     r = http.request('POST', url, body=data, headers=hdrs)
-    response = json.loads(r.data)   
+    response = json.loads(r.data)
     # Check for errors
-    if response['type'] == 'jsonwsp/fault' :
+    if response['type'] == 'jsonwsp/fault':
         print('API Error: faulty %s request' % response['methodname'])
         sys.exit(1)
     return response
 
 
-def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45, begTime = '2021-01-01', endTime = '2021-01-05', begHour = '00:00', endHour = '00:00'):
+def download_nasa_data(variable="T", minlon=-180, maxlon=180, minlat=-90, maxlat=-45, begTime='2021-01-01', endTime='2021-01-05', begHour='00:00', endHour='00:00'):
 
     # Define the parameters for the data subset
-    product = 'M2I3NPASM_V5.12.4' 
-    # extracting only air-temerature data
-    varNames =['T']
-    # minlon = -180
-    # maxlon = 180
-    # minlat = -90
-    # maxlat = -45
-    # begTime = '2021-01-01'
-    # endTime = '2021-01-05'
-    # begHour = '00:00'
-    # endHour = '00:00'
+    product = 'M2I3NPASM_V5.12.4'
+    # variable for extracting data
+    varNames = [variable]
 
     # Subset only the mandatory pressure levels (units are hPa)
-    # 1000 925 850 700 500 400 300 250 200 150 100 70 50 30 20 10 7 5 3 2 1 
+    # 1000 925 850 700 500 400 300 250 200 150 100 70 50 30 20 10 7 5 3 2 1
     dimName = 'lev'
     dimVals = [1]
     # dimVals = [1,4,7,13,17,19,21,22,23,24,25,26,27,29,30,31,32,33,35,36,37]
@@ -55,22 +47,21 @@ def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45,
     for i in range(len(dimVals)):
         dimSlice.append({'dimensionId': dimName, 'dimensionValue': dimVals[i]})
 
-
     # Construct JSON WSP request for API method: subset
     subset_request = {
         'methodname': 'subset',
         'type': 'jsonwsp/request',
         'version': '1.0',
         'args': {
-            'role'  : 'subset',
-            'start' : begTime,
-            'end'   : endTime,
-            'box'   : [minlon, minlat, maxlon, maxlat],
-            'crop'  : True, 
+            'role': 'subset',
+            'start': begTime,
+            'end': endTime,
+            'box': [minlon, minlat, maxlon, maxlat],
+            'crop': True,
             'data': [{'datasetId': product,
-                    'variable' : varNames[0],
-                    'slice': dimSlice
-                    }]
+                      'variable': varNames[0],
+                      'slice': dimSlice
+                      }]
         }
     }
 
@@ -93,12 +84,12 @@ def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45,
     while response['result']['Status'] in ['Accepted', 'Running']:
         sleep(5)
         response = get_http_data(status_request)
-        status  = response['result']['Status']
+        status = response['result']['Status']
         percent = response['result']['PercentCompleted']
-        print ('Job status: %s (%d%c complete)' % (status,percent,'%'))
-    if response['result']['Status'] == 'Succeeded' :
-        print ('Job Finished:  %s' % response['result']['message'])
-    else : 
+        print('Job status: %s (%d%c complete)' % (status, percent, '%'))
+    if response['result']['Status'] == 'Succeeded':
+        print('Job Finished:  %s' % response['result']['message'])
+    else:
         print('Job Failed: %s' % response['fault']['code'])
         sys.exit(1)
 
@@ -115,34 +106,34 @@ def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45,
         }
     }
 
-    # Retrieve the results in JSON in multiple batches 
+    # Retrieve the results in JSON in multiple batches
     # Initialize variables, then submit the first GetResults request
     # Add the results from this batch to the list and increment the count
     results = []
-    count = 0 
-    response = get_http_data(results_request) 
+    count = 0
+    response = get_http_data(results_request)
     count = count + response['result']['itemsPerPage']
     results.extend(response['result']['items'])
 
     # Increment the startIndex and keep asking for more results until we have them all
     total = response['result']['totalResults']
-    while count < total :
-        results_request['args']['startIndex'] += batchsize 
-        response = get_http_data(results_request) 
+    while count < total:
+        results_request['args']['startIndex'] += batchsize
+        response = get_http_data(results_request)
         count = count + response['result']['itemsPerPage']
         results.extend(response['result']['items'])
-        
+
     # Check on the bookkeeping
     print('Retrieved %d out of %d expected items' % (len(results), total))
-
 
     # Sort the results into documents and URLs
 
     docs = []
     urls = []
-    for item in results :
+    for item in results:
         try:
-            if item['start'] and item['end'] : urls.append(item) 
+            if item['start'] and item['end']:
+                urls.append(item)
         except:
             docs.append(item)
     # Print out the documentation links, but do not download them
@@ -153,20 +144,22 @@ def download_nasa_data(minlon = -180, maxlon =  180, minlat = -90, maxlat = -45,
 
     # Use the requests library to submit the HTTP_Services URLs and write out the results.
     print('\nHTTP_services output:')
-    for item in urls :
-        URL = item['link'] 
+    for item in urls:
+        URL = item['link']
         result = requests.get(URL)
         try:
             result.raise_for_status()
             outfn = item['label']
-            f = open('./files/' + outfn,'wb')
+            f = open('./files/' + outfn, 'wb')
             f.write(result.content)
             f.close()
             print(outfn, " is downloaded ")
             downloaded_files.append(item['label'])
         except:
-            print('Error! Status code is %d for this URL:\n%s' % (result.status.code,URL))
-            print('Help for downloading data is at https://disc.gsfc.nasa.gov/data-access')
+            print('Error! Status code is %d for this URL:\n%s' %
+                  (result.status.code, URL))
+            print(
+                'Help for downloading data is at https://disc.gsfc.nasa.gov/data-access')
 
     print('Downloading is done and find the downloaded files in your current working directory')
 
