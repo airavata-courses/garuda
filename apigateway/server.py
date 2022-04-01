@@ -123,8 +123,8 @@ def generate_new_request():
     try:
         # request type - nexrad/nasa
         data_type = 'nexrad'
-        if request_data['type'] is not None:
-            data_type = request_data['type']
+        if 'type' in request_data:
+            data_type = request_data['type']            
 
         # nexrad data
         if data_type == 'nexrad':
