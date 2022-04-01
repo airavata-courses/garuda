@@ -24,7 +24,7 @@ def main():
     # method to run after getting msg
     def callback(ch, method, properties, body):
         try:
-            print("recieved msg : %s", body)
+            print("recieved msg : {}".format(body))
             # extract request params
             request = json.loads(body)
             requestID = request['requestID']
