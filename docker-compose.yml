@@ -9,7 +9,7 @@ services:
       test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
       interval: 10s
       start_period: 30s
-    command: "--bind_ip_all --replSet MainRepSet"    
+    command: "--bind_ip_all --replSet MainRepSet"
     ports:
       - 27017:27017
     volumes:
@@ -78,16 +78,16 @@ services:
     hostname: "garuda_rabbitmq"
     restart: unless-stopped
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-        - queue:/var/lib/rabbitmq/
-        - queue:/var/log/rabbitmq
+      - queue:/var/lib/rabbitmq/
+      - queue:/var/log/rabbitmq
     healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:15672"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   queue_worker:
     container_name: garuda_queue_worker
     image: acharyapranav/garuda:queue_worker-$PROJECT
@@ -104,6 +104,24 @@ services:
       - RABBITMQ_PORT=5672
     stdin_open: true
     tty: true
+  queue_worker_nasa:
+    container_name: garuda_queue_worker_nasa
+    image: acharyapranav/garuda:queue_worker_nasa-$PROJECT
+    depends_on:
+      - mongodb
+      - db_middleware_writer
+      - db_middleware_reader
+      - rabbitmq
+    build: ./queue_worker_nasa
+    environment:
+      - DB_MIDDLEWARE_WRITER_HOST=garudadbmiddlewarewriter
+      - DB_MIDDLEWARE_WRITER_PORT=3001
+      - RABBITMQ_HOST=garuda_rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_QUEUE_NASA=offload_queue_nasa
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
   web_app:
     container_name: garuda_web_app
     image: acharyapranav/garuda:web_app-$PROJECT
@@ -113,7 +131,6 @@ services:
       - 3000:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
-
 
 volumes:
   db:
