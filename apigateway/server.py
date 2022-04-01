@@ -25,16 +25,16 @@ def log_error(err_code):
     elif err_code == -3:
         print("Status value not valid")
     
-def push_to_rabbitmq(data):
+def push_to_rabbitmq(data, queue_name):
     creds = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host = constants['RABBITMQ_HOST'], port = constants['RABBITMQ_PORT'], virtual_host = "/", credentials = creds)
     )
     channel = connection.channel()
-    channel.queue_declare(queue='offload_request')
+    channel.queue_declare(queue=queue_name)
     message = json.dumps(data)
 
-    channel.basic_publish(exchange='', routing_key='offload_request', body=message)
+    channel.basic_publish(exchange='', routing_key=queue_name, body=message)
     connection.close()
     '''
     Queue Request example: 
@@ -121,23 +121,48 @@ def generate_new_request():
         }
         return jsonify(response)
     try:
-        station_key = request_data['station_name']
-        db_date_absolute = str(request_data['date'])     
-        db_date = db_date_absolute.replace(" ", "").replace("-", "")
-        time_start, time_end = str(request_data['time']).replace(" ","").replace(":", "").split('-')
-        property = request_data['property']
-        user_email = request_data['user_email']
+        # request type - nexrad/nasa
+        data_type = 'nexrad'
+        if request_data['type'] is not None:
+            data_type = request_data['type']
+
+        # nexrad data
+        if data_type == 'nexrad':
+            station_key = request_data['station_name']
+            db_date_absolute = str(request_data['date'])     
+            db_date = db_date_absolute.replace(" ", "").replace("-", "")
+            time_start, time_end = str(request_data['time']).replace(" ","").replace(":", "").split('-')
+            property = request_data['property']
+            user_email = request_data['user_email']
+        # nasa data
+        else:
+            minlon = request_data["minlon"]
+            maxlon = request_data["maxlon"]
+            minlat = request_data["minlat"]
+            maxlat = request_data["maxlat"]
+            begTime = request_data["begTime"]
+            endTime = request_data["endTime"]
+            begHour = request_data["begHour"]
+            endHour = request_data["endHour"]
+            property = request_data["property"]
+            user_email = request_data['user_email']
     except:
         response = {
             "response_code" : "3",
             "response_message" : "Incorrect keys passed in the json request"
         }
         return jsonify(response)
-    db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}"
+
+    if data_type == 'nexrad':
+        db_key = f"{station_key}_{db_date}_{time_start}_{time_end}_{property}_{data_type}"
+    else:
+        # nasa data request ID
+        db_key = f"{property}_{minlon}_{maxlon}_{minlat}_{maxlat}_{begTime}_{endTime}_{begHour}_{endHour}_{data_type}"
 
     # Make call to check db for this key
     URL = "http://" + constants["DB_MIDDLEWARE_READER_HOST"] + ":" + constants["DB_MIDDLEWARE_READER_PORT"] + "/" + "postCheckRequest"
     METHOD = 'POST'
+    # TODO: remove property
     PAYLOAD = json.dumps({
         "request_id" : db_key,
         "property" : str(property)
@@ -182,28 +207,51 @@ def generate_new_request():
             response['data_dump'] = ""
         if db_response['data_status'] == "false":
             # Make a call to rabbitmq
-            '''
-            Queue Request example: 
-            {"requestID":"1234","stationID":"KABR","year":"2007","month":"01","date":"01","start_time":"000000","end_time":"003000","property":"Reflectivity"}
-            '''
-            rmq_month, rmq_date, rmq_year = db_date_absolute.split('-')
-            rabbitmq_data = {
-                "requestID" : str(db_key),
-                "stationID" : str(station_key),
-                "year" : rmq_year,
-                "month" : rmq_month,
-                "date" : rmq_date,
-                "start_time" : time_start,
-                "end_time" : time_end,
-                "property" : str(property)
-            }
+            rabbitmq_data  = {}
+            if data_type == 'nexrad':
+                '''
+                Queue Request example: 
+                {"requestID":"1234","stationID":"KABR","year":"2007","month":"01","date":"01","start_time":"000000","end_time":"003000","property":"Reflectivity"}
+                '''
+                rmq_month, rmq_date, rmq_year = db_date_absolute.split('-')
+                rabbitmq_data = {
+                    "requestID" : str(db_key),
+                    "stationID" : str(station_key),
+                    "year" : rmq_year,
+                    "month" : rmq_month,
+                    "date" : rmq_date,
+                    "start_time" : time_start,
+                    "end_time" : time_end,
+                    "property" : str(property)
+                }
+            else:
+                '''
+                Queue Request example: 
+                {"minlon":-180,"maxlon":180,"minlat":-90,"maxlat":-45,"begTime":"2021-01-01","endTime":"2021-01-02","begHour":"00:00","endHour":"00:00","requestID":"1234","property":"T"}
+                '''
+                rabbitmq_data = {
+                    "minlon":minlon,
+                    "maxlon":maxlon,
+                    "minlat":minlat,
+                    "maxlat":maxlat,
+                    "begTime":begTime,
+                    "endTime":endTime,
+                    "begHour":begHour,
+                    "endHour":endHour,
+                    "requestID":str(db_key),
+                    "property":str(property)
+                }
             try:
-                push_to_rabbitmq(data=rabbitmq_data)
+                queue_name = ''
+                if data_type == 'nexrad':
+                    queue_name = 'offload_request'
+                else:
+                    queue_name = 'offload_queue_nasa'
+                push_to_rabbitmq(data=rabbitmq_data, queue_name=queue_name)
             except:
                 response['response_code'] = "3"
                 response['response_message'] = "Failed to add new job to rabbitmq"
                 response['data_dump'] = ""
-
     else:
         response['response_code'] = "1"
         response['response_message'] = "Fail"
