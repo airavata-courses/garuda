@@ -112,7 +112,11 @@ services:
       - db_middleware_writer
       - db_middleware_reader
       - rabbitmq
-    build: ./queue_worker_nasa
+    build: 
+      context: ./queue_worker_nasa
+      args:
+        - nasa_username=$NASA_USERNAME
+        - nasa_password=$NASA_PASSWORD
     environment:
       - DB_MIDDLEWARE_WRITER_HOST=garudadbmiddlewarewriter
       - DB_MIDDLEWARE_WRITER_PORT=3001
