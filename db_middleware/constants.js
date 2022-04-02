@@ -21,6 +21,9 @@ module.exports = {
     CONST_API_CALLBACK_KEY_STATUS_ERROR: 'error',
     CONST_API_CALLBACK_KEY_MESSAGE: 'message',
     CONST_API_CALLBACK_KEY_IS_NEW_REQUEST: 'is_new_reqeust',
-    CONST_API_CALLBACK_KEY_REQUESTS: 'requests'
+    CONST_API_CALLBACK_KEY_REQUESTS: 'requests',
+
+    CONST_DATA_SET_TYPE_NEXRAD : "nasa",
+    CONST_DATA_SET_TYPE_MERRA : "merra"
 }
 
