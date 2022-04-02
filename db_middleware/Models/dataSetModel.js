@@ -58,12 +58,15 @@ async function insertDataInDataSetCollection(req, res, next) {
   const raw_data = req.body.data;
   //Rishabh: When calling this API from postman comment the 1st line and uncomment the 2nd line
   //1st line
-  let json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"));
+  let json = raw_data;
+
+  if (data_set_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
+    json = JSON.parse(raw_data.replace(/\bNaN\b/g, "null"));
+  }
   //2nd line
   //let json = raw_data
   var objectId = new mongoose.Types.ObjectId();
 
- 
 
   let dataSetModelObj;
   let reflectivityRefModelObj;
@@ -97,7 +100,7 @@ async function insertDataInDataSetCollection(req, res, next) {
       parent_doc_ref: objectId,
       lat: json.latitude.filter((number, index) => index % 4 == 0),
     });
-    
+
     longRefModelObj = new LongRefModel({
       parent_doc_ref: objectId,
       long: json.longitude.filter((number, index) => index % 4 == 0),
@@ -117,7 +120,7 @@ async function insertDataInDataSetCollection(req, res, next) {
       parent_doc_ref: objectId,
       lat: json.lat.filter((number, index) => index % 4 == 0),
     });
-    
+
     longRefModelObj = new LongRefModel({
       parent_doc_ref: objectId,
       long: json.lng.filter((number, index) => index % 4 == 0),
@@ -130,32 +133,32 @@ async function insertDataInDataSetCollection(req, res, next) {
 
   }
 
-    //Rishabh: transaction method won't work if replica of mongodb is not running
-    //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware folder
-    //We can also do this with custom connection in order to run write operation on another connection object
-    //Ref - https://mongoosejs.com/docs/transactions.html
-    const session = await mongoose.startSession();
-    await session
-      .withTransaction(async (session) => {
-        await latRefModelObj.save({ session });
-        await longRefModelObj.save({ session });
-        if (data_set_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
-          await reflectivityRefModelObj.save({ session });
-          await dataSetModelObj.save({ session });
-        } else {
-          await temperatureRefModelObj.save({ session })
-          await merraDataSetModel.save({ session });
-        }
-        res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true;
-      })
-      .catch((err) => {
-        console.log("Error during record insertion data_writer_api: " + err);
-        res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false;
-        res.locals.IS_ERROR_API_CALLED = false;
-        res.send({ status: "error", message: "Insertion failed in lat model" });
-      });
+  //Rishabh: transaction method won't work if replica of mongodb is not running
+  //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware folder
+  //We can also do this with custom connection in order to run write operation on another connection object
+  //Ref - https://mongoosejs.com/docs/transactions.html
+  const session = await mongoose.startSession();
+  await session
+    .withTransaction(async (session) => {
+      await latRefModelObj.save({ session });
+      await longRefModelObj.save({ session });
+      if (data_set_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
+        await reflectivityRefModelObj.save({ session });
+        await dataSetModelObj.save({ session });
+      } else {
+        await temperatureRefModelObj.save({ session })
+        await merraDataSetModel.save({ session });
+      }
+      res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true;
+    })
+    .catch((err) => {
+      console.log("Error during record insertion data_writer_api: " + err);
+      res.locals.IS_INSERT_OPERATION_SUCCESSFUL = false;
+      res.locals.IS_ERROR_API_CALLED = false;
+      res.send({ status: "error", message: "Insertion failed in lat model" });
+    });
 
-    next();
+  next();
 
   /* latRefModelObj.save((err) => {
     if (!err) {
@@ -188,7 +191,8 @@ function getDataOfRequestId(req, res, next) {
   // type check
   request_params = req.body.request_id.split("_");
   data_type = request_params[request_params.length - 1];
-  if(data_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD){
+
+  if (data_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
     DatasetModel.aggregate([
       {
         $match: {
@@ -250,7 +254,7 @@ function getDataOfRequestId(req, res, next) {
         console.log(error);
       });
   } else {
-    DatasetModel.aggregate([
+    MerraDataSetModel.aggregate([
       {
         $match: {
           request_id: req.body.request_id,
@@ -311,11 +315,11 @@ function getDataOfRequestId(req, res, next) {
         console.log(error);
       });
   }
-  
 
 
 
-    
+
+
   // DatasetModel.find(
   //   { request_id: req.body.request_id, property: req.body.property },
   //   (err, data) => {
