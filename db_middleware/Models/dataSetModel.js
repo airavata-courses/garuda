@@ -5,6 +5,7 @@ const LatRefModel = require("./latSetModel")
 const LongRefModel = require("./longSetModel")
 const ReflectivityRefModel = require("./reflectivitySetModel")
 const MerraDataSetModel = require("./merraDataSetModel")
+const TemperatureRefModel = require("./temperatureModel")
 
 const dataSetSchema = new mongoose.Schema({
   _id: ObjectId,
@@ -62,18 +63,14 @@ async function insertDataInDataSetCollection(req, res, next) {
   //let json = raw_data
   var objectId = new mongoose.Types.ObjectId();
 
-  const latRefModelObj = new LatRefModel({
-    parent_doc_ref: objectId,
-    lat: json.latitude.filter((number, index) => index % 4 == 0),
-  });
-  const longRefModelObj = new LongRefModel({
-    parent_doc_ref: objectId,
-    long: json.longitude.filter((number, index) => index % 4 == 0),
-  });
+ 
 
   let dataSetModelObj;
   let reflectivityRefModelObj;
   let merraDataSetModel;
+  let longRefModelObj;
+  let latRefModelObj;
+  let temperatureRefModelObj;
   if (data_set_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
     //Nexrad dataset
 
@@ -95,22 +92,42 @@ async function insertDataInDataSetCollection(req, res, next) {
       //data: json[json.variable]
       data: json.Reflectivity.filter((number, index) => index % 4 == 0),
     });
+
+    latRefModelObj = new LatRefModel({
+      parent_doc_ref: objectId,
+      lat: json.latitude.filter((number, index) => index % 4 == 0),
+    });
     
+    longRefModelObj = new LongRefModel({
+      parent_doc_ref: objectId,
+      long: json.longitude.filter((number, index) => index % 4 == 0),
+    });
   } else {
     //New merra data set
     merraDataSetModel = new MerraDataSetModel({
       _id: objectId,
       request_id: req.body.requestID,
-      min_lon: json.minlon,
-      max_lon: json.maxlon,
-      min_lat: req.minlat,
-      max_lat: req.maxLat,
-      start_time: json.startTime,
-      end_time: json.endTime,
-      beg_hour: json.begHour,
-      end_hour: json.endHour,
-      property: json.property
+      // lat: json.lat,
+      // lng: json.lng,
+      // temperature: json.T,
+      property: json.property || "T"
     });
+
+    latRefModelObj = new LatRefModel({
+      parent_doc_ref: objectId,
+      lat: json.lat.filter((number, index) => index % 4 == 0),
+    });
+    
+    longRefModelObj = new LongRefModel({
+      parent_doc_ref: objectId,
+      long: json.lng.filter((number, index) => index % 4 == 0),
+    });
+    temperatureRefModelObj = new TemperatureRefModel({
+      parent_doc_ref: objectId,
+      temperature: json.T.filter((number, index) => index % 4 == 0),
+    });
+
+
   }
 
     //Rishabh: transaction method won't work if replica of mongodb is not running
@@ -126,6 +143,7 @@ async function insertDataInDataSetCollection(req, res, next) {
           await reflectivityRefModelObj.save({ session });
           await dataSetModelObj.save({ session });
         } else {
+          await temperatureRefModelObj.save({ session })
           await merraDataSetModel.save({ session });
         }
         res.locals.IS_INSERT_OPERATION_SUCCESSFUL = true;

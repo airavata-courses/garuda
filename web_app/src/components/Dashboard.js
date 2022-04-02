@@ -49,7 +49,7 @@ export default function Dashboard() {
   function submitUserRequest(e) {
     e.preventDefault();
     var requestBody = null;
-    if (activeTab === CONST_NEXRAD) {
+    if ( activeTab  ===  CONST_NEXRAD ) {
       requestBody = retrieveNexradFormData();
     } else {
       requestBody = retrieveMerraFormData();
