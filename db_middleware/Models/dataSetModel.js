@@ -185,67 +185,137 @@ async function insertDataInDataSetCollection(req, res, next) {
  * Function to check status of request
  */
 function getDataOfRequestId(req, res, next) {
-  DatasetModel.aggregate([
-    {
-      $match: {
-        request_id: req.body.request_id,
+  // type check
+  request_params = req.body.request_id.split("_");
+  data_type = request_params[request_params.length - 1];
+  if(data_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD){
+    DatasetModel.aggregate([
+      {
+        $match: {
+          request_id: req.body.request_id,
+        },
       },
-    },
-    {
-      $lookup: {
-        from: "latrefmodels",
-        localField: "_id",
-        foreignField: "parent_doc_ref",
-        as: "lat",
+      {
+        $lookup: {
+          from: "latrefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "lat",
+        },
       },
-    },
-    {
-      $lookup: {
-        from: "longrefmodels",
-        localField: "_id",
-        foreignField: "parent_doc_ref",
-        as: "long",
+      {
+        $lookup: {
+          from: "longrefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "long",
+        },
       },
-    },
-    {
-      $lookup: {
-        from: "reflectivityrefmodels",
-        localField: "_id",
-        foreignField: "parent_doc_ref",
-        as: "reflectivity",
+      {
+        $lookup: {
+          from: "reflectivityrefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "reflectivity",
+        },
       },
-    },
-    {
-      $unwind: {
-        path: "$lat",
+      {
+        $unwind: {
+          path: "$lat",
+        },
       },
-    },
-    {
-      $unwind: {
-        path: "$long",
+      {
+        $unwind: {
+          path: "$long",
+        },
       },
-    },
-    {
-      $unwind: {
-        path: "$reflectivity",
+      {
+        $unwind: {
+          path: "$reflectivity",
+        },
       },
-    },
-  ])
-    .then((result) => {
-      res.send({
-        status: "success",
-        message: "Information retrieved",
-        data: result,
+    ])
+      .then((result) => {
+        res.send({
+          status: "success",
+          message: "Information retrieved",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.send({
+          status: "error",
+          message: "Information retrieval failed",
+        });
+        console.log(error);
       });
-    })
-    .catch((error) => {
-      res.send({
-        status: "error",
-        message: "Information retrieval failed",
+  } else {
+    DatasetModel.aggregate([
+      {
+        $match: {
+          request_id: req.body.request_id,
+        },
+      },
+      {
+        $lookup: {
+          from: "latrefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "lat",
+        },
+      },
+      {
+        $lookup: {
+          from: "longrefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "long",
+        },
+      },
+      {
+        $lookup: {
+          from: "temperaturerefmodels",
+          localField: "_id",
+          foreignField: "parent_doc_ref",
+          as: "temperature",
+        },
+      },
+      {
+        $unwind: {
+          path: "$lat",
+        },
+      },
+      {
+        $unwind: {
+          path: "$long",
+        },
+      },
+      {
+        $unwind: {
+          path: "$temperature",
+        },
+      },
+    ])
+      .then((result) => {
+        res.send({
+          status: "success",
+          message: "Information retrieved",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.send({
+          status: "error",
+          message: "Information retrieval failed",
+        });
+        console.log(error);
       });
-      console.log(error);
-    });
+  }
+  
 
+
+
+    
   // DatasetModel.find(
   //   { request_id: req.body.request_id, property: req.body.property },
   //   (err, data) => {
