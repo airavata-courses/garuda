@@ -49,8 +49,7 @@ const dummy_json ={
 }*/
 
 async function insertDataInDataSetCollection(req, res, next) {
-  const data_set_type = req.body.type;
-  
+  const data_set_type = req.body.type || CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD;
 
   // TODO: NASA data handling
   // can check if nasa data nasa data via req.body.type = nasa

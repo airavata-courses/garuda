@@ -49,65 +49,64 @@ export default function Dashboard() {
   function submitUserRequest(e) {
     e.preventDefault();
     var requestBody = null;
-
-    if ({ activeTab } === { CONST_NEXRAD }) {
+    if (activeTab === CONST_NEXRAD) {
       requestBody = retrieveNexradFormData();
     } else {
       requestBody = retrieveMerraFormData();
     }
-    if (requestBody){
+    if (requestBody) {
       console.log("request body " + JSON.stringify(requestBody));
-    var apiEndpoint =
-      process.env.REACT_APP_API_GATEWAY_ENDPOINT +
-      "/" +
-      process.env.REACT_APP_POST_NEW_REQUEST;
-    console.group(apiEndpoint);
-    
-    // {
-    // “response_code” : “0” / ”1”,
-    // “response_message” : “Success/Fail”, “data_dump” :””    }
+      var apiEndpoint =
+        process.env.REACT_APP_API_GATEWAY_ENDPOINT +
+        "/" +
+        process.env.REACT_APP_POST_NEW_REQUEST;
+      console.group(apiEndpoint);
 
-    document.getElementById("apiResponseMsg").innerHTML =
-      "Loading Please Wait! Submitting your request.";
-    fetch(apiEndpoint, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          if (result.response_code.localeCompare("0") == 0) {
-            // Success
-            document.getElementById("apiResponseMsg").innerHTML =
-              result.response_message;
-            setTimeout(() => {
-              window.location.href =
-                window.location.protocol +
-                "//" +
-                window.location.host +
-                "/Dashboard";
-            }, 2000);
-          } else {
-            // Error
-            document.getElementById("apiResponseMsg").innerHTML =
-              result.response_message;
-          }
+      // {
+      // “response_code” : “0” / ”1”,
+      // “response_message” : “Success/Fail”, “data_dump” :””    }
+
+      document.getElementById("apiResponseMsg").innerHTML =
+        "Loading Please Wait! Submitting your request.";
+      fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        (error) => {
-          console.log(error);
-          document.getElementById("apiResponseMsg").innerHTML =
-            "Something went wrong! Please try again later.";
-        }
-      );
+        body: JSON.stringify(requestBody),
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            console.log(result);
+            if (result.response_code.localeCompare("0") == 0) {
+              // Success
+              document.getElementById("apiResponseMsg").innerHTML =
+                result.response_message;
+              setTimeout(() => {
+                window.location.href =
+                  window.location.protocol +
+                  "//" +
+                  window.location.host +
+                  "/Dashboard";
+              }, 2000);
+            } else {
+              // Error
+              document.getElementById("apiResponseMsg").innerHTML =
+                result.response_message;
+            }
+          },
+          (error) => {
+            console.log(error);
+            document.getElementById("apiResponseMsg").innerHTML =
+              "Something went wrong! Please try again later.";
+          }
+        );
     } else {
       console.log("CHECK THE SYSTEMMMMMMMMMMMMM")
     }
-    
+
   }
 
   //TODO: using
@@ -165,7 +164,7 @@ export default function Dashboard() {
     var localMapProperty = document.getElementById("idDropdownMapProperty").value;
     var userEmail = localStorage.getItem("userEmail");
     var requestBody = null
-    
+
     if (!localMinLong) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
@@ -205,7 +204,7 @@ export default function Dashboard() {
         user_email: userEmail,
       };
     }
-    
+
 
     return requestBody
   }
