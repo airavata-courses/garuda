@@ -136,10 +136,10 @@ def generate_new_request():
             user_email = request_data['user_email']
         # nasa data
         else:
-            minlon = request_data["minlon"]
-            maxlon = request_data["maxlon"]
-            minlat = request_data["minlat"]
-            maxlat = request_data["maxlat"]
+            minlon = int(request_data["minlon"])
+            maxlon = int(request_data["maxlon"])
+            minlat = int(request_data["minlat"])
+            maxlat = int(request_data["maxlat"])
             begTime = request_data["begTime"]
             endTime = request_data["endTime"]
             begHour = request_data["begHour"]
