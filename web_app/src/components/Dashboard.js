@@ -10,7 +10,7 @@ import MerraDataForm from "./MerraDataForm";
 
 let data = {};
 let CONST_NEXRAD = "nexrad";
-let CONST_MERRA = "merra";
+let CONST_MERRA = "nasa";
 export default function Dashboard() {
   const [isLoadMap, setLoadMap] = useState(false);
   const [activeTab, setActiveTab] = useState(CONST_NEXRAD);
