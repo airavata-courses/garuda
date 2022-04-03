@@ -18,8 +18,9 @@ export default function Dashboard() {
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
 
+  // TODO: fix refresh button
   function refreshDashboard() {
-    navigateObj('/Dashboard',{ replace: true })
+    navigateObj('/Dashboard')
   }
 
   const sendDataToParent = (response) => { // the callback
@@ -73,7 +74,10 @@ export default function Dashboard() {
       }
 
       console.log("request body " + JSON.stringify(requestBody))
-      var apiEndpoint = process.env.REACT_APP_API_GATEWAY_ENDPOINT + '/' + process.env.REACT_APP_POST_NEW_REQUEST
+      const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+      const port = REACT_APP_API_GATEWAY_PORT || "5000";
+      const url = "http://" + host + "/" + port
+      var apiEndpoint = url + '/' + process.env.REACT_APP_POST_NEW_REQUEST
       console.group(apiEndpoint)
       // { 
       // “response_code” : “0” / ”1”,
@@ -96,7 +100,7 @@ export default function Dashboard() {
               // Success
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
               setTimeout(() => {
-                navigateObj('/Dashboard',{ replace: true })
+                navigateObj('/Dashboard', { replace: true })
               }, 2000)
             } else {
               // Error
