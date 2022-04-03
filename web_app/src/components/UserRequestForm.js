@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import UtilsApiCalls from '../api/UtilsApiCalls';
 import '../ui_components/UserRequestForm.css';
 
-export default function UserRequestForm() {
+export default function UserRequestForm({id, activeTab}) {
     //JSON response keys
     const KEY_STATION_NAME = 'station_name'
     const KEY_TIME_SLOTS = 'time'
@@ -17,54 +17,62 @@ export default function UserRequestForm() {
     //API call
     const { data, error, isLoaded } = UtilsApiCalls(process.env.REACT_APP_ALL_INFO, "GET");
 
+    return id === activeTab ? renderForm() : renderEmpty()
 
-    if (error !== null) {
-        return <div>Error: {error.message}</div>;
+    function renderEmpty(){
+        return null
     }
-    if (!isLoaded) {
-        return <div>Loading...</div>;
-    } else {
-        return (
-            <div>
-                <h3 style={{ textAlign: "center" }}>User Request Form</h3>
-                <div className="UserRequestForm">
-                    <span className="spanDropdownLocation" >
-                        <select id="idDropdownStationLocation">
-                            <option value="default">Select Station Name</option>
-                            {data[KEY_STATION_NAME]?.map(station => (
-                                <option value={station} key={station}> {station} </option>
-                            ))}
-                        </select>
-                    </span>
 
-                    <span className="spanDatePicker" >
-                        <DatePicker
-                            id="idDatePickerComponent"
-                            selected={startDate}
-                            onChange={(startDate) => setDate(startDate)}
-                            dateFormat="MM-dd-yyyy" />
-                    </span>
-
-                    <span className="spanDropdownTimeSlots"  >
-                        <select id="idDropdownTimeSlots">
-                            <option value="default">Select Time Slot</option>
-                            {data[KEY_TIME_SLOTS]?.map(timeSlot => (
-                                <option value={timeSlot} key={timeSlot}> {timeSlot} </option>
-                            ))}
-                        </select>
-                    </span>
-                    <span className="spanDropdownMapProperty">
-                        <select id="idDropdownMapProperty">
-                            <option value="default">Select Property</option>
-                            {data[KEY_PROPERTY_TYPE]?.map(mapProperty => (
-                                <option value={mapProperty} key={mapProperty}> {mapProperty} </option>
-                            ))}
-                        </select>
-                    </span>
-
+    function renderForm(){
+        if (error !== null) {
+            return <div>Error: {error.message}</div>;
+        }
+        if (!isLoaded) {
+            return <div>Loading...</div>;
+        } else {
+            return (
+                <div>
+                    <h3 style={{ textAlign: "center" }}>User Request Form</h3>
+                    <div className="UserRequestForm">
+                        <span className="spanDropdownLocation" >
+                            <select id="idDropdownStationLocation">
+                                <option value="default">Select Station Name</option>
+                                {data[KEY_STATION_NAME]?.map(station => (
+                                    <option value={station} key={station}> {station} </option>
+                                ))}
+                            </select>
+                        </span>
+    
+                        <span className="spanDatePicker" >
+                            <DatePicker
+                                id="idDatePickerComponent"
+                                selected={startDate}
+                                onChange={(startDate) => setDate(startDate)}
+                                dateFormat="MM-dd-yyyy" />
+                        </span>
+    
+                        <span className="spanDropdownTimeSlots"  >
+                            <select id="idDropdownTimeSlots">
+                                <option value="default">Select Time Slot</option>
+                                {data[KEY_TIME_SLOTS]?.map(timeSlot => (
+                                    <option value={timeSlot} key={timeSlot}> {timeSlot} </option>
+                                ))}
+                            </select>
+                        </span>
+                        <span className="spanDropdownMapProperty">
+                            <select id="idDropdownMapProperty">
+                                <option value="default">Select Property</option>
+                                {data[KEY_PROPERTY_TYPE]?.map(mapProperty => (
+                                    <option value={mapProperty} key={mapProperty}> {mapProperty} </option>
+                                ))}
+                            </select>
+                        </span>
+    
+                    </div>
                 </div>
-            </div>
-
-        );
+    
+            );
+        } 
     }
+    
 }
