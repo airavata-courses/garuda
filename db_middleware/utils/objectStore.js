@@ -8,7 +8,7 @@ const CONSTANTS = require("../constants");
  * @param {String} file_data 
  * @param {String} file_content_type 
  */
-async function upload_object_store(file_name, file_data, file_content_type = 'application/text') {
+async function upload_object_store(file_name, file_data, file_content_type = 'application/json') {
   var s3 = new AWS.S3({
     endpoint: new AWS.Endpoint(CONSTANTS.END_POINT),
     s3ForcePathStyle: true,
@@ -39,4 +39,6 @@ async function upload_object_store(file_name, file_data, file_content_type = 'ap
 //     console.log("error in uploading file to object store:  \n", err);
 //   })
 
-module.exports = upload_object_store;
+module.exports = {
+  upload_object_store
+}
