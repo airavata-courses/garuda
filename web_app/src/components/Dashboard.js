@@ -20,6 +20,7 @@ export default function Dashboard() {
 
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
+  let type = "nexrad"
 
   // TODO: fix refresh button
   function refreshDashboard() {
@@ -46,13 +47,16 @@ export default function Dashboard() {
       station.push(95.7129);
       for(let i = 0; i < response[0].lat.lat.length; i++) {
         for (let j = 0; j < response[0].long.long.length; j++) {
-          obj.latitude.push(response[0].lat.lat[i]);
-          obj.longitude.push(response[0].long.long[j]);
-          obj.reflectivity.push(response[0].temperature.temperature[i][j]);
+          if(response[0].temperature.temperature[i][j] != null) {
+            obj.latitude.push(response[0].lat.lat[i]);
+            obj.longitude.push(response[0].long.long[j]);
+            obj.reflectivity.push(response[0].temperature.temperature[i][j]);
+          }
         }
       }
+      type = "nasa"
     }
-    data = { obj, station };
+    data = { obj, station, type };
     setLoadMap(true);
   };
 
