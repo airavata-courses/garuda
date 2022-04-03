@@ -20,22 +20,33 @@ export default function Dashboard() {
     window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
   }
 
-  const sendDataToParent = (response) => { // the callback
+  const sendDataToParent = (response) => {
+    // the callback
+    //Get data from s3 bucket and then plot it
+    getDataFromS3(response[0].s3_url).then((s3Data) => {
+      station.push(s3Data.stationLongitude);
+      station.push(s3Data.stationLatitute);
 
-    station.push(response[0].station_longitude);
-    station.push(response[0].station_latitude);
-
-    for (let i = 0; i < response[0].lat.lat.length; i++) {
-      for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
-        obj.latitude.push(response[0].lat.lat[i][j]);
-        obj.longitude.push(response[0].long.long[i][j]);
-        obj.reflectivity.push(response[0].reflectivity.data[i][j]);
+      for (let i = 0; i < s3Data.latitude.lat.length; i++) {
+        for (let j = 0; j < s3Data.latitude.lat[i].length; j += 200) {
+          obj.latitude.push(s3Data.latitude.lat[i][j]);
+          obj.longitude.push(s3Data.longitude.long[i][j]);
+          obj.reflectivity.push(s3Data.Reflectivity.data[i][j]);
+        }
       }
-    }
+      data = { obj, station };
+      setLoadMap(true);
+    });
 
-    data = { obj, station }
-    setLoadMap(true)
   };
+   
+  async function getDataFromS3(url) {
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const jsonValue = await response.json();
+    return jsonValue;
+  }
 
   const setLoadMapFalse = () => { // the callback. Use a better name
     setLoadMap(false)
