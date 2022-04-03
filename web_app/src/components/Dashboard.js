@@ -44,11 +44,11 @@ export default function Dashboard() {
     } else {
       station.push(37.0902);
       station.push(95.7129);
-      for (let i = 0; i < response[0].lat.lat.length; i++) {
-        for (let j = 0; j < response[0].lat.lat[i].length; j += 20) {
-          obj.latitude.push(response[0].lat.lat[i][j]);
-          obj.longitude.push(response[0].long.long[i][j]);
-          obj.reflectivity.push(response[0].T.data[i][j]);
+      for(let i = 0; i < response[0].lat.lat.length; i++) {
+        for (let j = 0; j < response[0].long.long.length; j++) {
+          obj.latitude.push(response[0].lat.lat[i]);
+          obj.longitude.push(response[0].long.long[j]);
+          obj.reflectivity.push(response[0].temperature.temperature[i][j]);
         }
       }
     }

@@ -31,7 +31,8 @@ function checkRange(reflectivityRange) {
   } else if (reflectivityRange >= 150 && reflectivityRange < 180) {
     return "#EF7C8E" // pink
   } else if (reflectivityRange >= 180 && reflectivityRange < 210) {
-    return "#EF7C8E" //grey
+    // TODO: make grey
+    return "#EF7C8E" //pink
   } else {
     return "#2CF3E0" //black
   }
@@ -80,7 +81,7 @@ const MapBox = (props) => {
           </Geographies>
           {coordinates.map((coordinates, index) => (
             <Marker key={index} coordinates={coordinates}>
-              <circle key={index} r="0.1" fill={checkRange(coordinates[2])} />
+              <circle key={index} r="3" fill={checkRange(coordinates[2])} />
             </Marker>
           ))}
         </ZoomableGroup>
