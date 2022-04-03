@@ -89,7 +89,7 @@ async function insertDataInDataSetCollection(req, res, next) {
     data: json.Reflectivity.filter((number, index)=> index % 4 == 0)
   })
   //Rishabh: transaction method won't work if replica of mongodb is not running
-  //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware folder
+  //To start replica on local environment or in docker check 'stepsToStartReplicaDb.txt' file in db_middleware/notes folder
   //We can also do this with custom connection in order to run write operation on another connection object
   //Ref - https://mongoosejs.com/docs/transactions.html
   const session = await mongoose.startSession()
