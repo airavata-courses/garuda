@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   const sendDataToParent = (response) => {
     // the callback
-    let tempDataSetType = response.requestID.split("_")
+    let tempDataSetType = response[0].request_id.split("_")
     tempDataSetType = tempDataSetType[tempDataSetType.length - 1]
     if(tempDataSetType === CONST_NEXRAD){
       station.push(response[0].station_longitude);
@@ -42,7 +42,7 @@ export default function Dashboard() {
       station.push(37.0902);
       station.push(95.7129);
       for (let i = 0; i < response[0].lat.lat.length; i++) {
-        for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
+        for (let j = 0; j < response[0].lat.lat[i].length; j += 20) {
           obj.latitude.push(response[0].lat.lat[i][j]);
           obj.longitude.push(response[0].long.long[i][j]);
           obj.reflectivity.push(response[0].T.data[i][j]);

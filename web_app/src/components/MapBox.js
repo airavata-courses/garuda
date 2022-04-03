@@ -31,9 +31,9 @@ function checkRange(reflectivityRange) {
   } else if (reflectivityRange >= 150 && reflectivityRange < 180) {
     return "#EF7C8E" // pink
   } else if (reflectivityRange >= 180 && reflectivityRange < 210) {
-    return "#B9B7BD" //grey
+    return "#EF7C8E" //grey
   } else {
-    return "#050A30" //black
+    return "#2CF3E0" //black
   }
 }
 
@@ -43,6 +43,7 @@ const MapBox = (props) => {
   for (let i = 0; i < props.data.obj.latitude.length; i++) {
     coordinates.push([props.data.obj.longitude[i], props.data.obj.latitude[i], props.data.obj.reflectivity[i]]);
   }
+  console.log(coordinates)
   // TODO: set height width
   return (
     <div>

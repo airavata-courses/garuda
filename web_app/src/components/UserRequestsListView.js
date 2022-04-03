@@ -15,6 +15,30 @@ export default function UserRequestsListView({
     process.env.REACT_APP_POST_GET_ALL_REQUEST + "?user_email=" + username;
   //API call
   const { data, error, isLoaded } = UtilsApiCalls(apiURL, "GET");
+//   const dummy_test = {
+//     "error_code": "0",
+//     "error_message": "Information retrieved",
+//     "request_details": [
+//       {
+//           "__v": 0,
+//           "_id": "62491f0a4b2b585adacba66d",
+//           "property": "Reflectivity",
+//           "request_id": "KAKQ_02072022_004800_005359_Reflectivity_nexrad",
+//           "status": "1",
+//           "time_stamp": "1648959242",
+//           "user_email": "rishabh.jain53@gmail.com"
+//       },
+//       {
+//           "__v": 0,
+//           "_id": "624924a0b512d9f62eb74a72",
+//           "property": "T",
+//           "request_id": "T_-3_4_-3_5_02-07-2022_02-14-2022_02:00_03:00_nasa",
+//           "status": "0",
+//           "time_stamp": "1648960672",
+//           "user_email": "rishabh.jain53@gmail.com"
+//       }
+//   ]
+// }
   const arrUserRequestHistory = data.request_details || 0;
 
   //On click event handler method
@@ -89,7 +113,7 @@ export default function UserRequestsListView({
                 (splitRequestId = eachRequest.request_id.split("_")),
                 (data_type = splitRequestId[splitRequestId.length - 1]),
                 (
-                  <span>
+                  <>
                     {data_type === CONST_NEXRAD ? (
                       <tr key={index + 1}>
                         <td> {index + 1} </td>
@@ -147,11 +171,11 @@ export default function UserRequestsListView({
                       <tr key={index + 1}>
                         <td> {index + 1} </td>
                         <td> NA </td>
-                        <td> {splitRequestId[5] - splitRequestId[6]} </td>
-                        <td> {splitRequestId[7] - splitRequestId[8]} </td>
+                        <td> {splitRequestId[5] + " - " + splitRequestId[6]} </td>
+                        <td> {splitRequestId[7] + " - " + splitRequestId[8]} </td>
                         <td> {splitRequestId[0]} </td>
-                        <td> {splitRequestId[1] - splitRequestId[2]} </td>
-                        <td> {splitRequestId[3] - splitRequestId[4]} </td>
+                        <td> {splitRequestId[1] + " to " + splitRequestId[2]} </td>
+                        <td> {splitRequestId[3] + " to " + splitRequestId[4]} </td>
                         <td>
                           {" "}
                           {eachRequest.status === "1"
@@ -177,7 +201,7 @@ export default function UserRequestsListView({
                         </td>
                       </tr>
                     )}
-                  </span>
+                  </>
                 )
               )
             )}
