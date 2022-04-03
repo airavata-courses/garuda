@@ -6,10 +6,12 @@ import Card from "@material-ui/core/Card";
 import "../ui_components/Dashboard.css";
 import MapBox from "./MapBox";
 import UserRequestsListView from './UserRequestsListView'
+import { useNavigate } from "react-router-dom";
 
 let data = {};
 
 export default function Dashboard() {
+  const navigateObj = useNavigate();
 
   const [isLoadMap, setLoadMap] = useState(false);
 
@@ -17,7 +19,7 @@ export default function Dashboard() {
   let station = [];
 
   function refreshDashboard() {
-    window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+    navigateObj('/Dashboard',{ replace: true })
   }
 
   const sendDataToParent = (response) => { // the callback
@@ -94,7 +96,7 @@ export default function Dashboard() {
               // Success
               document.getElementById('apiResponseMsg').innerHTML = result.response_message
               setTimeout(() => {
-                window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+                navigateObj('/Dashboard',{ replace: true })
               }, 2000)
             } else {
               // Error
