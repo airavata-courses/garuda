@@ -76,19 +76,10 @@ export default function Dashboard() {
         "/" +
         process.env.REACT_APP_POST_NEW_REQUEST;
       console.group(apiEndpoint);
-
-      var requestBody = {
-        "station_name": vStationLocation,
-        "date": vDate,
-        "time": vTimeSlots,
-        "user_email": userEmail,
-        "property": vMapProperty
-      }
-
       console.log("request body " + JSON.stringify(requestBody))
-      const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
-      const port = REACT_APP_API_GATEWAY_PORT || "5000";
-      const url = "http://" + host + "/" + port
+      const host = process.env.REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+      const port = process.env.REACT_APP_API_GATEWAY_PORT || "5000";
+      const url = "http://" + host + ":" + port
       var apiEndpoint = url + '/' + process.env.REACT_APP_POST_NEW_REQUEST
       console.group(apiEndpoint)
       // {

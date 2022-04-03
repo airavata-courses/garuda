@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 function UtilsApiCalls(endpoint, requestType = "POST", requestBody = "") {
     //TODO: once we deploy the server get only the api name and append with domain as below
-    const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
-    const port = REACT_APP_API_GATEWAY_PORT || "5000";
-    const domainName = "http://" + host + "/" + port
+    const host = process.env.REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+    const port = process.env.REACT_APP_API_GATEWAY_PORT || "5000";
+    const domainName = "http://" + host + ":" + port
     const entireUrl = domainName + '/' + endpoint
     const [data, setData] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
