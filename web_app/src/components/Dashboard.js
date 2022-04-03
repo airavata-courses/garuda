@@ -7,27 +7,30 @@ import "../ui_components/Dashboard.css";
 import MapBox from "./MapBox";
 import UserRequestsListView from "./UserRequestsListView";
 import MerraDataForm from "./MerraDataForm";
+import { useNavigate } from "react-router-dom";
 
 let data = {};
 let CONST_NEXRAD = "nexrad";
 let CONST_MERRA = "nasa";
 export default function Dashboard() {
+  const navigateObj = useNavigate();
+
   const [isLoadMap, setLoadMap] = useState(false);
   const [activeTab, setActiveTab] = useState(CONST_NEXRAD);
 
   let obj = { latitude: [], longitude: [], reflectivity: [] };
   let station = [];
 
+  // TODO: fix refresh button
   function refreshDashboard() {
-    window.location.href =
-      window.location.protocol + "//" + window.location.host + "/Dashboard";
+    navigateObj('/Dashboard')
   }
 
   const sendDataToParent = (response) => {
     // the callback
     let tempDataSetType = response[0].request_id.split("_")
     tempDataSetType = tempDataSetType[tempDataSetType.length - 1]
-    if(tempDataSetType === CONST_NEXRAD){
+    if (tempDataSetType === CONST_NEXRAD) {
       station.push(response[0].station_longitude);
       station.push(response[0].station_latitude);
 
@@ -74,6 +77,20 @@ export default function Dashboard() {
         process.env.REACT_APP_POST_NEW_REQUEST;
       console.group(apiEndpoint);
 
+      var requestBody = {
+        "station_name": vStationLocation,
+        "date": vDate,
+        "time": vTimeSlots,
+        "user_email": userEmail,
+        "property": vMapProperty
+      }
+
+      console.log("request body " + JSON.stringify(requestBody))
+      const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+      const port = REACT_APP_API_GATEWAY_PORT || "5000";
+      const url = "http://" + host + "/" + port
+      var apiEndpoint = url + '/' + process.env.REACT_APP_POST_NEW_REQUEST
+      console.group(apiEndpoint)
       // {
       // “response_code” : “0” / ”1”,
       // “response_message” : “Success/Fail”, “data_dump” :””    }
@@ -97,12 +114,8 @@ export default function Dashboard() {
               document.getElementById("apiResponseMsg").innerHTML =
                 result.response_message;
               setTimeout(() => {
-                window.location.href =
-                  window.location.protocol +
-                  "//" +
-                  window.location.host +
-                  "/Dashboard";
-              }, 2000);
+                navigateObj('/Dashboard', { replace: true })
+              }, 2000)
             } else {
               // Error
               document.getElementById("apiResponseMsg").innerHTML =
@@ -212,7 +225,7 @@ export default function Dashboard() {
     } else if (-90 > localMaxLat || localMaxLat > 90) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
-      "The valid range for latitude is -90 to 90";
+        "The valid range for latitude is -90 to 90";
     } else if (localMaxLat < localMinLat) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =

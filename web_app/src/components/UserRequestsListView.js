@@ -15,30 +15,30 @@ export default function UserRequestsListView({
     process.env.REACT_APP_POST_GET_ALL_REQUEST + "?user_email=" + username;
   //API call
   const { data, error, isLoaded } = UtilsApiCalls(apiURL, "GET");
-//   const dummy_test = {
-//     "error_code": "0",
-//     "error_message": "Information retrieved",
-//     "request_details": [
-//       {
-//           "__v": 0,
-//           "_id": "62491f0a4b2b585adacba66d",
-//           "property": "Reflectivity",
-//           "request_id": "KAKQ_02072022_004800_005359_Reflectivity_nexrad",
-//           "status": "1",
-//           "time_stamp": "1648959242",
-//           "user_email": "rishabh.jain53@gmail.com"
-//       },
-//       {
-//           "__v": 0,
-//           "_id": "624924a0b512d9f62eb74a72",
-//           "property": "T",
-//           "request_id": "T_-3_4_-3_5_02-07-2022_02-14-2022_02:00_03:00_nasa",
-//           "status": "0",
-//           "time_stamp": "1648960672",
-//           "user_email": "rishabh.jain53@gmail.com"
-//       }
-//   ]
-// }
+  //   const dummy_test = {
+  //     "error_code": "0",
+  //     "error_message": "Information retrieved",
+  //     "request_details": [
+  //       {
+  //           "__v": 0,
+  //           "_id": "62491f0a4b2b585adacba66d",
+  //           "property": "Reflectivity",
+  //           "request_id": "KAKQ_02072022_004800_005359_Reflectivity_nexrad",
+  //           "status": "1",
+  //           "time_stamp": "1648959242",
+  //           "user_email": "rishabh.jain53@gmail.com"
+  //       },
+  //       {
+  //           "__v": 0,
+  //           "_id": "624924a0b512d9f62eb74a72",
+  //           "property": "T",
+  //           "request_id": "T_-3_4_-3_5_02-07-2022_02-14-2022_02:00_03:00_nasa",
+  //           "status": "0",
+  //           "time_stamp": "1648960672",
+  //           "user_email": "rishabh.jain53@gmail.com"
+  //       }
+  //   ]
+  // }
   const arrUserRequestHistory = data.request_details || 0;
 
   //On click event handler method
@@ -46,16 +46,12 @@ export default function UserRequestsListView({
   function getRequestIdData(e, requestId, property) {
     e.preventDefault();
     setLoadMapFalse();
-    const apiURL =
-      process.env.REACT_APP_API_GATEWAY_ENDPOINT +
-      "/" +
-      process.env.REACT_APP_POST_GET_DATA_OF_REQUEST_ID +
-      "?user_email=" +
-      username +
-      "&request_id=" +
-      requestId +
-      "&property=" +
-      property;
+
+    const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+    const port = REACT_APP_API_GATEWAY_PORT || "5000";
+    const url = "http://" + host + "/" + port
+    const apiURL = url + '/' + process.env.REACT_APP_POST_GET_DATA_OF_REQUEST_ID + "?user_email=" + username + "&request_id=" + requestId + "&property=" + property
+
 
     document.getElementById("apiResponseMsg").innerHTML =
       "Processing your request";
