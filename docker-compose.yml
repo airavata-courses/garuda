@@ -19,7 +19,11 @@ services:
     image: acharyapranav/garuda:db_middleware-$PROJECT
     depends_on:
       - mongodb
-    build: ./db_middleware
+    build: 
+      context: ./db_middleware
+      args:
+        - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     environment:
       - DB_HOSTS=garuda_mongo:27017
       - DB_DATABASE=garuda
