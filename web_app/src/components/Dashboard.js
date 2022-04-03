@@ -27,11 +27,11 @@ export default function Dashboard() {
       station.push(s3Data.stationLongitude);
       station.push(s3Data.stationLatitute);
 
-      for (let i = 0; i < s3Data.latitude.lat.length; i++) {
-        for (let j = 0; j < s3Data.latitude.lat[i].length; j += 200) {
-          obj.latitude.push(s3Data.latitude.lat[i][j]);
-          obj.longitude.push(s3Data.longitude.long[i][j]);
-          obj.reflectivity.push(s3Data.Reflectivity.data[i][j]);
+      for (let i = 0; i < s3Data.latitude.length; i++) {
+        for (let j = 0; j < s3Data.latitude[i].length; j += 200) {
+          obj.latitude.push(s3Data.latitude[i][j]);
+          obj.longitude.push(s3Data.longitude[i][j]);
+          obj.reflectivity.push(s3Data.Reflectivity[i][j]);
         }
       }
       data = { obj, station };
