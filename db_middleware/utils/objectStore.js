@@ -31,12 +31,12 @@ async function upload_object_store(file_name, file_data, file_content_type = 'ap
 }
 
 // example invokation
-upload_object_store("pranav.json", '{"name":"pranav"}', 'application/json')
-  .then((url) => {
-    console.log(url)
-  })
-  .catch((err) => {
-    console.log("error in uploading file to object store:  \n", err);
-  })
+// upload_object_store("pranav.json", '{"name":"pranav"}', 'application/json')
+//   .then((url) => {
+//     console.log(url)
+//   })
+//   .catch((err) => {
+//     console.log("error in uploading file to object store:  \n", err);
+//   })
 
 module.exports = upload_object_store;
