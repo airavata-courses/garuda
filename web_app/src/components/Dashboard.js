@@ -22,9 +22,8 @@ export default function Dashboard() {
   let station = [];
   let type = "nexrad"
 
-  // TODO: fix refresh button
   function refreshDashboard() {
-    navigateObj('/Dashboard')
+    navigateObj('/', {replace:true})
   }
 
   const sendDataToParent = (response) => {
@@ -109,7 +108,7 @@ export default function Dashboard() {
               document.getElementById("apiResponseMsg").innerHTML =
                 result.response_message;
               setTimeout(() => {
-                navigateObj('/Dashboard', { replace: true })
+                refreshDashboard()
               }, 2000)
             } else {
               // Error
@@ -171,10 +170,10 @@ export default function Dashboard() {
   }
 
   function retrieveMerraFormData() {
-    var localMinLong = document.getElementById("inMinLong").value;
-    var localMaxLong = document.getElementById("inMaxLong").value;
-    var localMinLat = document.getElementById("inMinLat").value;
-    var localMaxLat = document.getElementById("inMaxLat").value;
+    var localMinLong = parseInt(document.getElementById("inMinLong").value);
+    var localMaxLong = parseInt(document.getElementById("inMaxLong").value);
+    var localMinLat =  parseInt(document.getElementById("inMinLat").value);
+    var localMaxLat =  parseInt(document.getElementById("inMaxLat").value);
     var localBeginDate = document.getElementById("idDatePickerBegin").value;
     var localEndDate = document.getElementById("idDatePickerEnd").value;
     var localStartTime = document.getElementById("idDropdownStartTime").value;
