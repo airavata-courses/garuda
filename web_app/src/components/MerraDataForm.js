@@ -4,8 +4,8 @@ function SecondTab({ id, activeTab }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   let data = {
-    KEY_START_TIME: ["00:00", "01:00", "02:00"],
-    KEY_END_TIME: ["00:00", "01:00", "02:00"],
+    KEY_START_TIME: ["00:00", "01:00", "02:00","03:00", "04:00", "05:00","06:00", "07:00", "08:00","09:00", "10:00", "11:00","12:00", "13:00", "14:00","15:00", "16:00", "17:00","18:00", "19:00", "20:00","21:00", "22:00", "23:00"],
+    KEY_END_TIME: ["00:00", "01:00", "02:00","03:00", "04:00", "05:00","06:00", "07:00", "08:00","09:00", "10:00", "11:00","12:00", "13:00", "14:00","15:00", "16:00", "17:00","18:00", "19:00", "20:00","21:00", "22:00", "23:00"],
     PROPERTY: ["T"],
   };
   return activeTab === id ? renderForm() : renderEmpty();
@@ -22,21 +22,25 @@ function SecondTab({ id, activeTab }) {
             type="number"
             placeholder="minimum longitude -180 to 180"
             id="inMinLong"
+            style = {{width:"210px"}}
           />
           <input
             type="number"
             placeholder="maximum longitude -180 to 180"
             id="inMaxLong"
+            style = {{width:"210px"}}
           />
           <input
             type="number"
             placeholder="minimum latitude -90 to 90"
             id="inMinLat"
+            style = {{width:"180px"}}
           />
           <input
             type="number"
-            placeholder="minimum longitude -90 to 90"
+            placeholder="maximum latitude -90 to 90"
             id="inMaxLat"
+            style = {{width:"180px"}}
           />
           <br></br>
           <span className="spanBeginDate">
@@ -82,7 +86,7 @@ function SecondTab({ id, activeTab }) {
               <option value="default">Select Property</option>
               {data["PROPERTY"]?.map((mapProperty) => (
                 <option value={mapProperty} key={mapProperty}>
-                  Temprature
+                  Temperature
                 </option>
               ))}
             </select>

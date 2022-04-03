@@ -25,18 +25,30 @@ export default function Dashboard() {
 
   const sendDataToParent = (response) => {
     // the callback
+    let tempDataSetType = response.requestID.split("_")
+    tempDataSetType = tempDataSetType[tempDataSetType.length - 1]
+    if(tempDataSetType === CONST_NEXRAD){
+      station.push(response[0].station_longitude);
+      station.push(response[0].station_latitude);
 
-    station.push(response[0].station_longitude);
-    station.push(response[0].station_latitude);
-
-    for (let i = 0; i < response[0].lat.lat.length; i++) {
-      for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
-        obj.latitude.push(response[0].lat.lat[i][j]);
-        obj.longitude.push(response[0].long.long[i][j]);
-        obj.reflectivity.push(response[0].reflectivity.data[i][j]);
+      for (let i = 0; i < response[0].lat.lat.length; i++) {
+        for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
+          obj.latitude.push(response[0].lat.lat[i][j]);
+          obj.longitude.push(response[0].long.long[i][j]);
+          obj.reflectivity.push(response[0].reflectivity.data[i][j]);
+        }
+      }
+    } else {
+      station.push(37.0902);
+      station.push(95.7129);
+      for (let i = 0; i < response[0].lat.lat.length; i++) {
+        for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
+          obj.latitude.push(response[0].lat.lat[i][j]);
+          obj.longitude.push(response[0].long.long[i][j]);
+          obj.reflectivity.push(response[0].T.data[i][j]);
+        }
       }
     }
-
     data = { obj, station };
     setLoadMap(true);
   };
@@ -49,7 +61,7 @@ export default function Dashboard() {
   function submitUserRequest(e) {
     e.preventDefault();
     var requestBody = null;
-    if ( activeTab  ===  CONST_NEXRAD ) {
+    if (activeTab === CONST_NEXRAD) {
       requestBody = retrieveNexradFormData();
     } else {
       requestBody = retrieveMerraFormData();
@@ -104,9 +116,8 @@ export default function Dashboard() {
           }
         );
     } else {
-      console.log("CHECK THE SYSTEMMMMMMMMMMMMM")
+      console.log("CHECK THE SYSTEMMMMMMMMMMMMM");
     }
-
   }
 
   //TODO: using
@@ -145,14 +156,13 @@ export default function Dashboard() {
         time: vTimeSlots,
         user_email: userEmail,
         property: vMapProperty,
-        type: "nexrad"
+        type: CONST_NEXRAD,
       };
     }
     return requestBody;
   }
 
   function retrieveMerraFormData() {
-
     var localMinLong = document.getElementById("inMinLong").value;
     var localMaxLong = document.getElementById("inMaxLong").value;
     var localMinLat = document.getElementById("inMinLat").value;
@@ -161,26 +171,52 @@ export default function Dashboard() {
     var localEndDate = document.getElementById("idDatePickerEnd").value;
     var localStartTime = document.getElementById("idDropdownStartTime").value;
     var localEndTime = document.getElementById("idDropdownEndTime").value;
-    var localMapProperty = document.getElementById("idDropdownMapProperty").value;
+    var localMapProperty = document.getElementById(
+      "idDropdownMapProperty"
+    ).value;
     var userEmail = localStorage.getItem("userEmail");
-    var requestBody = null
+    var requestBody = null;
 
     if (!localMinLong) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
         "Please enter valid range for minimum longitude";
+    } else if (-180 > localMinLong || localMinLong > 180) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+        "The valid range for longitude is -180 to 180";
     } else if (!localMaxLong) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
         "Please enter valid range for maximum longitude";
+    } else if (-180 > localMaxLong || localMaxLong > 180) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+        "The valid range for longitude is -180 to 180";
+    } else if (localMaxLong < localMinLong) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+        "Maximum longitude can't be less than Minimum Longitude";
     } else if (!localMinLat) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
         "Please enter valid range for minimum latitude";
+    } else if (-90 > localMinLat || localMinLat > 90) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+        "The valid range for latitude is -90 to 90";
     } else if (!localMaxLat) {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
         "Please enter valid range for maximum longitude";
+    } else if (-90 > localMaxLat || localMaxLat > 90) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+      "The valid range for latitude is -90 to 90";
+    } else if (localMaxLat < localMinLat) {
+      //alert("Please select station location")
+      document.getElementById("apiResponseMsg").innerHTML =
+        "Maximum latitude can't be less than Minimum latitude";
     } else if (localStartTime === "default") {
       //alert("Please select station location")
       document.getElementById("apiResponseMsg").innerHTML =
@@ -190,23 +226,37 @@ export default function Dashboard() {
       document.getElementById("apiResponseMsg").innerHTML =
         "Please select the end time";
     } else {
-      requestBody = {
-        minlon: localMinLong,
-        maxlon: localMaxLong,
-        minlat: localMinLat,
-        maxlat: localMaxLat,
-        begTime: localBeginDate,
-        endTime: localEndDate,
-        begHour: localStartTime,
-        endHour: localEndTime,
-        property: localMapProperty,
-        type: "nasa",
-        user_email: userEmail,
-      };
+      //Validate date and time
+      // var tempLocalBeginDate = localBeginDate.split["-"]
+      // var tempLocalEndDate = localEndDate.split["-"]
+      let tempLocalBeginDate = new Date(localBeginDate);
+      let tempLocalEndDate = new Date(localEndDate);
+      let tempLocalStartTime = localStartTime.split(":");
+      let tempLocalEndTime = localEndTime.split(":");
+      if (tempLocalBeginDate > tempLocalEndDate) {
+        document.getElementById("apiResponseMsg").innerHTML =
+          "Start date should be less than end date";
+      } else if (+tempLocalBeginDate === +tempLocalEndDate && tempLocalStartTime[0] >= tempLocalEndTime[0]) {
+        document.getElementById("apiResponseMsg").innerHTML =
+          "Start time hour should be less than end time hour";
+      } else {
+        requestBody = {
+          minlon: localMinLong,
+          maxlon: localMaxLong,
+          minlat: localMinLat,
+          maxlat: localMaxLat,
+          begTime: localBeginDate,
+          endTime: localEndDate,
+          begHour: localStartTime,
+          endHour: localEndTime,
+          property: localMapProperty,
+          type: CONST_MERRA,
+          user_email: userEmail,
+        };
+      }
     }
 
-
-    return requestBody
+    return requestBody;
   }
 
   function handleTabSwitching(dataType) {
