@@ -8,7 +8,7 @@ const CONSTANTS = require("../constants");
  * @param {String} file_data 
  * @param {String} file_content_type 
  */
-function upload_object_store(file_name, file_data, file_content_type = 'application/text') {
+async function upload_object_store(file_name, file_data, file_content_type = 'application/text') {
   var s3 = new AWS.S3({
     endpoint: new AWS.Endpoint(CONSTANTS.END_POINT),
     s3ForcePathStyle: true,
@@ -22,17 +22,21 @@ function upload_object_store(file_name, file_data, file_content_type = 'applicat
   };
 
   // call S3 to retrieve upload file to specified bucket
-  s3.upload(uploadParams, function (err, data) {
-    if (err) {
-      console.log("Error", err);
-    } if (data) {
-      console.log("Upload Success", data.Location);
-    }
-  });
-
+  try {
+    const object = await s3.upload(uploadParams).promise()
+    return object.Location;
+  } catch (err) {
+    throw err;
+  }
 }
 
 // example invokation
-// upload_object_store("pranav.json", '{"name":"pranav"}', 'application/json')
+upload_object_store("pranav.json", '{"name":"pranav"}', 'application/json')
+  .then((url) => {
+    console.log(url)
+  })
+  .catch((err) => {
+    console.log("error in uploading file to object store:  \n", err);
+  })
 
 module.exports = upload_object_store;
