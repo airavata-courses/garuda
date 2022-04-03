@@ -17,7 +17,10 @@ export default function UserRequestsListView({ sendDataToParent, setLoadMapFalse
     function getRequestIdData(e, requestId, property) {
         e.preventDefault();
         setLoadMapFalse();
-        const apiURL = process.env.REACT_APP_API_GATEWAY_ENDPOINT + '/' + process.env.REACT_APP_POST_GET_DATA_OF_REQUEST_ID + "?user_email=" + username + "&request_id=" + requestId + "&property=" + property
+        const host = REACT_APP_API_GATEWAY_HOST || "127.0.0.1";
+        const port = REACT_APP_API_GATEWAY_PORT || "5000";
+        const url = "http://" + host + "/" + port
+        const apiURL = url + '/' + process.env.REACT_APP_POST_GET_DATA_OF_REQUEST_ID + "?user_email=" + username + "&request_id=" + requestId + "&property=" + property
 
         document.getElementById('apiResponseMsg').innerHTML = "Processing your request"
         fetch(apiURL, {

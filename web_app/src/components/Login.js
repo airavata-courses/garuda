@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
+import { useNavigate } from "react-router-dom";
 
 // const clientId =
 //   '766338807168-qt90s6t8o21mh03c328t9nbb35s4hgl0.apps.googleusercontent.com';
 
 function Login() {
-
+  const navigateObj = useNavigate();
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj.email);
     // alert(
@@ -20,7 +21,8 @@ function Login() {
     document.getElementById('divApiResponse').innerHTML = "Login Successful! Redirecting..."
     window.localStorage.setItem('userEmail', res.profileObj.email);
     setTimeout(() => {
-      window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+      //window.location.href = window.location.protocol + "//" + window.location.host + "/Dashboard"
+      navigateObj('/Dashboard',{ replace: true })
     }, 200);
   };
 
