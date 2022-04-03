@@ -22,9 +22,8 @@ export default function Dashboard() {
   let station = [];
   let type = "nexrad"
 
-  // TODO: fix refresh button
   function refreshDashboard() {
-    navigateObj('/Dashboard')
+    navigateObj('/', {replace:true})
   }
 
   const sendDataToParent = (response) => {
@@ -109,7 +108,7 @@ export default function Dashboard() {
               document.getElementById("apiResponseMsg").innerHTML =
                 result.response_message;
               setTimeout(() => {
-                navigateObj('/Dashboard', { replace: true })
+                refreshDashboard()
               }, 2000)
             } else {
               // Error
