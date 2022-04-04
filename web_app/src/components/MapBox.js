@@ -12,7 +12,7 @@ const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json";
 
 function checkRange(reflectivityRange) {
-  if (reflectivityRange > -20) {
+  if (reflectivityRange > -20 && reflectivityRange <= -18) {
     return "#FFA500" //orange
   } else if (reflectivityRange > -22 && reflectivityRange <= -20) {
     return "#F51620" //red
@@ -30,10 +30,23 @@ function checkRange(reflectivityRange) {
     return "#80B622" //green
   } else if (reflectivityRange >= 150 && reflectivityRange < 180) {
     return "#EF7C8E" // pink
-  } else if (reflectivityRange >= 180 && reflectivityRange < 210) {
-    return "#B9B7BD" //grey
-  } else {
-    return "#050A30" //black
+  } else if (reflectivityRange >= 180 && reflectivityRange < 271) {
+    return "#EF7C8E" 
+  } else if (reflectivityRange >= 271 && reflectivityRange < 275) {
+    console.log("dark blue");
+    return "#00008B"; // dark-blue
+  } else if (reflectivityRange >= 276 && reflectivityRange < 280) {
+    console.log("blue");
+    return "#0000FF";
+  } else if (reflectivityRange >= 280 && reflectivityRange < 284) {
+    console.log("yellow");
+    return "#FFFF00";
+  } else if (reflectivityRange >= 284 && reflectivityRange < 300) {
+    console.log("red");
+    return "#FF0000";
+  }
+  else {
+    return "#F54107"
   }
 }
 
@@ -42,6 +55,12 @@ const MapBox = (props) => {
 
   for (let i = 0; i < props.data.obj.latitude.length; i++) {
     coordinates.push([props.data.obj.longitude[i], props.data.obj.latitude[i], props.data.obj.reflectivity[i]]);
+  }
+  console.log(coordinates)
+
+  let radius = 0.1;
+  if (props.data.type == "nasa") {
+    radius = 2;
   }
   // TODO: set height width
   return (
@@ -79,7 +98,7 @@ const MapBox = (props) => {
           </Geographies>
           {coordinates.map((coordinates, index) => (
             <Marker key={index} coordinates={coordinates}>
-              <circle key={index} r="0.1" fill={checkRange(coordinates[2])} />
+              <circle key={index} r={radius} fill={checkRange(coordinates[2])} />
             </Marker>
           ))}
         </ZoomableGroup>
