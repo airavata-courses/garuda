@@ -60,14 +60,14 @@ async function insertDataInDataSetCollection(req, res, next) {
   //let json = raw_data
   var objectId = new mongoose.Types.ObjectId();
 
-  
+
   if (data_set_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
     //Nexrad dataset
     const url = await AwsObjectStore.upload_object_store(req.body.requestID + ".json", JSON.stringify(json));
     let dataSetModelObj = new DatasetModel({
       _id: objectId,
       request_id: req.body.requestID,
-      s3_url: url
+      s3_url: CONSTANTS.END_POINT + CONSTANTS.BUCKET_NAME + "/" + req.body.requestID + ".json"
     })
     dataSetModelObj.save((err) => {
       if (!err) {
@@ -87,7 +87,7 @@ async function insertDataInDataSetCollection(req, res, next) {
     let merraDataSetModel = new MerraDataSetModel({
       _id: objectId,
       request_id: req.body.requestID,
-      s3_url: url
+      s3_url: CONSTANTS.END_POINT + CONSTANTS.BUCKET_NAME + "/" + req.body.requestID + ".json"
     })
     merraDataSetModel.save((err) => {
       if (!err) {
@@ -113,8 +113,8 @@ function getDataOfRequestId(req, res, next) {
   data_type = request_params[request_params.length - 1];
 
   if (data_type === CONSTANTS.CONST_DATA_SET_TYPE_NEXRAD) {
-    DatasetModel.find({"request_id": req.body.request_id}, function (err, docs) {
-      if(!err){
+    DatasetModel.find({ "request_id": req.body.request_id }, function (err, docs) {
+      if (!err) {
         res.send({
           status: "success",
           message: "Information retrieved",
@@ -129,8 +129,8 @@ function getDataOfRequestId(req, res, next) {
       }
     })
   } else {
-    MerraDataSetModel.find({"request_id": req.body.request_id}, function (err, docs) {
-      if(!err){
+    MerraDataSetModel.find({ "request_id": req.body.request_id }, function (err, docs) {
+      if (!err) {
         res.send({
           status: "success",
           message: "Information retrieved from merra",
