@@ -145,9 +145,9 @@ def download_nasa_data(variable="T", minlon=-180, maxlon=180, minlat=-90, maxlat
     # Use the requests library to submit the HTTP_Services URLs and write out the results.
     print('\nHTTP_services output:')
     for item in urls:
-        URL = item['link']
-        result = requests.get(URL)
         try:
+            URL = item['link']
+            result = requests.get(URL)
             result.raise_for_status()
             outfn = item['label']
             f = open('./files/' + outfn, 'wb')
@@ -155,7 +155,8 @@ def download_nasa_data(variable="T", minlon=-180, maxlon=180, minlat=-90, maxlat
             f.close()
             print(outfn, " is downloaded ")
             downloaded_files.append(item['label'])
-        except:
+        except Exception as ex:
+            print(str(ex))
             print('Error! Status code is %d for this URL:\n%s' %
                   (result.status.code, URL))
             print(
