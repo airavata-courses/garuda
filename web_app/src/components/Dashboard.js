@@ -23,7 +23,7 @@ export default function Dashboard() {
   let type = "nexrad"
 
   function refreshDashboard() {
-    navigateObj('/', {replace:true})
+    navigateObj('/', { replace: true })
   }
 
   const sendDataToParent = (response) => {
@@ -49,12 +49,12 @@ export default function Dashboard() {
       } else {
         station.push(37.0902);
         station.push(95.7129);
-        for(let i = 0; i < response[0].lat.length; i++) {
-          for (let j = 0; j < response[0].lng.length; j++) {
-            if(response[0].T[i][j] != null) {
-              obj.latitude.push(response[0].lat[i]);
-              obj.longitude.push(response[0].lng[j]);
-              obj.reflectivity.push(response[0].T[i][j]);
+        for (let i = 0; i < s3Data.lat.length; i++) {
+          for (let j = 0; j < s3Data.lng.length; j++) {
+            if (s3Data.T[i][j] != null) {
+              obj.latitude.push(s3Data.lat[i]);
+              obj.longitude.push(s3Data.lng[j]);
+              obj.reflectivity.push(s3Data.T[i][j]);
             }
           }
         }
@@ -64,7 +64,7 @@ export default function Dashboard() {
       setLoadMap(true);
     });
   };
-   
+
   async function getDataFromS3(url) {
     const response = await fetch(url, {
       method: "GET",
@@ -186,8 +186,8 @@ export default function Dashboard() {
   function retrieveMerraFormData() {
     var localMinLong = parseInt(document.getElementById("inMinLong").value);
     var localMaxLong = parseInt(document.getElementById("inMaxLong").value);
-    var localMinLat =  parseInt(document.getElementById("inMinLat").value);
-    var localMaxLat =  parseInt(document.getElementById("inMaxLat").value);
+    var localMinLat = parseInt(document.getElementById("inMinLat").value);
+    var localMaxLat = parseInt(document.getElementById("inMaxLat").value);
     var localBeginDate = document.getElementById("idDatePickerBegin").value;
     var localEndDate = document.getElementById("idDatePickerEnd").value;
     var localStartTime = document.getElementById("idDropdownStartTime").value;
