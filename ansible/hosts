@@ -1,8 +1,9 @@
 [control_plane]
-control1 ansible_host=149.165.153.132 ansible_user=ubuntu 
+control1 ansible_host=149.165.153.132 ansible_user=garuda 
 
 [workers]
-worker1 ansible_host=149.165.153.213 ansible_user=ubuntu
+worker1 ansible_host=149.165.153.213 ansible_user=garuda
+worker2 ansible_host=149.165.155.35 ansible_user=garuda
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
