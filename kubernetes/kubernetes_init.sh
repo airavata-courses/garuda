@@ -29,8 +29,18 @@ kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin
 # kubectl proxy
 # url: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 
-## garuda application ##
-kubectl apply -f garuda_deploy.yaml
+## edit garuda_deploy file with env vairables
+sed -i "s/{{AWS_ACCESS_KEY_ID}}/$AWS_ACCESS_KEY_ID/g" garuda_deploy_deployment.yaml
+sed -i "s/{{AWS_SECRET_ACCESS_KEY}}/$AWS_SECRET_ACCESS_KEY/g" garuda_deploy_deployment.yaml
+
+## garuda remove exisiting deployments ##
+kubectl delete -f garuda_deploy_deployment.yaml
+
+## garuda application deployment ##
+kubectl apply -f garuda_deploy_deployment.yaml
+
+## garuda application statefulset deployment ##
+kubectl apply -f garuda_deploy_statefull_set.yaml
 
 ## Mongo DB cluster ##
 echo "
