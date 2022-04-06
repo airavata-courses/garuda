@@ -66,9 +66,9 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except KeyboardInterrupt:
+    except:
         print('Interrupted')
         try:
-            sys.exit(0)
+            sys.exit(1)
         except SystemExit:
-            os._exit(0)
+            os._exit(1)

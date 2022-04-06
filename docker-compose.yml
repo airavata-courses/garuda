@@ -27,6 +27,8 @@ services:
       - APP_TYPE=writer
       - DB_REPLICA_SET=MainRepSet
       - DB_REPLICA_SET_PREFERENCE=secondaryPreferred
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     restart: unless-stopped
     ports:
       - 3001:3001
@@ -133,7 +135,7 @@ services:
     build: 
       context: ./web_app
       args:
-        - REACT_APP_API_GATEWAY_HOST=garuda-ui.org
+        - REACT_APP_API_GATEWAY_HOST=garuda.org
         - REACT_APP_API_GATEWAY_PORT=30000
     depends_on:
       - api_gateway

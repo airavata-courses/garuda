@@ -23,41 +23,55 @@ export default function Dashboard() {
   let type = "nexrad"
 
   function refreshDashboard() {
-    navigateObj('/', {replace:true})
+    navigateObj('/', { replace: true })
   }
 
   const sendDataToParent = (response) => {
     // the callback
-    let tempDataSetType = response[0].request_id.split("_")
-    tempDataSetType = tempDataSetType[tempDataSetType.length - 1]
-    if (tempDataSetType === CONST_NEXRAD) {
-      station.push(response[0].station_longitude);
-      station.push(response[0].station_latitude);
+    //Get data from s3 bucket and then plot it
+    getDataFromS3(response[0].s3_url).then((s3Data) => {
 
-      for (let i = 0; i < response[0].lat.lat.length; i++) {
-        for (let j = 0; j < response[0].lat.lat[i].length; j += 200) {
-          obj.latitude.push(response[0].lat.lat[i][j]);
-          obj.longitude.push(response[0].long.long[i][j]);
-          obj.reflectivity.push(response[0].reflectivity.data[i][j]);
-        }
-      }
-    } else {
-      station.push(37.0902);
-      station.push(95.7129);
-      for(let i = 0; i < response[0].lat.lat.length; i++) {
-        for (let j = 0; j < response[0].long.long.length; j++) {
-          if(response[0].temperature.temperature[i][j] != null) {
-            obj.latitude.push(response[0].lat.lat[i]);
-            obj.longitude.push(response[0].long.long[j]);
-            obj.reflectivity.push(response[0].temperature.temperature[i][j]);
+      let tempDataSetType = response[0].request_id.split("_")
+      tempDataSetType = tempDataSetType[tempDataSetType.length - 1]
+
+      if (tempDataSetType === CONST_NEXRAD) {
+        //nexrad
+        station.push(s3Data.stationLongitude);
+        station.push(s3Data.stationLatitute);
+
+        for (let i = 0; i < s3Data.latitude.length; i++) {
+          for (let j = 0; j < s3Data.latitude[i].length; j += 200) {
+            obj.latitude.push(s3Data.latitude[i][j]);
+            obj.longitude.push(s3Data.longitude[i][j]);
+            obj.reflectivity.push(s3Data.Reflectivity[i][j]);
           }
         }
+      } else {
+        station.push(37.0902);
+        station.push(95.7129);
+        for (let i = 0; i < s3Data.lat.length; i++) {
+          for (let j = 0; j < s3Data.lng.length; j++) {
+            if (s3Data.T[i][j] != null) {
+              obj.latitude.push(s3Data.lat[i]);
+              obj.longitude.push(s3Data.lng[j]);
+              obj.reflectivity.push(s3Data.T[i][j]);
+            }
+          }
+        }
+        type = "nasa"
       }
-      type = "nasa"
-    }
-    data = { obj, station, type };
-    setLoadMap(true);
+      data = { obj, station, type };
+      setLoadMap(true);
+    });
   };
+
+  async function getDataFromS3(url) {
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    const jsonValue = await response.json();
+    return jsonValue;
+  }
 
   const setLoadMapFalse = () => {
     // the callback. Use a better name
@@ -172,8 +186,8 @@ export default function Dashboard() {
   function retrieveMerraFormData() {
     var localMinLong = parseInt(document.getElementById("inMinLong").value);
     var localMaxLong = parseInt(document.getElementById("inMaxLong").value);
-    var localMinLat =  parseInt(document.getElementById("inMinLat").value);
-    var localMaxLat =  parseInt(document.getElementById("inMaxLat").value);
+    var localMinLat = parseInt(document.getElementById("inMinLat").value);
+    var localMaxLat = parseInt(document.getElementById("inMaxLat").value);
     var localBeginDate = document.getElementById("idDatePickerBegin").value;
     var localEndDate = document.getElementById("idDatePickerEnd").value;
     var localStartTime = document.getElementById("idDropdownStartTime").value;

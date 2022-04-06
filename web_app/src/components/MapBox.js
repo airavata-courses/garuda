@@ -33,16 +33,12 @@ function checkRange(reflectivityRange) {
   } else if (reflectivityRange >= 180 && reflectivityRange < 271) {
     return "#EF7C8E" 
   } else if (reflectivityRange >= 271 && reflectivityRange < 275) {
-    console.log("dark blue");
     return "#00008B"; // dark-blue
   } else if (reflectivityRange >= 276 && reflectivityRange < 280) {
-    console.log("blue");
     return "#0000FF";
   } else if (reflectivityRange >= 280 && reflectivityRange < 284) {
-    console.log("yellow");
     return "#FFFF00";
   } else if (reflectivityRange >= 284 && reflectivityRange < 300) {
-    console.log("red");
     return "#FF0000";
   }
   else {

@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 const merraDataSetModel = new mongoose.Schema({
   _id: ObjectId,
   request_id: String,
-  property: String,
+  s3_url: String,
 });
 const MerraDatasetModel = mongoose.model("MerraDataSetModel", merraDataSetModel);
 
