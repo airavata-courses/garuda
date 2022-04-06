@@ -334,9 +334,9 @@ spec:
             cpu: "500m"
         env:
         - name: REACT_APP_API_GATEWAY_HOST
-          value: "localhost"
+          value: "garuda-ui.org"
         - name: REACT_APP_API_GATEWAY_PORT
-          value: "5000"
+          value: "30000"
 ---
 apiVersion: v1
 kind: Service
