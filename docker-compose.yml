@@ -135,7 +135,7 @@ services:
     build: 
       context: ./web_app
       args:
-        - REACT_APP_API_GATEWAY_HOST=garuda-ui.org
+        - REACT_APP_API_GATEWAY_HOST=garuda.org
         - REACT_APP_API_GATEWAY_PORT=30000
     depends_on:
       - api_gateway

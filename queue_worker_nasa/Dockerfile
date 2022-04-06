@@ -9,5 +9,4 @@ WORKDIR /queue_worker_nasa
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
-RUN mkdir -p files
-CMD python worker.py
+ENTRYPOINT ["python", "-u", "worker.py"]

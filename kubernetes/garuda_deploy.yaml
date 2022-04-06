@@ -17,6 +17,7 @@ spec:
       containers:
       - name: db-middleware-writer
         image: acharyapranav/garuda:db_middleware-PROJECT3
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         resources:
@@ -39,6 +40,10 @@ spec:
           value: "MainRepSet"
         - name: DB_REPLICA_SET_PREFERENCE
           value: "secondaryPreferred"
+        - name: AWS_ACCESS_KEY_ID
+          value: ""
+        - name: AWS_SECRET_ACCESS_KEY
+          value: ""
 ---
 apiVersion: v1
 kind: Service
@@ -84,6 +89,7 @@ spec:
       containers:
       - name: db-middleware-reader
         image: acharyapranav/garuda:db_middleware-PROJECT3
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         resources:
@@ -151,6 +157,7 @@ spec:
       containers:
       - name: api-gateway
         image: acharyapranav/garuda:api_gateway-PROJECT3
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         resources:
@@ -222,6 +229,7 @@ spec:
       containers:
       - name: queue-worker
         image: acharyapranav/garuda:queue_worker-PROJECT3
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "512Mi"
@@ -271,6 +279,7 @@ spec:
       containers:
       - name: queue-worker-nasa
         image: acharyapranav/garuda:queue_worker_nasa-PROJECT3
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "512Mi"
