@@ -41,9 +41,9 @@ spec:
         - name: DB_REPLICA_SET_PREFERENCE
           value: "secondaryPreferred"
         - name: AWS_ACCESS_KEY_ID
-          value: ""
+          value: "{{AWS_ACCESS_KEY_ID}}"
         - name: AWS_SECRET_ACCESS_KEY
-          value: ""
+          value: "{{AWS_SECRET_ACCESS_KEY}}"
 ---
 apiVersion: v1
 kind: Service
