@@ -24,7 +24,7 @@ jobs:
         script: |
           cd $HOME
           rm -rf garuda/
-          git clone https://github.com/airavata-courses/garuda.git -b project_3
+          git clone https://github.com/airavata-courses/garuda.git -b project_feature_s3_CD
           echo "Building docker images"
           docker-compose build
           cd garuda/kubernetes/
