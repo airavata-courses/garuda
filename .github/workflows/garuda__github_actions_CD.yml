@@ -1,10 +1,7 @@
 name: Garuda_CD
 on:
   push:
-    branches: [main, project_3, project_feature_s3_CD]
-  pull_request:
-    branches: [main, project_3, project_feature_s3_CD]
-
+    branches: [main, release]
 jobs:
   build:
     name: Build
@@ -24,7 +21,7 @@ jobs:
         script: |
           cd $HOME
           rm -rf garuda/
-          git clone https://github.com/airavata-courses/garuda.git -b project_feature_s3_CD
+          git clone https://github.com/airavata-courses/garuda.git
           sh env_replacer.sh
           echo "Building docker images"
           cd garuda/
