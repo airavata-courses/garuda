@@ -1,0 +1,7 @@
+# Run ansible on the 4 playbooks 
+cd ../ansible
+
+ansible-playbook -i hosts ../kube-cluster/initial.yml
+ansible-playbook -i hosts ../kube-cluster/kube-dependencies.yml
+ansible-playbook -i hosts ../kube-cluster/control-plane.yml
+ansible-playbook -i hosts ../kube-cluster/workers.yml
