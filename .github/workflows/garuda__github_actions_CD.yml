@@ -26,8 +26,9 @@ jobs:
           rm -rf garuda/
           git clone https://github.com/airavata-courses/garuda.git -b project_feature_s3_CD
           echo "Building docker images"
+          cd garuda/
           docker-compose build
-          cd garuda/kubernetes/
+          cd kubernetes/
           echo "Pushing created images into DockerHub"
           sh docker_push.sh
           echo "Deploy resources into kubernetes cluster"
