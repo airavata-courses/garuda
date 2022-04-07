@@ -35,7 +35,7 @@ Run the above command on your terminal from the root of project folder to create
 
 ### Adding hostnames in /etc/hosts
 ```sh
-sudo sh scipts/host.sh
+sudo sh scripts/host.sh
 ```
 
 > Note: The above command creates 6 containers for the running the application.
@@ -107,7 +107,7 @@ Run the above command on your cmd from the root of project folder to create all 
 
 ### Adding hostnames in /etc/hosts
 ```sh
-sudo sh scipts/host.sh
+sudo sh scripts/host.sh
 ```
 
 > Note: The above command creates 6 containers for the running the application.
