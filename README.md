@@ -82,6 +82,11 @@ Start application services
 docker-compose up
 ```
 
+### Adding hostnames in /etc/hosts
+```sh
+sudo sh scipts/host.sh
+```
+
 Run the above command on your cmd from the root of project folder to create all the resources to run the project.
 
 > Note: The above command creates 6 containers for the running the application.
@@ -89,6 +94,9 @@ Run the above command on your cmd from the root of project folder to create all 
 > Note: The services run in non-detached mode. On exiting the process from terminal all the containers stop.
 
 > Note: This command might take some time to run. It's spinning up all the containers required to run the project. After all the resources are done loading, logs won't be printing on the terminal. You can use the application now !
+
+
+
 
 #### Access Web-Application
 
@@ -116,6 +124,13 @@ Build resource again if needed
 docker compose build
 ```
 
+> Note: Before building make sure you have these env variables exported in terminal
+>  1. NASA_USERNAME - NASA MERRA2 dashboard username
+>  2. NASA_PASSWORD - NASA MERRA2 dashboard password
+>  3. AWS_ACCESS_KEY_ID - JetStream Object Store access key ID
+>  4. AWS_SECRET_ACCESS_KEY - JetStream Object Store access secret
+>  5. PROJECT - Version of project you want to build
+
 ## Modules
 
 1. [Data Extractor](./data_extractor/README.md) : Apache Maven project to build a utility JAR file which extracts requested NEXRAD data from S3.
@@ -133,10 +148,9 @@ It also dumps the dataset of the request to the object store (AWS S3 bucket) and
 
 ## Optimization
 In the project 3 milestone after brainstorming we found scope for improvement in our system through which we reduced load from the backend significantly. The improvement was to store request dataset to the object-store(AWS S3 bucket) and then web app retrieves the data from the object store whenever user requests to plot the map. To check the systems performance with and without object store. We benchmarked the system with JMeter by making 100 concurrent request.
-The result were far better than expected. The average response time in without object store was 14194ms and in with object store was 399ms.
+The average response time in without object store was 14194ms and in with object store was 399ms.
 The average response time was reduced by <b> 135% <b>.
-The details of the reports are present in [this](./docs/Architecture_analysis_case_study/) directory.
-The JMeter reports are present in [this](./tests/load_test/object-store_optimization/) directory.
+The details of the reports are present [here](https://courses.airavata.org/garuda/Architecture_analysis_case_study/Optimization%20using%20object-store.pdf)
  
 ## Architecture
 
