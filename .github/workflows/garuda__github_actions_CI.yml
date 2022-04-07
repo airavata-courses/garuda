@@ -6,9 +6,9 @@ name: Garuda_CI
 # events but only for the development branch and master branch
 on:
   push:
-    branches: [data_extractor, queue_worker, main]
+    branches: [main, release]
   pull_request:
-    branches: [data_extractor, queue_worker, main]
+    branches: [main, release]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
