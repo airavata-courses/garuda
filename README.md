@@ -154,7 +154,7 @@ docker compose build
 
 Add changes in etc/hosts/ for production url
 ```sh
-sudo sh scipts/prod_host.sh
+sudo sh scripts/prod_host.sh
 ```
 
 Install CORS plugin in browser to enable cors headers since application is using jetstream object strore
