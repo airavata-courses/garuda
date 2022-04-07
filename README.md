@@ -157,6 +157,10 @@ The details of the reports are present in [this](./docs/Architecture_analysis_ca
 
   3.  CD is triggered on each push to master branch.
 
+  4.  CD logs into JetStream2 remote server, builds all the docker images, pushes the docker images to DockerHub, replaces old deployments with latest deployments on remote kubernetes cluster.
+
+![Garuda CI-CD Workflow](./docs/diagram/garuda-ci-cd.jpg)
+
 ## Packages / Distribution builds
 
 [Garuda's Data Extractor Maven Package](https://github.com/airavata-courses/garuda/packages/1236747)
