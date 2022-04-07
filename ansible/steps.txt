@@ -1,0 +1,5 @@
+# Run the following lines to install ansible
+python3 -m pip install --user ansible
+
+# move the hosts file to the ansible directory
+sudo mv hosts /etc/ansible/hosts
