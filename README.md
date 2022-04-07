@@ -150,6 +150,18 @@ docker compose build
 >  4. AWS_SECRET_ACCESS_KEY - JetStream Object Store access secret
 >  5. PROJECT - Version of project you want to build
 
+## Access JetStream production deployment
+
+Add changes in etc/hosts/ for production url
+```sh
+sudo sh scipts/prod_host.sh
+```
+
+Install CORS plugin in browser to enable cors headers since application is using jetstream object strore
+[sample cors plugin](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en)
+
+Access application at http://garuda.org
+
 ## Modules
 
 1. [Data Extractor](./data_extractor/README.md) : Apache Maven project to build a utility JAR file which extracts requested NEXRAD data from S3.
