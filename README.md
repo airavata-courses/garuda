@@ -123,11 +123,20 @@ docker compose build
 2. [Queue Worker](./queue_worker/README.md) : Apache Maven project to build a JAR file which runs a consumer on a rabbitmq queue. It processes the request using data_extractor utitlity JAR and published the data to a API endpoint.
 
 3. [DB_Middleware](./db_middleware/README.md): Microservice to interact with database. This microservices provides APIs to perform read and writes to database. Reads are performed by API_Gateway module and Writes are performed by Queue_Worker module and API_Gateway module.
+It also dumps the dataset of the request to the object store (AWS S3 bucket) and saves the object url in the database
 
 4. [API_Gateway](./apigateway/README.md): API_Gateway module provides a middle-ware layer for all the back-end services. Front-end application communicate with API_Gateway module to interact with all other micro-services.
 
 5. [Web_App](./web_app/README.md): Web Application module is the application with which the end users interacts. It communicates with API_Gateway module to maintain user data and fetch NEXRAD data.
 
+6. [Queue Worker Nasa](./queue_worker_nasa/README.md) : Python application which runs a consumer on a rabbitmq queue. It processes the request using extractor utitlity and published the data in a conerted formatted to a API endpoint.
+
+## Optimization
+In the project 3 milestone after brainstorming we found scope for improvement in our system through which we reduced load from the backend significantly. The improvement was to store request dataset to the object-store(AWS S3 bucket) and then web app retrieves the data from the object store whenever user requests to plot the map. To check the systems performance with and without object store. We benchmarked the system with JMeter by making 100 concurrent request.
+The result were far better than expected. The average response time in without object store was 14194ms and in with object store was 399ms.
+The average response time was reduced by <b> 135% <b>.
+The details of the reports are present in [this](./docs/Architecture_analysis_case_study/) directory.
+ 
 ## Architecture
 
 ![Garuda Architecture Diagram](./docs/diagram/Architecture_diagram.jpg)
