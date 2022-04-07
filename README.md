@@ -136,6 +136,7 @@ In the project 3 milestone after brainstorming we found scope for improvement in
 The result were far better than expected. The average response time in without object store was 14194ms and in with object store was 399ms.
 The average response time was reduced by <b> 135% <b>.
 The details of the reports are present in [this](./docs/Architecture_analysis_case_study/) directory.
+The JMeter reports are present in [this](./tests/load_test/object-store_optimization/) directory.
  
 ## Architecture
 
