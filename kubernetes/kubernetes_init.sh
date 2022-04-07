@@ -30,8 +30,8 @@ kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin
 # url: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 
 ## edit garuda_deploy file with env vairables
-sed -i "s/{{AWS_ACCESS_KEY_ID}}/$AWS_ACCESS_KEY_ID/g" garuda_deploy_deployment.yaml
-sed -i "s/{{AWS_SECRET_ACCESS_KEY}}/$AWS_SECRET_ACCESS_KEY/g" garuda_deploy_deployment.yaml
+# sed -i "s/{{AWS_ACCESS_KEY_ID}}/$AWS_ACCESS_KEY_ID/g" garuda_deploy_deployment.yaml
+# sed -i "s/{{AWS_SECRET_ACCESS_KEY}}/$AWS_SECRET_ACCESS_KEY/g" garuda_deploy_deployment.yaml
 
 ## garuda remove exisiting deployments ##
 kubectl delete -f garuda_deploy_deployment.yaml
