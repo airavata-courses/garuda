@@ -1,0 +1,11 @@
+Mongoose github issue 
+https://github.com/Automattic/mongoose/issues/7073
+
+https://www.npmjs.com/package/run-rs
+
+npm install run-rs -g
+run-rs --mongod
+
+
+for docker -
+https://github.com/luca-rand/docker-run-rs

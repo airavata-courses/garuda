@@ -7,6 +7,10 @@ module.exports = {
     DB_REPLICA_SET: process.env.DB_REPLICA_SET || 'MainRepSet',
     DB_REPLICA_SET_PREFERENCE: process.env.DB_REPLICA_SET_PREFERENCE || 'secondaryPreferred',
 
+    // object store
+    BUCKET_NAME: process.env.BUCKET_NAME || 'garuda_bucket',
+    END_POINT: process.env.END_POINT || "https://js2.jetstream-cloud.org:8001/",
+
     // writer - 3001, reader - 3002
     APP_TYPE: process.env.APP_TYPE || 'writer',
     APP_PORT: process.env.APP_PORT || 3001,
@@ -21,6 +25,9 @@ module.exports = {
     CONST_API_CALLBACK_KEY_STATUS_ERROR: 'error',
     CONST_API_CALLBACK_KEY_MESSAGE: 'message',
     CONST_API_CALLBACK_KEY_IS_NEW_REQUEST: 'is_new_reqeust',
-    CONST_API_CALLBACK_KEY_REQUESTS: 'requests'
+    CONST_API_CALLBACK_KEY_REQUESTS: 'requests',
+
+    CONST_DATA_SET_TYPE_NEXRAD : "nexrad",
+    CONST_DATA_SET_TYPE_MERRA : "nasa"
 }
 

@@ -14,6 +14,11 @@ Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/e
 
 #### Start Application
 
+Export ENV variables
+```sh
+export $PROJECT=PROJECT3
+```
+
 Pull the latest images from DockerHub
 
 ```sh
@@ -25,8 +30,13 @@ Start application services
 ```sh
 docker-compose up
 ```
-
 Run the above command on your terminal from the root of project folder to create all the resources to run the project.
+
+
+### Adding hostnames in /etc/hosts
+```sh
+sudo sh scipts/host.sh
+```
 
 > Note: The above command creates 6 containers for the running the application.
 
@@ -36,7 +46,7 @@ Run the above command on your terminal from the root of project folder to create
 
 #### Access Web-Application
 
-URL for the web-application: http://localhost:3000
+URL for the web-application: http://garuda.org:3000
 
 #### Stop Application
 
@@ -59,6 +69,12 @@ Build resource again if needed
 ```sh
 docker-compose build
 ```
+> Note: Before building make sure you have these env variables exported in terminal
+>  1. NASA_USERNAME - NASA MERRA2 dashboard username
+>  2. NASA_PASSWORD - NASA MERRA2 dashboard password
+>  3. AWS_ACCESS_KEY_ID - JetStream Object Store access key ID
+>  4. AWS_SECRET_ACCESS_KEY - JetStream Object Store access secret
+>  5. PROJECT - Version of project you want to build
 
 ## Run on Windows based systems
 
@@ -69,6 +85,11 @@ Softwares/prerequisites needed to run garuda: [Docker](https://docs.docker.com/d
 > Note: You'll need latest version of docker for windows
 
 #### Start Application
+
+Export ENV variables
+```sh
+export $PROJECT=PROJECT3
+```
 
 Pull the latest images from DockerHub
 
@@ -82,12 +103,12 @@ Start application services
 docker-compose up
 ```
 
+Run the above command on your cmd from the root of project folder to create all the resources to run the project.
+
 ### Adding hostnames in /etc/hosts
 ```sh
 sudo sh scipts/host.sh
 ```
-
-Run the above command on your cmd from the root of project folder to create all the resources to run the project.
 
 > Note: The above command creates 6 containers for the running the application.
 
@@ -96,11 +117,9 @@ Run the above command on your cmd from the root of project folder to create all 
 > Note: This command might take some time to run. It's spinning up all the containers required to run the project. After all the resources are done loading, logs won't be printing on the terminal. You can use the application now !
 
 
-
-
 #### Access Web-Application
 
-URL for the web-application: http://localhost:3000
+URL for the web-application: http://garuda.org:3000
 
 #### Stop Application
 
@@ -130,6 +149,18 @@ docker compose build
 >  3. AWS_ACCESS_KEY_ID - JetStream Object Store access key ID
 >  4. AWS_SECRET_ACCESS_KEY - JetStream Object Store access secret
 >  5. PROJECT - Version of project you want to build
+
+## Access JetStream production deployment
+
+Add changes in etc/hosts/ for production url
+```sh
+sudo sh scipts/prod_host.sh
+```
+
+Install CORS plugin in browser to enable cors headers since application is using jetstream object strore
+[sample cors plugin](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en)
+
+Access application at http://garuda.org
 
 ## Modules
 

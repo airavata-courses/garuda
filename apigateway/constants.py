@@ -29,7 +29,7 @@ def getConstants():
         constants["RABBITMQ_HOST"] = os.environ.get('RABBITMQ_HOST')
 
     constants["RABBITMQ_PORT"] = '5672'
-    if os.environ.get('RABBITMQ_HOST') is not None:
+    if os.environ.get('RABBITMQ_PORT') is not None:
         constants["RABBITMQ_PORT"] = os.environ.get('RABBITMQ_PORT')
 
     return constants
