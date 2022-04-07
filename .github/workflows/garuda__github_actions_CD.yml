@@ -1,0 +1,33 @@
+name: Garuda_CD
+on:
+  push:
+    branches: [main, release]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: executing remote ssh commands using key file
+      uses: appleboy/ssh-action@master
+      with:
+        # host for jetstream server
+        host: 149.165.154.67
+        # username for jetstream server
+        username: exouser
+        # jetstream userkey, added to server and github secrets
+        key: ${{ secrets.JETSTREAM_PVT_KEY }}
+        port: 22
+        script: |
+          cd $HOME
+          rm -rf garuda/
+          git clone https://github.com/airavata-courses/garuda.git
+          sh env_replacer.sh
+          echo "Building docker images"
+          cd garuda/
+          docker-compose build
+          cd kubernetes/
+          echo "Pushing created images into DockerHub"
+          sh docker_push.sh
+          echo "Deploy resources into kubernetes cluster"
+          sh kubernetes_init.sh
