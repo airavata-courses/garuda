@@ -297,7 +297,7 @@ export default function Dashboard() {
                 className={activeTab === CONST_NEXRAD ? "active" : ""}
                 onClick={() => handleTabSwitching(CONST_NEXRAD)}
               >
-                Nexard Data
+                Nexard Data 1
               </li>
               <li
                 className={activeTab === CONST_MERRA ? "active" : ""}
