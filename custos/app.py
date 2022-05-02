@@ -46,7 +46,7 @@ class Garuda:
             self.b64_encoded_custos_token = utl.get_token(custos_settings=self.custos_settings)
             # print(self.b64_encoded_custos_token)
 
-            self.created_groups = {}
+            self.created_groups = {x['name'] : x['id'] for x in self.get_all_groups()}
             self.users = []
 
             self.admin_user_name = "isjarana"
@@ -88,6 +88,10 @@ class Garuda:
             respData = json.loads(resp)
             print("Created group id of "+ group['name'] + ": " +respData['id'] )
             self.created_groups[respData['name']] = respData['id']
+            temp = Groups_Json()
+            temp.write_groups(respData['name'], group['owner_id'])
+            temp.save_json()
+            del temp
             return 1
         except Exception as e:
             print(e)
@@ -101,10 +105,10 @@ class Garuda:
             #     print(x)
             resp = MessageToJson(groups)
             respData = json.loads(resp)
-            for x in respData['groups']:
-                print(x['id'])
+            # for x in respData['groups']:
+            #     print(x['id'])
             # print(respData)
-            return 1
+            return respData['groups']
         except:
             return 0
 
@@ -119,6 +123,10 @@ class Garuda:
                                                     )
             resp = MessageToJson(val)
             print(resp)
+            temp = Groups_Json()
+            temp.write_groups(group, user)
+            temp.save_json()
+            del temp
             return 1
         except Exception as e:
             print(e)
@@ -126,7 +134,10 @@ class Garuda:
             return 0
     
     def get_all_users_of_group(self, group):
-        print(self.group_management_client.group_stub.getAllChildUsers)
+        temp = Groups_Json()
+        print(temp.read_groups()[group])
+        del temp
+        # print(self.group_management_client.group_stub.getAllChildUsers)
         pass
 
     def test(self):
@@ -142,7 +153,17 @@ def index():
     # main()
     global garuda
     garuda.test()
-    groups = garuda.get_all_groups()
+    # user = {
+    #     'username' : "rdjain",
+    #     'first_name' : "Rishabh",
+    #     'last_name' : "Jain",
+    #     'password' : "Ri$#@bh",
+    #     'email' : "rdjain@iu.edu"
+    # }
+    # garuda.register_users(user)
+    # garuda.get_all_groups()
+    garuda.allocate_user_to_group("rdjain", "Garuda-test-1")
+    groups = garuda.get_all_users_of_group("Garuda-test-1")
     # print(type(groups))
     # garuda.get_all_users_of_group("Garuda-test-1")
     # user = {
@@ -152,6 +173,7 @@ def index():
     #     'password' : "t@nm@y",
     #     'email' : "tsawaji@iu.edu"
     # }
+    
     # group = {
     #     'name' : "Garuda-test-1",
     #     'description' : "First test group for Garuda Custos",
@@ -174,7 +196,26 @@ def test_end_point():
 
     print(response.text) 
 
-# def 
+class Groups_Json:
+    def __init__(self) -> None:
+        self.filename = "groups.json"
+        fp = open(self.filename, 'r')
+        self.groups = json.load(fp)
+        fp.close()
+    
+    def read_groups(self):
+        return self.groups
+
+    def write_groups(self, group, user):
+        if self.groups[group]:
+            self.groups[group].append(user)
+        else:
+            self.groups[group] = [user]
+    
+    def save_json(self):
+        with open(self.filename, 'w') as fp:
+            json.dump(self.groups, fp)
+
 
 def init():
     global garuda
