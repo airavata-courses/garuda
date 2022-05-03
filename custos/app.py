@@ -295,6 +295,20 @@ def getAllUsersOfAGroup():
         }
         return jsonify(response)
 
+@app.route('/getAllGroups', methods = ['GET'])
+@cross_origin()
+def getAllGroups():
+
+    try:
+        global garuda
+        return garuda.get_all_groups()
+    except:
+        response = {
+            "response_code" : "-1",
+            "response_message" : "something went wrong"
+        }
+        return jsonify(response)
+
 
 @app.route("/test")
 def hello():
