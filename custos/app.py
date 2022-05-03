@@ -1,8 +1,9 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, request, jsonify
 import os
 import json
 import random, string
 import requests
+from flask_cors import CORS, cross_origin
 
 from custos.clients.user_management_client import UserManagementClient
 from custos.clients.group_management_client import GroupManagementClient
@@ -132,7 +133,15 @@ class Garuda:
             print(e)
             print("User allocation error")
             return 0
-    
+
+    def doesUserExists(self, jsonobj):
+
+        response = self.user_management_client.find_users(token=self.b64_encoded_custos_token, offset=0, limit=1,
+                                                 username=jsonobj["username"])
+        return response
+
+
+    @DeprecationWarning
     def get_all_users_of_group(self, group):
         temp = Groups_Json()
         print(temp.read_groups()[group])
@@ -140,9 +149,148 @@ class Garuda:
         # print(self.group_management_client.group_stub.getAllChildUsers)
         pass
 
+
+    #NOT WORKING IN POSTMAN
+    # def get_all_users_of_a_group(self, jsonobj):
+
+    #     url = "https://custos.scigap.org/group-management/v1.0.0/groups"
+
+    #     payload={}
+    #     headers = {
+    #     'Authorization': 'Bearer Y3VzdG9zLXd3aXllYWlueTVpdXFwOHJmMGRoLTEwMDAzNDE1Ok5YaWFMU2E2bUVBMlJVbDJYeUNnMlpSbHdUYXEyeEN2RU1RVWhQMUs='
+    #     }
+
+    #     response = requests.request("GET", url, headers=headers, data=payload)
+
+    #     print(response.text)
+
+
     def test(self):
         # print(garuda.group_management_client.get_all_groups(garuda.b64_encoded_custos_token))
         print("I am still alive!!!")
+
+@app.route("/postRegisterNewUser", methods = ['POST'])
+### Following JSON object required were all keys are mandatory
+    #       {
+    #           'username' : "rdjain",
+    #           'first_name' : "Rishabh",
+    #           'last_name' : "Jain",
+    #           'password' : "Ri$#@bh",
+    #           'email' : "rdjain@iu.edu"
+    #       }
+@cross_origin()
+def postRegisterNewUser():
+    try:
+        request_data = request.get_json()
+    except:
+        response = {
+            "response_code" : "2",
+            "response_message" : "Request is not of type application/json"
+        }
+        return jsonify(response)
+
+    try:
+        global garuda
+        return garuda.register_users(request_data)
+
+    except:
+        response = {
+            "response_code" : "-1",
+            "response_message" : "something went wrong"
+        }
+        return jsonify(response)
+
+
+@app.route("/postCreateNewGroup", methods = ['POST'])
+### Following JSON object required were all keys are mandatory
+    #   {
+    #     'name' : "Garuda-test-1",
+    #     'description' : "First test group for Garuda Custos",
+    #     'owner_id' : "tsawaji"
+    #   }
+@cross_origin()
+def postCreateNewGroup():
+    try:
+        request_data = request.get_json()
+    except:
+        response = {
+            "response_code" : "2",
+            "response_message" : "Request is not of type application/json"
+        }
+        return jsonify(response)
+
+    try:
+        global garuda
+        return garuda.create_group(request_data)
+
+    except:
+        response = {
+            "response_code" : "-1",
+            "response_message" : "something went wrong"
+        }
+        return jsonify(response)
+
+
+@app.route("/postAddUserToAGroup", methods = ['POST'])
+### Following JSON object required were all keys are mandatory
+    #   {
+    #     'username' : "rdjain",
+    #     'group_name' : "Garuda-test-1",
+    #   }
+@cross_origin()
+def postAddUserToAGroup():
+    try:
+        request_data = request.get_json()
+    except:
+        response = {
+            "response_code" : "2",
+            "response_message" : "Request is not of type application/json"
+        }
+        return jsonify(response)
+
+    try:
+        
+        global garuda
+        # TODO check doesUserExists response and add if else
+        garuda.doesUserExists(request_data)
+
+        return garuda.allocate_user_to_group(request_data["username"], request_data["group_name"])
+
+    except:
+        response = {
+            "response_code" : "-1",
+            "response_message" : "something went wrong"
+        }
+        return jsonify(response)
+
+
+@app.route('/getAllUsersOfAGroup', methods = ['GET'])
+### Following JSON object required were all keys are mandatory
+    #   {
+    #     'group_name' : "Garuda-test-1",
+    #   }
+@cross_origin()
+def getAllUsersOfAGroup():
+    # Get parameters
+    try:
+        request_data = request.get_json()
+    except:
+        response = {
+            "response_code" : "2",
+            "response_message" : "Request is not of type application/json"
+        }
+        return jsonify(response)
+
+    try:
+        global garuda
+        return garuda.get_all_users_of_a_group(request_data)
+    except:
+        response = {
+            "response_code" : "-1",
+            "response_message" : "something went wrong"
+        }
+        return jsonify(response)
+
 
 @app.route("/test")
 def hello():
