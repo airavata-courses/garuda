@@ -157,7 +157,7 @@ class Garuda:
 
     #     payload={}
     #     headers = {
-    #     'Authorization': 'Bearer Y3VzdG9zLXd3aXllYWlueTVpdXFwOHJmMGRoLTEwMDAzNDE1Ok5YaWFMU2E2bUVBMlJVbDJYeUNnMlpSbHdUYXEyeEN2RU1RVWhQMUs='
+    #     'Authorization': 'Bearer '+str(garuda.b64_encoded_custos_token)
     #     }
 
     #     response = requests.request("GET", url, headers=headers, data=payload)
@@ -251,11 +251,11 @@ def postAddUserToAGroup():
     try:
         
         global garuda
-        # TODO check doesUserExists response and add if else
-        garuda.doesUserExists(request_data)
-
-        return garuda.allocate_user_to_group(request_data["username"], request_data["group_name"])
-
+        # check doesUserExists response and add if else
+        if garuda.doesUserExists(request_data):
+            return garuda.allocate_user_to_group(request_data["username"], request_data["group_name"])
+        else:
+            return "User does not exist"
     except:
         response = {
             "response_code" : "-1",
@@ -310,8 +310,8 @@ def index():
     # }
     # garuda.register_users(user)
     # garuda.get_all_groups()
-    garuda.allocate_user_to_group("rdjain", "Garuda-test-1")
-    groups = garuda.get_all_users_of_group("Garuda-test-1")
+    # garuda.allocate_user_to_group("rdjain", "Garuda-test-1")
+    # groups = garuda.get_all_users_of_group("Garuda-test-1")
     # print(type(groups))
     # garuda.get_all_users_of_group("Garuda-test-1")
     # user = {
@@ -330,6 +330,10 @@ def index():
     # garuda.register_users(user)
     # garuda.create_group(group)
     # test_end_point()
+    # request_data = {
+    #     'username' : 'fgdsagfgfdg'
+    #     }
+    # print(garuda.doesUserExists(request_data))
     return render_template('index.html')
 
 def test_end_point():
