@@ -255,7 +255,11 @@ def postAddUserToAGroup():
         if garuda.doesUserExists(request_data):
             return garuda.allocate_user_to_group(request_data["username"], request_data["group_name"])
         else:
-            return "User does not exist"
+            response = {
+            "response_code" : "3",
+            "response_message" : "user does not exist"
+        }
+            return jsonify(response)
     except:
         response = {
             "response_code" : "-1",
