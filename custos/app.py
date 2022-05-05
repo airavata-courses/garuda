@@ -23,12 +23,21 @@ class Garuda:
     def __init__(self) -> None:
         try:
             # read settings
+            # Garuda tokens
+            self.url = "https://js-156-79.jetstream-cloud.org:30367"
             self.custos_settings = CustosServerClientSettings(
-                custos_host='custos.scigap.org',
-                custos_port='31499', 
-                custos_client_id='custos-wwiyeainy5iuqp8rf0dh-10003415',
-                custos_client_sec='NXiaLSa6mEA2RUl2XyCg2ZRlwTaq2xCvEMQUhP1K'
+                custos_host='https://js-156-79.jetstream-cloud.org',
+                custos_port='30367', 
+                custos_client_id='custos-m482zzqpwc1jf9oog0zx-10000000',
+                custos_client_sec='xZ9exHaJoqdx1PJf7L5rxw5nwOmMIBv5O30oJH7l'
             )
+            # Cloud elves tokens
+            # self.custos_settings = CustosServerClientSettings(
+            #     custos_host='https://js-157-36.jetstream-cloud.org',
+            #     custos_port='32036', 
+            #     custos_client_id='custos-elvjqfo7bvpbq4oflw1p-10000104',
+            #     custos_client_sec='tau9aGzpcRDFhAjZ2wVhGqGVYN8Gq20kuCqXXvJ5'
+            # )
             # create custos resource secret client
             # create custos user management client
             self.user_management_client = UserManagementClient(self.custos_settings)
@@ -45,13 +54,16 @@ class Garuda:
             # create identity management client
             self.identity_management_client = IdentityManagementClient(self.custos_settings)
             self.b64_encoded_custos_token = utl.get_token(custos_settings=self.custos_settings)
-            # print(self.b64_encoded_custos_token)
+            print(self.b64_encoded_custos_token)
 
-            self.created_groups = {x['name'] : x['id'] for x in self.get_all_groups()}
-            self.users = []
+            # try:
+            #     self.created_groups = {x['name'] : x['id'] for x in self.get_all_groups()}
+            # except:
+            #     self.created_groups = {}
+            # self.users = []
 
-            self.admin_user_name = "isjarana"
-            self.admin_password = "IJR@circ@1"
+            self.admin_user_name = "rishabh"
+            self.admin_password = "shubham123"
             
             self.resource_ids = []
             self.success_flag = True
@@ -169,15 +181,17 @@ class Garuda:
         # print(garuda.group_management_client.get_all_groups(garuda.b64_encoded_custos_token))
         print("I am still alive!!!")
 
+
 @app.route("/postRegisterNewUser", methods = ['POST'])
-### Following JSON object required were all keys are mandatory
-    #       {
-    #           'username' : "rdjain",
-    #           'first_name' : "Rishabh",
-    #           'last_name' : "Jain",
-    #           'password' : "Ri$#@bh",
-    #           'email' : "rdjain@iu.edu"
-    #       }
+# {
+# "username":"pachry",
+# "first_name":"Pranav",
+# "last_name":"Acharya",
+# "email":"pachry@iu.edu",
+# "password":"t@nm@y",
+
+# "temporary_password":false
+# }
 @cross_origin()
 def postRegisterNewUser():
     try:
@@ -188,17 +202,65 @@ def postRegisterNewUser():
             "response_message" : "Request is not of type application/json"
         }
         return jsonify(response)
-
     try:
         global garuda
-        return jsonify(garuda.register_users(request_data))
-
+        end_point = "/user-management/v1.0.0/user"
+        url = garuda.url + end_point
+        payload = json.dumps({
+            'username' : request_data['username'],
+            'first_name' : request_data['first_name'],
+            'last_name' : request_data['last_name'],
+            'email' : request_data['email'],
+            'password' : request_data['password']
+        })
+        headers = {
+            'Authorization': "bearer Y3VzdG9zLW00ODJ6enFwd2MxamY5b29nMHp4LTEwMDAwMDAwOnhaOWV4SGFKb3FkeDFQSmY3TDVyeHc1bndPbU1JQnY1TzMwb0pIN2w=",
+            'Content-Type': 'application/json'
+        }
+        print(payload)
+        response = requests.request("POST", url, headers=headers, data=payload)
+        print(response)
+        return response.text
     except:
         response = {
             "response_code" : "-1",
             "response_message" : "something went wrong"
         }
         return jsonify(response)
+
+
+
+# @app.route("/postRegisterNewUser", methods = ['POST'])
+# ### Following JSON object required were all keys are mandatory
+#     #       {
+#     #           'username' : "rdjain",
+#     #           'first_name' : "Rishabh",
+#     #           'last_name' : "Jain",
+#     #           'password' : "Ri$#@bh",
+#     #           'email' : "rdjain@iu.edu"
+#     #       }
+# @cross_origin()
+# def postRegisterNewUser():
+#     # Working and tested
+#     try:
+#         request_data = request.get_json()
+#     except:
+#         response = {
+#             "response_code" : "2",
+#             "response_message" : "Request is not of type application/json"
+#         }
+#         return jsonify(response)
+
+#     try:
+#         global garuda
+#         return jsonify(garuda.register_users(request_data))
+
+#     except:
+#         response = {
+#             "response_code" : "-1",
+#             "response_message" : "something went wrong"
+#         }
+#         return jsonify(response)
 
 
 @app.route("/postCreateNewGroup", methods = ['POST'])
