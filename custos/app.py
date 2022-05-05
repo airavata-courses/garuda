@@ -191,7 +191,7 @@ def postRegisterNewUser():
 
     try:
         global garuda
-        return garuda.register_users(request_data)
+        return jsonify(garuda.register_users(request_data))
 
     except:
         response = {
@@ -253,7 +253,7 @@ def postAddUserToAGroup():
         global garuda
         # check doesUserExists response and add if else
         if garuda.doesUserExists(request_data):
-            return garuda.allocate_user_to_group(request_data["username"], request_data["group_name"])
+            return jsonify(garuda.allocate_user_to_group(request_data["username"], request_data["group_name"]))
         else:
             response = {
             "response_code" : "3",
@@ -268,7 +268,7 @@ def postAddUserToAGroup():
         return jsonify(response)
 
 
-@app.route('/getAllUsersOfAGroup', methods = ['GET'])
+@app.route('/getAllUsersOfAGroup', methods = ['POST'])
 ### Following JSON object required were all keys are mandatory
     #   {
     #     'group_name' : "Garuda-test-1",
@@ -301,7 +301,7 @@ def getAllGroups():
 
     try:
         global garuda
-        return garuda.get_all_groups()
+        return jsonify(garuda.get_all_groups())
     except:
         response = {
             "response_code" : "-1",
