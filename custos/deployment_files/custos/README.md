@@ -118,7 +118,14 @@ git checkout develop
     F. Once this is done check if all the services are deployed in the MASTER node using 
         kubectl get all --all-namespaces
 
-        Everything will be running/ready except "deployment.apps/custos-messaging-core-service" which can be ignored           
+        Everything will be running/ready except "deployment.apps/custos-messaging-core-service" which can be ignored      
+
+        Also, run the following command in the MASTER node, you need to change path 
+        ```
+            helm install cluster-management-core-service /PATH/custos/artifacts/cluster-management-core-service-1.1-SNAPSHOT.tgz -n keycloak
+            
+            eg. helm install cluster-management-core-service /home/ssh_user/custos/artifacts/cluster-management-core-service-1.1-SNAPSHOT.tgz -n keycloak
+        ``` 
         
     G. Now we have to deploy 2 service again in staging environment
         *** Redeploying service 1 - "iam-admin-core-service"
