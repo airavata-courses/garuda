@@ -215,6 +215,19 @@ git checkout develop
             "application_type":"web",
             "comment":"Custos super tenant for production"
         }
+        
+        -You will receive following json format in response
+        { 
+            "client_id": "CLIENT_ID", 
+            "client_secret": "CLIENT_SECRET", 
+            "is_activated": false, 
+            "client_id_issued_at": 1651714179000,
+            "client_secret_expires_at": 0,
+            "registration_client_uri": "https://custos.scigap.org/apiserver/tenant-management/v1.0.0/oauth2/tenant?client_id=custos-m482zzqpwc1jf9oog0zx-10000000",
+            "token_endpoint_auth_method": "client_secret_basic",
+            "msg": "Use Base64 encoded clientId:clientSecret as auth token for authorization, Credentials are activated after admin approval" 
+        }
+
     3. Save the response of the received in the above step
    
 9. Go to Vault UI again 
@@ -233,3 +246,12 @@ git checkout develop
         "super_tenant":true,
         "updatedBy":"admin_username   KEY_PASSED_IN_BODY_OF_PREVIOUS_REQUEST"
         }
+        
+        -You will receive following json format in response 
+        { 
+        "tenant_id": "10000000",
+        "status": "ACTIVE" 
+        }
+        
+        
+        Once, we receive ACTIVE in the above API response then we have successfully deployed custos.
