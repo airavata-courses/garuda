@@ -1,4 +1,3 @@
-<pre>
 In your cluster master, do this for all nodes
 
 ` kubectl label nodes node_name custosServiceWorker="enabled"`
@@ -234,6 +233,3 @@ git checkout develop
         "super_tenant":true,
         "updatedBy":"admin_username   KEY_PASSED_IN_BODY_OF_PREVIOUS_REQUEST"
         }
-
-
-</pre>
