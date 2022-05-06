@@ -6,3 +6,5 @@ Go inside each folder for detailed steps
 <li>  Deploy vault </li>
 <li>  Deploy mysql </li>
 <li>  Deploy custos </li>
+
+More detailed steps of deployment are present in respective folder
