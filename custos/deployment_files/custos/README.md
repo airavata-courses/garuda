@@ -208,7 +208,7 @@ After deploying two services and in staging
 8. Make an REST api call to 
     1. POST request to YOUR_HOST_NAME and endpoint 
          - /tenant-management/v1.0.0/oauth2/tenant
-            https://js-156-79.jetstream-cloud.org:30367/tenant-management/v1.0.0/oauth2/tenant
+         - https://js-156-79.jetstream-cloud.org:30367/tenant-management/v1.0.0/oauth2/tenant
     1. In body pass json object
         ```
             {
@@ -253,8 +253,9 @@ After deploying two services and in staging
          "superTenant": true
 
 11. Make one last REST api call
-    1. POST request to YOUR_HOST_NAME and endpoint - /tenant-management/v1.0.0/status
-         https://js-156-79.jetstream-cloud.org:30367/tenant-management/v1.0.0/status 
+    1. POST request to YOUR_HOST_NAME and endpoint 
+       - /tenant-management/v1.0.0/status
+       - https://js-156-79.jetstream-cloud.org:30367/tenant-management/v1.0.0/status 
     2. With following body 
         ```
             {
