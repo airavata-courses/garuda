@@ -40,7 +40,7 @@ git checkout develop
     <spring.profiles.active>dev</spring.profiles.active>
     2.  <!-- 2. Vault root_token -->
         <vault.token>YOUR_ROOT_TOKEN_FROM_VAULT_JSON_FILE</vault.token>
-    3.  <!-- 3. Below values are static-->
+    3.  <!-- 3. Below values are static -->
         <vault.scheme>http</vault.scheme>
         <vault.host>vault.vault.svc.cluster.local</vault.host>
         <vault.port>8200</vault.port>
@@ -48,10 +48,10 @@ git checkout develop
     4. <!-- 4. keycloak credentials --> 
     <!-- KEYCLOCK_PASSWORD can be found from the command while deploying keycloak  -->
     <!-- BASE64 format only -->
-        <iam.dev.username>KEYCLOAK_USERNAME</iam.dev.username>
-        <iam.dev.password>KEYCLOCK_PASSWORD_BASE64</iam.dev.password>
-        <iam.staging.username>KEYCLOAK_USERNAME</iam.staging.username>
-        <iam.staging.password>KEYCLOCK_PASSWORD_BASE64</iam.staging.password>
+    <iam.dev.username>KEYCLOAK_USERNAME</iam.dev.username>
+    <iam.dev.password>KEYCLOCK_PASSWORD_BASE64</iam.dev.password>
+    <iam.staging.username>KEYCLOAK_USERNAME</iam.staging.username>
+    <iam.staging.password>KEYCLOCK_PASSWORD_BASE64</iam.staging.password>
     5. <!-- 5. MySQL credentials -->
         <!-- Found while deploying MYSQL -->
         <spring.datasource.username>MYSQL_USERNAME</spring.datasource.username>
@@ -62,7 +62,7 @@ git checkout develop
         <docker.image.repo>DOCKER_USERNAME</docker.image.repo>
     7. <!-- 7. Hostname (Master node) -->
     <!-- js-156-79.jetstream-cloud.org -->
-        <host>MASTER_NODE_HOST</host>
+    <host>MASTER_NODE_HOST</host>
     8. <!-- 8. Private key path generated in RSA format -->
         <!-- ssh-keygen -t rsa -b 4096 -m pem  -->
         <!-- Path in this instance -->
