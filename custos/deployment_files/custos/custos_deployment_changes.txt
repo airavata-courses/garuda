@@ -1,0 +1,455 @@
+diff --git a/custos-core-services/utility-services/custos-configuration-service/pom.xml b/custos-core-services/utility-services/custos-configuration-service/pom.xml
+index 93a03d9a..139498a5 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/pom.xml
++++ b/custos-core-services/utility-services/custos-configuration-service/pom.xml
+@@ -80,7 +80,8 @@
+ <!--                             passphrase="isjarana" trust="true">-->
+ <!--                        </scp>-->
+ <!--                    </target>-->
+-                    <skip>true</skip>
++                    <!-- 1. Changed this false -->
++                    <skip>false</skip>
+                 </configuration>
+             </plugin>
+         </plugins>
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-dev.properties
+index bf8d6682..ce21d75b 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-dev.properties
+@@ -27,7 +27,7 @@ agent.profile.core.service.dns.name=agent-profile-core-service.custos.svc.cluste
+ agent.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ federated.authentication.service.dns.name=federeted-authentication-core-service.custos.svc.cluster.local
+ federated.authentication.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-staging.properties
+index 2b468ae6..7b7ffa09 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/agentManagementService-staging.properties
+@@ -27,7 +27,7 @@ agent.profile.core.service.dns.name=agent-profile-core-service.custos.svc.cluste
+ agent.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ federated.authentication.service.dns.name=federeted-authentication-core-service.custos.svc.cluster.local
+ federated.authentication.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-dev.properties
+index be9cca7d..d2949800 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-dev.properties
+@@ -27,7 +27,7 @@ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-staging.properties
+index e96ea44c..305cb9cb 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/groupManagementService-staging.properties
+@@ -27,7 +27,7 @@ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-dev.properties
+index 589bdc1c..87778877 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-dev.properties
+@@ -20,7 +20,7 @@
+ iam.server.client.id=admin-cli
+ iam.server.truststore.path=/home/ubuntu/keystore/keycloak-client-truststore.pkcs12
+ iam.server.truststore.password=keycloak
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ iam.server.admin.username=${iam.dev.username}
+ iam.server.admin.password=${iam.dev.password}
+ iam.server.super.admin.realm.id=master
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-staging.properties
+index 1da5a9f5..d4ea2b59 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/iamAdminCoreService-staging.properties
+@@ -1,7 +1,7 @@
+ iam.server.client.id=admin-cli
+ iam.server.truststore.path=/home/ubuntu/keystore/keycloak-client-truststore.pkcs12
+ iam.server.truststore.password=keycloak
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ iam.server.admin.username=${iam.staging.username}
+ iam.server.admin.password=${iam.staging.password}
+ iam.server.super.admin.realm.id=master
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-dev.properties
+index a0ce104a..65d0a9b9 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-dev.properties
+@@ -19,7 +19,7 @@
+ 
+ custos.identity.auth.cache.enabled=true
+ custos.identity.auth.cache.size=1024
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ iam.server.truststore.path=/home/ubuntu/keystore/keycloak-client-truststore.pkcs12
+ iam.server.truststore.password=keycloak
+ introspection.endpoint=https://custos.scigap.org:32036/identity-management/v1.0.0/token/introspect
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-staging.properties
+index 9cfc99d7..e2d77a8f 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityCoreService-staging.properties
+@@ -19,7 +19,7 @@
+ 
+ custos.identity.auth.cache.enabled=true
+ custos.identity.auth.cache.size=1024
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ iam.server.truststore.path=/home/ubuntu/keystore/keycloak-client-truststore.pkcs12
+ iam.server.truststore.password=keycloak
+ introspection.endpoint=https://service.staging.usecustos.org/apiserver/identity-management/v1.0.0/token/introspect
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-dev.properties
+index e3c03336..0b0c2bb2 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-dev.properties
+@@ -23,7 +23,7 @@ tenant.profile.core.service.dns.name=tenant-profile-core-service.custos.svc.clus
+ tenant.profile.core.service.port=7000
+ credential.store.service.dns.name=credential-store-core-service.custos.svc.cluster.local
+ credential.store.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-staging.properties
+index 4209726b..1333b335 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/identityManagementService-staging.properties
+@@ -23,7 +23,7 @@ tenant.profile.core.service.dns.name=tenant-profile-core-service.custos.svc.clus
+ tenant.profile.core.service.port=7000
+ credential.store.service.dns.name=credential-store-core-service.custos.svc.cluster.local
+ credential.store.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-dev.properties
+index 6391688d..276bf6ff 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-dev.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-staging.properties
+index 1a89db5a..276bf6ff 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/logManagementService-staging.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-dev.properties
+index 8cb95c5e..b0735321 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-dev.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+ cluster.management.core.service.port=7000
+ resource.secret.service.dns.name=resource-secret-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-staging.properties
+index 1c895e8c..ddc7fffa 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/resourceSecretManagementService-staging.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+ cluster.management.core.service.port=7000
+ resource.secret.service.dns.name=resource-secret-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-dev.properties
+index 08d35882..131fe88f 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-dev.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ tenant.profile.core.service.dns.name=tenant-profile-core-service.custos.svc.cluster.local
+ tenant.profile.core.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-staging.properties
+index a9268471..cdb0984b 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/scimService-staging.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://service.staging.usecustos.org/apiserver/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ tenant.profile.core.service.dns.name=tenant-profile-core-service.custos.svc.cluster.local
+ tenant.profile.core.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-dev.properties
+index 23b29104..b10c9b03 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-dev.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ sharing.core.service.dns.name=sharing-core-service.custos.svc.cluster.local
+ sharing.core.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-staging.properties
+index d25415f3..b10c9b03 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/sharingManagementService-staging.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ sharing.core.service.dns.name=sharing-core-service.custos.svc.cluster.local
+ sharing.core.service.port=7000
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-dev.properties
+index 0f1c5df7..09ce6236 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-dev.properties
+@@ -29,7 +29,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-staging.properties
+index c6e3284a..56919e6d 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/tenantManagementService-staging.properties
+@@ -10,7 +10,7 @@ identity.service.dns.name=identity-core-service.custos.svc.cluster.local
+ identity.service.port=7000
+ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.local
+ user.profile.core.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-dev.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-dev.properties
+index 06a9f098..04f61cc1 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-dev.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-dev.properties
+@@ -27,7 +27,7 @@ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.custos.scigap.org:31000/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-staging.properties b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-staging.properties
+index 51774063..c3c42415 100644
+--- a/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-staging.properties
++++ b/custos-core-services/utility-services/custos-configuration-service/src/main/resources/userManagementService-staging.properties
+@@ -27,7 +27,7 @@ user.profile.core.service.dns.name=user-profile-core-service.custos.svc.cluster.
+ user.profile.core.service.port=7000
+ iam.admin.service.dns.name=iam-admin-core-service.custos.svc.cluster.local
+ iam.admin.service.port=7000
+-iam.server.url=https://keycloak.staging.usecustos.org:30170/auth/
++iam.server.url=https://js-156-79.jetstream-cloud.org:30367/auth/
+ custos.logging.core.service.dns.name=custos-logging.custos.svc.cluster.local
+ custos.logging.core.service.port=7000
+ cluster.management.core.service.dns.name=cluster-management-core-service.custos.svc.cluster.local
+diff --git a/custos-integration-services/tenant-management-service-parent/tenant-management-service/src/main/java/org/apache/custos/tenant/management/tasks/TenantActivationTask.java b/custos-integration-services/tenant-management-service-parent/tenant-management-service/src/main/java/org/apache/custos/tenant/management/tasks/TenantActivationTask.java
+index 443d0e2c..341968e0 100644
+--- a/custos-integration-services/tenant-management-service-parent/tenant-management-service/src/main/java/org/apache/custos/tenant/management/tasks/TenantActivationTask.java
++++ b/custos-integration-services/tenant-management-service-parent/tenant-management-service/src/main/java/org/apache/custos/tenant/management/tasks/TenantActivationTask.java
+@@ -222,31 +222,32 @@ public class TenantActivationTask<T, U> extends ServiceTaskImpl<T, U> {
+ 
+ 
+         if (!update) {
+-            RegisterClientResponse registerClientResponse = federatedAuthenticationClient
+-                    .addClient(clientMetadataBuilder.build());
+-
+-
+-            CredentialMetadata credentialMetadataCILogon = CredentialMetadata
+-                    .newBuilder()
+-                    .setId(registerClientResponse.getClientId())
+-                    .setSecret(registerClientResponse.getClientSecret())
+-                    .setOwnerId(tenant.getTenantId())
+-                    .setType(Type.CILOGON)
+-                    .build();
+-
+-            credentialStoreServiceClient.putCredential(credentialMetadataCILogon);
+-
+-
+-            ConfigureFederateIDPRequest request = ConfigureFederateIDPRequest
+-                    .newBuilder()
+-                    .setTenantId(tenant.getTenantId())
+-                    .setClientID(registerClientResponse.getClientId())
+-                    .setClientSec(registerClientResponse.getClientSecret())
+-                    .setScope(tenant.getScope())
+-                    .setRequesterEmail(tenant.getRequesterEmail())
+-                    .setType(FederatedIDPs.CILOGON)
+-                    .build();
+-            iamAdminServiceClient.configureFederatedIDP(request);
++                //Rishabh: Commented below line as per guidelines
++        //     RegisterClientResponse registerClientResponse = federatedAuthenticationClient
++        //             .addClient(clientMetadataBuilder.build());
++
++
++        //     CredentialMetadata credentialMetadataCILogon = CredentialMetadata
++        //             .newBuilder()
++        //             .setId(registerClientResponse.getClientId())
++        //             .setSecret(registerClientResponse.getClientSecret())
++        //             .setOwnerId(tenant.getTenantId())
++        //             .setType(Type.CILOGON)
++        //             .build();
++
++        //     credentialStoreServiceClient.putCredential(credentialMetadataCILogon);
++
++
++        //     ConfigureFederateIDPRequest request = ConfigureFederateIDPRequest
++        //             .newBuilder()
++        //             .setTenantId(tenant.getTenantId())
++        //             .setClientID(registerClientResponse.getClientId())
++        //             .setClientSec(registerClientResponse.getClientSecret())
++        //             .setScope(tenant.getScope())
++        //             .setRequesterEmail(tenant.getRequesterEmail())
++        //             .setType(FederatedIDPs.CILOGON)
++        //             .build();
++        //     iamAdminServiceClient.configureFederatedIDP(request);
+ 
+             PermissionType permissionType = PermissionType
+                     .newBuilder()
+diff --git a/pom.xml b/pom.xml
+index f4abee0a..8093564b 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -354,17 +354,22 @@
+         <profile>
+             <id>container</id>
+             <properties>
+-                <spring.profiles.active>dev</spring.profiles.active>
+-                <vault.token>{{token}}</vault.token>
+-                <vault.scheme>https</vault.scheme>
+-                <vault.host>https://vault.custos.scigap.org</vault.host>
+-                <vault.port>31190</vault.port>
+-                <vault.uri>https://vault.custos.scigap.org:31190</vault.uri>
+-
+-                <iam.dev.username>{{token}}</iam.dev.username>
+-                <iam.dev.password>{{token}}</iam.dev.password>
+-                <iam.staging.username>{{token}}</iam.staging.username>
+-                <iam.staging.password>{{token}}</iam.staging.password>
++                <!-- 1. Already Dev  -->
++                <spring.profiles.active>staging</spring.profiles.active>
++                <!-- 2. Vault root_token -->
++                <vault.token>s.Q7uJC5jzzE26RktguFkzt5GP</vault.token>
++                
++                <!-- 3. Change this as well. Below values are static-->
++                <vault.scheme>http</vault.scheme>
++                <vault.host>vault.vault.svc.cluster.local</vault.host>
++                <vault.port>8200</vault.port>
++                <vault.uri>http://vault.vault.svc.cluster.local:8200</vault.uri>
++
++                <!-- 4. keycloak credentials -->
++                <iam.dev.username>admin</iam.dev.username>
++                <iam.dev.password>g3j9qfO3nBRwQA==</iam.dev.password>
++                <iam.staging.username>admin</iam.staging.username>
++                <iam.staging.password>g3j9qfO3nBRwQA==</iam.staging.password>
+ 
+                 <iam.production.username>{{token}}</iam.production.username>
+                 <iam.production.password>{{token}}</iam.production.password>
+@@ -376,8 +381,10 @@
+                 <cilogon.production.id>{{token}}</cilogon.production.id>
+                 <cilogon.production.sec>{{token}}</cilogon.production.sec>
+                 <custos.email.password>{{token}}</custos.email.password>
++
++                <!-- 5. MySQL credentials -->
+                 <spring.datasource.username>root</spring.datasource.username>
+-                <spring.datasource.password>root</spring.datasource.password>
++                <spring.datasource.password>UtahSALTlakeCITY</spring.datasource.password>
+ 
+ 
+             </properties>
+@@ -650,8 +657,9 @@
+         <io.micrometer.version>1.3.1</io.micrometer.version>
+         <brave.version>5.9.1</brave.version>
+ 
+-        <docker.image.prefix>apachecustos</docker.image.prefix>
+-        <docker.image.repo>custos</docker.image.repo>
++        <!-- 6. Docker username - add username to both the fields -->
++        <docker.image.prefix>rishabhjain96</docker.image.prefix>
++        <docker.image.repo>rishabhjain96</docker.image.repo>
+         <docker.plugin.version>1.4.13</docker.plugin.version>
+ 
+         <helm.maven.plugin.version>2.8.0</helm.maven.plugin.version>
+@@ -688,19 +696,25 @@
+         <com.codahale.version>0.7.0</com.codahale.version>
+ 
+ <!--        <host>prod.custos.usecustos.org</host>-->
++        
++        <!-- 7. Hostname (Master node) -->
++        <host>js-156-79.jetstream-cloud.org</host>
+ 
+-        <host>custos10.sciencegateways.iu.edu</host>
+-
+-        <ssh.privatekey>/Users/isururanawaka/.ssh/custos/id_rsa</ssh.privatekey>
++        <!-- 8. Private key path generated in RSA format -->
++        <!-- ssh-keygen -t rsa -b 4096 -m pem  -->
++        <ssh.privatekey>/home/rishijain15/.ssh/id_rsa</ssh.privatekey>
+ 
+-        <ssh.passphrase>isjarana</ssh.passphrase>
++        <!-- 9. Empty below parameter -->
++        <ssh.passphrase></ssh.passphrase>
+         <dozer.version>5.5.1</dozer.version>
+ 
+         <kafka-clients.version>1.0.0</kafka-clients.version>
+ 
+         <email.version>1.5.0-b01</email.version>
+ <!--        <ssh.username>custos</ssh.username>-->
+-        <ssh.username>custosadmin</ssh.username>
++
++        <!-- 10.. Username of master node -->
++        <ssh.username>rishijain15</ssh.username>
+         <project.version>1.1-SNAPSHOT</project.version>
+         <clusterIssuer>letsencrypt-prod</clusterIssuer>
+ 
